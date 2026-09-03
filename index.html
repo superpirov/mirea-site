@@ -1,1 +1,762 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIREA — Производство бытовой химии | Гели для душа, жидкое мыло, автошампунь</title>
+<meta name="description" content="MIREA — российский производитель гелей для душа Sensa, жидкого мыла Aura и автошампуня Modul. Розница и опт. г. Дербент.">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        mirea: { dark: '#1e3e35', sage: '#7a9d8f', gold: '#e8b44f', light: '#f4f7f5', cream: '#fdf8ed' },
+      },
+      fontFamily: {
+        sans: ['Manrope','sans-serif'],
+        serif: ['Cormorant Garamond','serif'],
+        display: ['Space Grotesk','sans-serif'],
+      }
+    }
+  }
+}
+</script>
+<style>
+* { scrollbar-width: thin; scrollbar-color: #7a9d8f #f4f7f5; }
+html { scroll-behavior: smooth; }
+.hero-gradient { background: radial-gradient(1200px 600px at 70% 20%, rgba(122,157,143,0.18) 0%, transparent 60%), radial-gradient(800px 400px at 20% 80%, rgba(232,180,79,0.12) 0%, transparent 60%), linear-gradient(180deg, #fdfdfb 0%, #f4f7f5 100%); }
+.glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+.bottle-shadow { filter: drop-shadow(0 25px 50px rgba(30,62,53,0.25)) drop-shadow(0 10px 20px rgba(30,62,53,0.15)); }
+.text-balance { text-wrap: balance; }
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-float2 { animation: float 6s ease-in-out infinite 2s; }
+@keyframes float { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-12px) } }
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+</style>
+</head>
+<body class="bg-[#fdfdfb] text-[#1e3e35] font-sans antialiased overflow-x-hidden">
 
+<!-- NAV -->
+<nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-white/70 glass border-b border-black/[0.04]">
+  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-[72px]">
+      <a href="#home" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-xl bg-[#1e3e35] flex items-center justify-center text-white font-serif font-bold text-[18px] tracking-widest group-hover:bg-[#162e27] transition">M</div>
+        <div>
+          <div class="font-serif font-bold text-[22px] leading-none tracking-[0.14em]">MIREA</div>
+          <div class="text-[9px] tracking-[0.22em] text-[#7a9d8f] font-semibold -mt-0.5">CARE & CHEMISTRY</div>
+        </div>
+      </a>
+      <div class="hidden lg:flex items-center gap-8">
+        <a href="#home" class="nav-link text-[13px] tracking-[0.14em] font-semibold text-[#1e3e35] hover:text-[#7a9d8f] transition">ГЛАВНАЯ</a>
+        <a href="#company" class="nav-link text-[13px] tracking-[0.14em] font-semibold text-[#1e3e35]/60 hover:text-[#1e3e35] transition">КОМПАНИЯ</a>
+        <a href="#products" class="nav-link text-[13px] tracking-[0.14em] font-semibold text-[#1e3e35]/60 hover:text-[#1e3e35] transition">ПРОДУКЦИЯ</a>
+        <button onclick="openWholesale()" class="nav-link text-[13px] tracking-[0.14em] font-semibold text-[#1e3e35]/60 hover:text-[#1e3e35] transition">ОПТОВЫЕ ЗАКУПКИ</button>
+        <a href="#contacts" class="nav-link text-[13px] tracking-[0.14em] font-semibold text-[#1e3e35]/60 hover:text-[#1e3e35] transition">КОНТАКТЫ</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="tel:+79384900111" class="hidden md:flex items-center gap-2 text-[13px] font-semibold">
+          <span class="w-8 h-8 rounded-full bg-[#1e3e35] text-white grid place-items-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+          +7 938 490-01-11
+        </a>
+        <button onclick="toggleCart(true)" class="relative w-10 h-10 rounded-full bg-[#1e3e35] text-white grid place-items-center hover:bg-[#162e27] transition">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 8h-3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-3"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><circle cx="9" cy="19" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg>
+          <span id="cart-badge" class="absolute -top-1 -right-1 bg-[#e8b44f] text-[#1e3e35] text-[11px] font-extrabold w-5 h-5 rounded-full grid place-items-center hidden">0</span>
+        </button>
+        <button id="burger" class="lg:hidden w-10 h-10 rounded-full border border-[#1e3e35]/10 grid place-items-center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- mobile menu -->
+  <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-black/5">
+    <div class="px-6 py-6 flex flex-col gap-4">
+      <a href="#home" onclick="closeMobile()" class="text-sm tracking-[0.16em] font-bold">ГЛАВНАЯ</a>
+      <a href="#company" onclick="closeMobile()" class="text-sm tracking-[0.16em] font-bold">КОМПАНИЯ</a>
+      <a href="#products" onclick="closeMobile()" class="text-sm tracking-[0.16em] font-bold">ПРОДУКЦИЯ</a>
+      <button onclick="openWholesale();closeMobile()" class="text-left text-sm tracking-[0.16em] font-bold">ОПТОВЫЕ ЗАКУПКИ</button>
+      <a href="#contacts" onclick="closeMobile()" class="text-sm tracking-[0.16em] font-bold">КОНТАКТЫ</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero-gradient pt-[72px] relative overflow-hidden">
+  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-4 items-center pt-8 lg:pt-14 pb-10 lg:pb-16">
+      <!-- left copy -->
+      <div class="lg:col-span-6 xl:col-span-6 relative z-10">
+        <div class="inline-flex items-center gap-2 bg-white border border-[#1e3e35]/[0.06] rounded-full px-3 py-1.5 shadow-sm mb-6">
+          <span class="w-2 h-2 rounded-full bg-[#e8b44f] animate-pulse"></span>
+          <span class="text-[11px] tracking-[0.14em] font-bold text-[#1e3e35]/70">ПРОИЗВОДСТВО • ДЕРБЕНТ • С 2021</span>
+          <span class="hidden sm:inline text-[11px] bg-[#1e3e35] text-white px-2 py-0.5 rounded-full font-bold">РОЗНИЦА И ОПТ</span>
+        </div>
+        <h1 class="font-serif font-medium leading-[0.92] tracking-[-0.03em] text-[42px] sm:text-[56px] lg:text-[64px] xl:text-[72px]">
+          <span class="block text-[#1e3e35]">Химия</span>
+          <span class="block text-[#1e3e35]">которая</span>
+          <span class="block text-[#7a9d8f] italic font-normal">заботится</span>
+        </h1>
+        <p class="mt-5 text-[15px] sm:text-[17px] leading-relaxed text-[#1e3e35]/60 max-w-[560px] text-balance">Российский производитель гелей для душа, жидкого мыла и автохимии. Чистые составы, стойкие ароматы, честная цена — от одной бутылки до паллеты.</p>
+
+        <div class="flex flex-wrap gap-3 mt-8">
+          <a href="#products" class="inline-flex items-center gap-3 bg-[#1e3e35] text-white rounded-full px-7 py-4 text-[13px] tracking-[0.12em] font-bold hover:bg-[#162e27] transition shadow-[0_12px_30px_rgba(30,62,53,0.25)]">
+            ПЕРЕЙТИ В КАТАЛОГ
+            <span class="w-7 h-7 rounded-full bg-white text-[#1e3e35] grid place-items-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </a>
+          <button onclick="openWholesale()" class="inline-flex items-center gap-2 bg-white border border-[#1e3e35]/10 rounded-full px-7 py-4 text-[13px] tracking-[0.12em] font-bold hover:bg-[#f4f7f5] transition">
+            <span class="w-2 h-2 rounded-full bg-[#e8b44f]"></span> ОПТОВЫЙ ПРАЙС
+          </button>
+        </div>
+
+        <div class="grid grid-cols-3 gap-6 mt-10 max-w-[520px] border-t border-[#1e3e35]/[0.06] pt-6">
+          <div>
+            <div class="font-serif text-[28px] leading-none font-semibold">500<span class="text-[16px]">мл</span></div>
+            <div class="text-[11px] tracking-[0.14em] font-bold text-[#1e3e35]/40 mt-1">ЭРГОНОМИЧНЫЙ ФЛАКОН</div>
+          </div>
+          <div>
+            <div class="font-serif text-[28px] leading-none font-semibold">20<span class="text-[16px]">л</span></div>
+            <div class="text-[11px] tracking-[0.14em] font-bold text-[#1e3e35]/40 mt-1">АВТОШАМПУНЬ MODUL</div>
+          </div>
+          <div>
+            <div class="font-serif text-[28px] leading-none font-semibold">3<span class="text-[16px]"> линейки</span></div>
+            <div class="text-[11px] tracking-[0.14em] font-bold text-[#1e3e35]/40 mt-1">6 АРОМАТОВ</div>
+          </div>
+        </div>
+
+        <!-- trust -->
+        <div class="flex items-center gap-4 mt-8">
+          <div class="flex -space-x-2">
+            <div class="w-8 h-8 rounded-full bg-[#7a9d8f] border-2 border-white grid place-items-center text-white text-xs">✓</div>
+            <div class="w-8 h-8 rounded-full bg-[#1e3e35] border-2 border-white grid place-items-center text-white text-xs">✓</div>
+            <div class="w-8 h-8 rounded-full bg-[#e8b44f] border-2 border-white grid place-items-center text-[#1e3e35] text-xs">✓</div>
+          </div>
+          <div class="text-[12px] leading-tight">
+            <div class="font-bold">Уже 12 000+ клиентов</div>
+            <div class="text-[#1e3e35]/50">Розница и опт по всей России</div>
+          </div>
+          <div class="hidden sm:flex items-center gap-1 ml-4 text-[#e8b44f]">
+            ★★★★★ <span class="text-[#1e3e35] text-xs font-bold ml-1">4.9/5</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- right visual -->
+      <div class="lg:col-span-6 xl:col-span-6 relative lg:h-[620px] flex items-center justify-center">
+        <!-- decorative blob -->
+        <div class="absolute inset-0 -z-10 hidden lg:block">
+          <div class="absolute right-[8%] top-[6%] w-[520px] h-[520px] bg-[#7a9d8f]/10 rounded-full blur-[2px]"></div>
+          <div class="absolute right-[18%] top-[18%] w-[380px] h-[380px] bg-[#e8b44f]/10 rounded-full blur-[1px]"></div>
+        </div>
+
+        <!-- bottles composition -->
+        <div class="relative w-full max-w-[560px] h-[520px] sm:h-[580px] lg:h-[560px]">
+          <!-- card behind -->
+          <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] h-[82%] bg-white rounded-[32px] shadow-[0_20px_60px_rgba(30,62,53,0.08)] border border-black/[0.03]"></div>
+
+          <!-- floating badge top -->
+          <div class="absolute top-6 right-6 lg:right-2 bg-[#1e3e35] text-white rounded-2xl px-4 py-3 shadow-xl z-20">
+            <div class="text-[10px] tracking-[0.16em] font-bold text-white/60">ХИТ ПРОДАЖ</div>
+            <div class="font-serif text-[18px] leading-none mt-1">Sensa Jasmine</div>
+            <div class="text-[11px] text-white/60">Гель для душа • 500 мл</div>
+          </div>
+
+          <!-- 3 bottles -->
+          <div class="absolute inset-0 flex items-end justify-center gap-2 sm:gap-4 pb-10 pt-10">
+            <!-- bottle 1 - Aura Almond -->
+            <div class="animate-float relative w-[110px] sm:w-[150px] h-[380px] sm:h-[420px] bg-gradient-to-b from-[#fdf8ed] to-white rounded-[28px] border border-black/5 shadow-[0_20px_40px_rgba(0,0,0,0.08)] flex flex-col items-center pt-6 overflow-hidden">
+              <div class="w-[54px] h-[38px] rounded-t-[10px] bg-[#1e3e35] relative"><div class="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-4 bg-[#1e3e35] rounded-t-full"></div></div>
+              <div class="mt-3 w-[88%] bg-[#1e3e35] rounded-[18px] p-3 text-center text-white">
+                <div class="text-[9px] tracking-[0.2em] font-bold text-white/60">MIREA</div>
+                <div class="font-serif text-[20px] leading-none mt-1">Aura</div>
+                <div class="text-[9px] tracking-[0.16em] mt-1 text-white/70">МИНДАЛЬ + ВИШНЯ</div>
+                <div class="mt-3 h-px bg-white/15"></div>
+                <div class="text-[8px] tracking-[0.14em] mt-2 text-white/50">ЖИДКОЕ МЫЛО • 500 МЛ</div>
+              </div>
+              <div class="mt-auto mb-4 text-[10px] tracking-[0.12em] font-bold text-[#1e3e35]/30">500 ML</div>
+              <div class="absolute bottom-0 h-2 w-full bg-[#e8b44f]"></div>
+            </div>
+
+            <!-- bottle 2 - Sensa central larger -->
+            <div class="animate-float2 relative w-[130px] sm:w-[170px] h-[420px] sm:h-[480px] bg-white rounded-[30px] border border-black/5 shadow-[0_30px_60px_rgba(30,62,53,0.18)] flex flex-col items-center pt-7 overflow-hidden z-10 -mb-4">
+              <div class="w-[62px] h-[44px] rounded-t-[12px] bg-[#1e3e35] relative"><div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-9 h-5 bg-[#1e3e35] rounded-t-full"></div><div class="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-[2px] bg-white/20 rounded-full"></div></div>
+              <div class="mt-4 w-[86%] bg-[#1e3e35] rounded-[20px] p-4 text-center text-white relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10" style="background: radial-gradient(300px 120px at 50% 0%, #7a9d8f 0%, transparent 70%)"></div>
+                <div class="relative">
+                  <div class="text-[9px] tracking-[0.22em] font-bold text-[#e8b44f]">MIREA</div>
+                  <div class="font-serif text-[26px] leading-none mt-1">Sensa</div>
+                  <div class="text-[9px] tracking-[0.16em] mt-1 text-white/70">ЖАСМИН + ПЕРСИК</div>
+                  <div class="mt-3 flex justify-center gap-1"><span class="w-1 h-1 rounded-full bg-[#e8b44f]"></span><span class="w-1 h-1 rounded-full bg-white/30"></span><span class="w-1 h-1 rounded-full bg-white/30"></span></div>
+                  <div class="text-[8px] tracking-[0.14em] mt-3 text-white/50">ГЕЛЬ ДЛЯ ДУША • 500 МЛ</div>
+                </div>
+              </div>
+              <div class="mt-4 w-[70%] h-[70px] rounded-full bg-gradient-to-b from-[#7a9d8f]/10 to-transparent blur-[0.5px]"></div>
+              <div class="mt-auto mb-5 flex items-center gap-2">
+                <span class="text-[11px] font-bold tracking-[0.12em]">590 ₽</span><span class="text-[10px] text-black/30 line-through">750 ₽</span>
+              </div>
+              <div class="absolute bottom-0 h-2.5 w-full bg-[#1e3e35]"></div>
+            </div>
+
+            <!-- bottle 3 - Modul -->
+            <div class="animate-float relative w-[110px] sm:w-[150px] h-[380px] sm:h-[420px] bg-[#1e3e35] rounded-[28px] border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.18)] flex flex-col items-center pt-6 overflow-hidden text-white">
+              <div class="w-[54px] h-[38px] rounded-t-[10px] bg-white relative"><div class="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-4 bg-white rounded-t-full"></div></div>
+              <div class="mt-3 w-[88%] bg-white rounded-[18px] p-3 text-center text-[#1e3e35]">
+                <div class="text-[9px] tracking-[0.2em] font-bold text-[#7a9d8f]">MIREA</div>
+                <div class="font-serif text-[20px] leading-none mt-1 font-bold">Modul</div>
+                <div class="text-[9px] tracking-[0.16em] mt-1 text-black/50">АВТОШАМПУНЬ</div>
+                <div class="mt-2 inline-flex bg-[#1e3e35] text-white text-[8px] tracking-[0.14em] font-bold px-2 py-1 rounded-full">20 Л • 3500 ₽</div>
+              </div>
+              <div class="mt-auto mb-4 text-[10px] tracking-[0.12em] font-bold text-white/40">PRO LINE</div>
+              <div class="absolute bottom-0 h-2 w-full bg-[#e8b44f]"></div>
+            </div>
+          </div>
+
+          <!-- bottom info -->
+          <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-black/5 px-5 py-3 flex items-center gap-5 whitespace-nowrap">
+            <div class="flex items-center gap-2 text-[12px] font-semibold"><span class="w-6 h-6 rounded-full bg-[#e8f3ee] grid place-items-center text-[#1e3e35]">♻</span> Эко состав</div>
+            <div class="w-px h-6 bg-black/10"></div>
+            <div class="flex items-center gap-2 text-[12px] font-semibold"><span class="w-6 h-6 rounded-full bg-[#fdf8ed] grid place-items-center">✦</span> Гипоаллергенно</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USP bar -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 pb-10">
+      <div class="bg-white rounded-2xl p-5 border border-black/[0.04] flex gap-3 items-start">
+        <div class="w-10 h-10 rounded-xl bg-[#1e3e35] text-white grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><div class="font-bold text-sm">Собственное производство</div><div class="text-xs text-black/50 leading-tight mt-1">Дербент, контроль каждой партии</div></div>
+      </div>
+      <div class="bg-white rounded-2xl p-5 border border-black/[0.04] flex gap-3 items-start">
+        <div class="w-10 h-10 rounded-xl bg-[#e8b44f] text-[#1e3e35] grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div><div class="font-bold text-sm">Розница и опт</div><div class="text-xs text-black/50 leading-tight mt-1">От 1 шт до паллет, гибкие цены</div></div>
+      </div>
+      <div class="bg-white rounded-2xl p-5 border border-black/[0.04] flex gap-3 items-start">
+        <div class="w-10 h-10 rounded-xl bg-[#7a9d8f] text-white grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="1" y="3" width="22" height="18" rx="2"/><path d="M1 7h22"/></svg></div>
+        <div><div class="font-bold text-sm">Быстрая доставка</div><div class="text-xs text-black/50 leading-tight mt-1">По России от 2 дней, СДЭК/Деловые линии</div></div>
+      </div>
+      <div class="bg-white rounded-2xl p-5 border border-black/[0.04] flex gap-3 items-start">
+        <div class="w-10 h-10 rounded-xl bg-[#1e3e35] text-white grid place-items-center shrink-0"> lab </div>
+        <div><div class="font-bold text-sm">Лабораторные тесты</div><div class="text-xs text-black/50 leading-tight mt-1">Дерматологически протестировано</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPANY -->
+<section id="company" class="py-16 lg:py-24 bg-white relative">
+  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-12 gap-10 items-start">
+      <div class="lg:col-span-5">
+        <div class="inline-flex items-center gap-2 text-[11px] tracking-[0.18em] font-bold text-[#7a9d8f]"><span class="w-8 h-px bg-[#7a9d8f]"></span> О КОМПАНИИ</div>
+        <h2 class="font-serif text-[36px] sm:text-[44px] leading-[0.95] mt-3">Производим<br><span class="italic text-[#7a9d8f] font-normal">химию с душой</span></h2>
+        <p class="mt-4 text-[15px] leading-relaxed text-black/55">Mirea — молодое производство в Дагестане. Мы решили, что бытовая химия может быть красивой, ароматной и честной по составу — без компромиссов.</p>
+        <div class="mt-8 bg-[#fdf8ed] rounded-2xl p-6 border border-[#e8b44f]/20">
+          <div class="flex items-center gap-3 text-sm font-bold"><span class="w-8 h-8 rounded-full bg-[#e8b44f] grid place-items-center">!</span> Раздел в разработке</div>
+          <p class="text-sm text-black/60 mt-2 leading-relaxed">Мы готовим подробную историю бренда, фото производства и сертификаты. Скоро здесь появится полная информация о компании, команде и технологиях.</p>
+          <div class="mt-4 text-xs tracking-[0.12em] font-bold text-[#1e3e35]/40">ОБНОВЛЕНИЕ — ОСЕНЬ 2026</div>
+        </div>
+      </div>
+      <div class="lg:col-span-7 grid sm:grid-cols-2 gap-4">
+        <div class="bg-[#1e3e35] text-white rounded-[24px] p-7 relative overflow-hidden">
+          <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+          <div class="text-[11px] tracking-[0.16em] font-bold text-white/50">С 2021 ГОДА</div>
+          <div class="font-serif text-[42px] leading-none mt-2">5 лет</div>
+          <div class="text-sm text-white/70 mt-2">на рынке бытовой химии, рост на 120% в год</div>
+          <div class="mt-6 flex gap-2"><span class="px-3 py-1 rounded-full bg-white/10 text-xs font-bold">ISO 9001</span><span class="px-3 py-1 rounded-full bg-[#e8b44f] text-[#1e3e35] text-xs font-bold">ГОСТ</span></div>
+        </div>
+        <div class="bg-[#f4f7f5] rounded-[24px] p-7 border border-black/5">
+          <div class="w-10 h-10 rounded-xl bg-white border border-black/5 grid place-items-center">◐</div>
+          <div class="font-bold mt-4">Натуральные отдушки</div>
+          <div class="text-sm text-black/50 mt-1 leading-relaxed">Французские аромакомпозиции, без парабенов и SLS</div>
+        </div>
+        <div class="bg-[#f4f7f5] rounded-[24px] p-7 border border-black/5">
+          <div class="w-10 h-10 rounded-xl bg-white border border-black/5 grid place-items-center">◎</div>
+          <div class="font-bold mt-4">Дизайн как в бутике</div>
+          <div class="text-sm text-black/50 mt-1 leading-relaxed">Флакон 500 мл — удобно в руке, красиво на полке</div>
+        </div>
+        <div class="bg-[#e8b44f] rounded-[24px] p-7 text-[#1e3e35]">
+          <div class="text-[11px] tracking-[0.16em] font-bold text-[#1e3e35]/60">ПРОИЗВОДСТВО</div>
+          <div class="font-serif text-[28px] leading-none mt-2">1200 м²</div>
+          <div class="text-sm mt-1">г. Дербент, ул. Шоссейная 26</div>
+          <div class="mt-4 text-xs font-bold underline decoration-[#1e3e35]/20 underline-offset-4">СМОТРЕТЬ НА КАРТЕ →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="py-16 lg:py-20 bg-[#f4f7f5]">
+  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div>
+        <div class="inline-flex items-center gap-2 text-[11px] tracking-[0.18em] font-bold text-[#7a9d8f]"><span class="w-8 h-px bg-[#7a9d8f]"></span> КАТАЛОГ</div>
+        <h2 class="font-serif text-[36px] sm:text-[46px] leading-none mt-3">Выберите <span class="italic text-[#7a9d8f] font-normal">линейку</span></h2>
+      </div>
+      <div class="text-sm text-black/50 max-w-[420px] leading-relaxed">Сначала выберите направление — Body (уход) или Auto (автохимия), затем — аромат и объём.</div>
+    </div>
+
+    <!-- line selector -->
+    <div class="mt-8 grid sm:grid-cols-2 gap-4 max-w-[760px]">
+      <button onclick="selectLine('body')" id="btn-body" class="group relative rounded-[24px] p-[1.5px] bg-[#1e3e35] overflow-hidden">
+        <div class="bg-[#1e3e35] rounded-[22px] p-6 flex items-center gap-4 text-left text-white relative overflow-hidden">
+          <div class="absolute right-0 top-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+          <div class="w-14 h-14 rounded-2xl bg-white text-[#1e3e35] grid place-items-center text-xl shrink-0">◍</div>
+          <div class="relative">
+            <div class="font-serif text-[22px] leading-none">Body</div>
+            <div class="text-[11px] tracking-[0.14em] font-bold text-white/60 mt-1">ГЕЛИ • МЫЛО • УХОД</div>
+            <div class="text-xs text-white/70 mt-1">4 аромата • 500 мл</div>
+          </div>
+          <div class="ml-auto w-8 h-8 rounded-full bg-white text-[#1e3e35] grid place-items-center">→</div>
+        </div>
+      </button>
+      <button onclick="selectLine('auto')" id="btn-auto" class="group relative rounded-[24px] p-[1.5px] bg-black/10 overflow-hidden hover:bg-black/15 transition">
+        <div class="bg-white rounded-[22px] p-6 flex items-center gap-4 text-left relative overflow-hidden">
+          <div class="w-14 h-14 rounded-2xl bg-[#f4f7f5] border border-black/5 grid place-items-center text-xl shrink-0">⬢</div>
+          <div>
+            <div class="font-serif text-[22px] leading-none text-[#1e3e35]">Auto</div>
+            <div class="text-[11px] tracking-[0.14em] font-bold text-black/40 mt-1">АВТОХИМИЯ</div>
+            <div class="text-xs text-black/50 mt-1">Modul • 20 л</div>
+          </div>
+          <div class="ml-auto w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">→</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- category tabs for Body -->
+    <div id="body-cats" class="mt-6 flex flex-wrap gap-3">
+      <button onclick="selectCategory('sensa')" id="cat-sensa" class="px-6 py-3 rounded-full bg-[#1e3e35] text-white text-[13px] tracking-[0.12em] font-bold">SENSA — ГЕЛЬ ДЛЯ ДУША</button>
+      <button onclick="selectCategory('aura')" id="cat-aura" class="px-6 py-3 rounded-full bg-white border border-black/10 text-[#1e3e35] text-[13px] tracking-[0.12em] font-bold hover:bg-black/5">AURA — ЖИДКОЕ МЫЛО</button>
+    </div>
+
+    <!-- products grid -->
+    <div id="products-grid" class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+    <!-- empty for auto handled same grid -->
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section id="contacts" class="py-16 lg:py-20 bg-white">
+  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-12 gap-8">
+      <div class="lg:col-span-5">
+        <div class="inline-flex items-center gap-2 text-[11px] tracking-[0.18em] font-bold text-[#7a9d8f]"><span class="w-8 h-px bg-[#7a9d8f]"></span> КОНТАКТЫ</div>
+        <h2 class="font-serif text-[36px] sm:text-[44px] leading-none mt-3">На связи<br><span class="italic text-[#7a9d8f] font-normal">каждый день</span></h2>
+
+        <div class="mt-8 space-y-4">
+          <div class="bg-[#f4f7f5] rounded-2xl p-5 flex gap-4">
+            <div class="w-11 h-11 rounded-xl bg-[#1e3e35] text-white grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><div class="text-[11px] tracking-[0.14em] font-bold text-black/40">АДРЕС ПРОИЗВОДСТВА</div><div class="font-semibold mt-1">г. Дербент, ул. Шоссейная, д. 26</div><div class="text-sm text-black/50">Республика Дагестан, 368600</div></div>
+          </div>
+          <div class="bg-[#f4f7f5] rounded-2xl p-5 flex gap-4">
+            <div class="w-11 h-11 rounded-xl bg-[#e8b44f] text-[#1e3e35] grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div><div class="text-[11px] tracking-[0.14em] font-bold text-black/40">ТЕЛЕФОН</div><a href="tel:+79384900111" class="font-semibold mt-1 block text-[18px]">+7 938 490-01-11</a><div class="text-sm text-black/50">Ежедневно 9:00—20:00</div></div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-white border border-black/10 rounded-2xl p-5">
+              <div class="text-[11px] tracking-[0.14em] font-bold text-black/40">ЗАКАЗЫ • РОЗНИЦА</div>
+              <a href="mailto:order@mireacare.ru" class="font-semibold text-[#1e3e35] mt-1 block">order@mireacare.ru</a>
+              <div class="text-xs text-black/40 mt-1">Ответим за 15 минут</div>
+            </div>
+            <div class="bg-white border border-black/10 rounded-2xl p-5">
+              <div class="text-[11px] tracking-[0.14em] font-bold text-black/40">ОПТ • СОТРУДНИЧЕСТВО</div>
+              <a href="mailto:cooperation@mireacare.ru" class="font-semibold text-[#1e3e35] mt-1 block">cooperation@mireacare.ru</a>
+              <div class="text-xs text-black/40 mt-1">Прайс и условия</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lg:col-span-7">
+        <div class="rounded-[24px] overflow-hidden border border-black/10 bg-[#f4f7f5] h-[420px] lg:h-[520px] relative">
+          <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A1a2b3c&source=constructor&ll=48.295%2C42.067&z=15&pt=48.295,42.067" width="100%" height="100%" frameborder="0" style="filter: grayscale(0.2) contrast(1.1);"></iframe>
+          <div class="absolute bottom-4 left-4 right-4 bg-white rounded-2xl p-4 shadow-xl border border-black/5 flex items-center justify-between gap-4">
+            <div><div class="font-bold text-sm">Mirea — производство</div><div class="text-xs text-black/50">Дербент, Шоссейная 26 • Пн-Сб 9:00-18:00</div></div>
+            <a href="https://yandex.ru/maps/?text=Дербент%20Шоссейная%2026" target="_blank" class="shrink-0 bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs tracking-[0.12em] font-bold">ПОСТРОИТЬ МАРШРУТ</a>
+          </div>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <button onclick="openWholesale()" class="flex-1 bg-[#e8b44f] text-[#1e3e35] rounded-full px-6 py-4 text-[13px] tracking-[0.12em] font-extrabold">ЗАПРОСИТЬ ОПТОВЫЙ ПРАЙС</button>
+          <a href="tel:+79384900111" class="bg-white border border-black/10 rounded-full px-6 py-4 text-[13px] tracking-[0.12em] font-bold">ПОЗВОНИТЬ</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-[#1e3e35] text-white py-10">
+  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col lg:flex-row justify-between gap-8">
+      <div>
+        <div class="font-serif text-[22px] tracking-[0.14em] font-bold">MIREA</div>
+        <div class="text-[11px] tracking-[0.2em] text-white/50 font-bold">CARE & CHEMISTRY • ДЕРБЕНТ</div>
+        <div class="text-sm text-white/60 mt-4 max-w-[360px] leading-relaxed">Производство гелей для душа, жидкого мыла и автохимии. Розница и опт по всей России.</div>
+      </div>
+      <div class="flex gap-10 text-sm">
+        <div><div class="font-bold tracking-[0.12em] text-xs text-white/40">МЕНЮ</div><div class="mt-3 space-y-2 text-white/70"><a href="#home" class="block hover:text-white">Главная</a><a href="#company" class="block hover:text-white">Компания</a><a href="#products" class="block hover:text-white">Продукция</a><a href="#contacts" class="block hover:text-white">Контакты</a></div></div>
+        <div><div class="font-bold tracking-[0.12em] text-xs text-white/40">КОНТАКТЫ</div><div class="mt-3 space-y-2 text-white/70"><div>+7 938 490-01-11</div><div>order@mireacare.ru</div><div>cooperation@mireacare.ru</div><div class="text-white/40">Дербент, Шоссейная 26</div></div></div>
+      </div>
+    </div>
+    <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between gap-3 text-xs text-white/40">
+      <div>© 2021–2026 MIREA. Все права защищены.</div>
+      <a href="admin.html" class="hover:text-white underline decoration-white/20 underline-offset-4">Админ-панель →</a>
+    </div>
+  </div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-[#1e3e35]/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity"></div>
+<div id="cart-drawer" class="fixed right-0 top-0 h-full w-full sm:w-[440px] bg-white z-[61] translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+  <div class="p-6 border-b border-black/5 flex items-center justify-between">
+    <div><div class="font-serif text-[22px] font-semibold leading-none">Корзина</div><div class="text-xs tracking-[0.12em] font-bold text-black/40 mt-1"><span id="cart-count">0</span> ТОВАРОВ</div></div>
+    <button onclick="toggleCart(false)" class="w-9 h-9 rounded-full bg-[#f4f7f5] grid place-items-center hover:bg-black/5">✕</button>
+  </div>
+  <div id="cart-items" class="flex-1 overflow-auto p-6 space-y-4"></div>
+  <div class="p-6 border-t border-black/5 bg-[#f4f7f5]">
+    <div class="flex justify-between text-sm"><span class="text-black/50">Подытог</span><span id="cart-subtotal" class="font-bold">0 ₽</span></div>
+    <div class="flex justify-between text-sm mt-2"><span class="text-black/50">Доставка</span><span class="font-bold text-[#7a9d8f]">рассчитывается</span></div>
+    <div class="flex justify-between text-[18px] font-extrabold mt-3 pt-3 border-t border-black/10"><span>Итого</span><span id="cart-total">0 ₽</span></div>
+    <button onclick="openCheckout()" class="w-full mt-5 bg-[#1e3e35] text-white rounded-full py-4 text-[13px] tracking-[0.12em] font-bold hover:bg-[#162e27] transition">ОФОРМИТЬ ЗАКАЗ →</button>
+    <div class="text-[11px] text-center text-black/40 mt-3">Нажимая, вы соглашаетесь с обработкой данных</div>
+  </div>
+</div>
+
+<!-- WHOLESALE MODAL -->
+<div id="wholesale-modal" class="fixed inset-0 z-[70] hidden">
+  <div onclick="closeWholesale()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div>
+  <div class="absolute inset-0 grid place-items-center p-4">
+    <div class="bg-white rounded-[24px] max-w-[580px] w-full max-h-[90vh] overflow-auto shadow-2xl">
+      <div class="p-7 sm:p-8">
+        <div class="flex justify-between items-start gap-4">
+          <div>
+            <div class="inline-flex bg-[#e8b44f] text-[#1e3e35] text-[11px] tracking-[0.14em] font-extrabold px-3 py-1 rounded-full">ОПТ ОТ 50 ШТ</div>
+            <h3 class="font-serif text-[28px] leading-none mt-3">Оптовые закупки</h3>
+            <p class="text-sm text-black/50 mt-2 leading-relaxed">Оставьте контакты — вышлем прайс, условия и образцы в течение 30 минут.</p>
+          </div>
+          <button onclick="closeWholesale()" class="w-9 h-9 rounded-full bg-[#f4f7f5] grid place-items-center shrink-0">✕</button>
+        </div>
+        <form id="wholesale-form" onsubmit="submitWholesale(event)" class="mt-6 space-y-4">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ИМЯ</span><input required name="name" placeholder="Как к вам обращаться" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
+            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ТЕЛЕФОН</span><input required name="phone" placeholder="+7 ___ ___-__-__" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
+          </div>
+          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">EMAIL</span><input required type="email" name="email" placeholder="you@company.ru" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
+          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">КОМПАНИЯ / ГОРОД</span><input name="company" placeholder="ИП, ООО, город" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
+          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">СООБЩЕНИЕ</span><textarea name="message" rows="3" placeholder="Какие позиции интересуют, объём, вопросы по доставке…" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></textarea></label>
+          <div class="bg-[#f4f7f5] rounded-xl p-4 flex gap-3">
+            <div class="w-8 h-8 rounded-full bg-[#1e3e35] text-white grid place-items-center shrink-0 text-xs">%</div>
+            <div class="text-xs leading-relaxed text-black/60"><b class="text-[#1e3e35]">Скидки до 35%</b> от розницы, отсрочка для юр. лиц, брендирование под СТМ от 500 шт.</div>
+          </div>
+          <button type="submit" class="w-full bg-[#1e3e35] text-white rounded-full py-4 text-[13px] tracking-[0.12em] font-bold hover:bg-[#162e27] transition">ОТПРАВИТЬ ЗАПРОС →</button>
+          <div class="text-[11px] text-center text-black/30">Отправка на <b class="text-black/60">cooperation@mireacare.ru</b> • Ответим в течение 30 минут</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div id="checkout-modal" class="fixed inset-0 z-[70] hidden">
+  <div onclick="closeCheckout()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div>
+  <div class="absolute inset-0 grid place-items-center p-4">
+    <div class="bg-white rounded-[24px] max-w-[640px] w-full max-h-[90vh] overflow-auto shadow-2xl">
+      <div class="p-7 sm:p-8">
+        <div class="flex justify-between items-start">
+          <h3 class="font-serif text-[26px] leading-none">Оформление заказа</h3>
+          <button onclick="closeCheckout()" class="w-9 h-9 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button>
+        </div>
+        <p class="text-sm text-black/50 mt-2">Заполните данные — менеджер свяжется для подтверждения и расчёта доставки.</p>
+        <form id="checkout-form" onsubmit="submitOrder(event)" class="mt-6 space-y-4">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ИМЯ И ФАМИЛИЯ *</span><input required name="name" placeholder="Иван Петров" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
+            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ТЕЛЕФОН *</span><input required name="phone" placeholder="+7 938 000-00-00" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
+          </div>
+          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">EMAIL</span><input type="email" name="email" placeholder="для чека и трек-номера" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
+          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">АДРЕС ДОСТАВКИ</span><input name="address" placeholder="Город, улица, дом, квартира" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
+          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">КОММЕНТАРИЙ</span><textarea name="comment" rows="2" placeholder="Удобное время, пожелания…" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></textarea></label>
+          <div id="checkout-summary" class="bg-[#f4f7f5] rounded-xl p-4 text-sm"></div>
+          <button type="submit" class="w-full bg-[#e8b44f] text-[#1e3e35] rounded-full py-4 text-[13px] tracking-[0.12em] font-extrabold hover:bg-[#d9a63f] transition">ПОДТВЕРДИТЬ ЗАКАЗ →</button>
+          <div class="text-[11px] text-center text-black/30">Заказ уйдёт на <b class="text-black/60">order@mireacare.ru</b> • Оплата при получении / по счёту</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#1e3e35] text-white px-6 py-3 rounded-full text-sm font-semibold shadow-xl z-[80] hidden"></div>
+
+<script>
+// DATA
+const defaultProducts = [
+  { id:'sensa-jasmin', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', color:'#1e3e35', accent:'#e8b44f', scent:'Жасмин, персик, белый мускус' },
+  { id:'sensa-grape', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца. Для утреннего заряда.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', color:'#7a9d8f', accent:'#1e3e35', scent:'Грейпфрут, розовый перец, кедр' },
+  { id:'aura-almond', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной. Не сушит кожу, аромат вишнёвого десерта.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', color:'#fdf8ed', accent:'#1e3e35', scent:'Миндаль, вишня, ваниль' },
+  { id:'aura-honey', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом и молочными протеинами. Для сухой кожи.', volume:'500 мл', price:490, oldPrice:650, badge:'', color:'#fff7e6', accent:'#e8b44f', scent:'Мёд, молоко, овсяное молочко' },
+  { id:'modul-20', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь для бесконтактной мойки. 1:50, густая пена, без разводов.', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', color:'#1e3e35', accent:'#e8b44f', scent:'—', extra:'20 литров • концентрат' },
+];
+
+let products = JSON.parse(localStorage.getItem('mirea_products') || 'null') || defaultProducts;
+let cart = JSON.parse(localStorage.getItem('mirea_cart') || '[]');
+let currentLine = 'body';
+let currentCategory = 'sensa';
+
+function saveProducts(){ localStorage.setItem('mirea_products', JSON.stringify(products)); }
+
+function selectLine(line){
+  currentLine = line;
+  document.getElementById('btn-body').className = line==='body' ? 'group relative rounded-[24px] p-[1.5px] bg-[#1e3e35] overflow-hidden' : 'group relative rounded-[24px] p-[1.5px] bg-black/10 overflow-hidden hover:bg-black/15 transition';
+  document.getElementById('btn-body').firstElementChild.className = line==='body' ? 'bg-[#1e3e35] rounded-[22px] p-6 flex items-center gap-4 text-left text-white relative overflow-hidden' : 'bg-white rounded-[22px] p-6 flex items-center gap-4 text-left relative overflow-hidden';
+  document.getElementById('btn-auto').className = line==='auto' ? 'group relative rounded-[24px] p-[1.5px] bg-[#1e3e35] overflow-hidden' : 'group relative rounded-[24px] p-[1.5px] bg-black/10 overflow-hidden hover:bg-black/15 transition';
+  document.getElementById('btn-auto').firstElementChild.className = line==='auto' ? 'bg-[#1e3e35] rounded-[22px] p-6 flex items-center gap-4 text-left text-white relative overflow-hidden' : 'bg-white rounded-[22px] p-6 flex items-center gap-4 text-left relative overflow-hidden';
+  // update inner colors for auto/body - simplified toggle by re-rendering
+  const bodyCats = document.getElementById('body-cats');
+  bodyCats.style.display = line==='body' ? 'flex' : 'none';
+  if(line==='auto') currentCategory='modul';
+  else if(currentCategory==='modul') currentCategory='sensa';
+  updateCategoryUI();
+  renderProducts();
+  // adjust button styles inner text colors
+  if(line==='body'){
+    document.querySelector('#btn-body .font-serif').className='font-serif text-[22px] leading-none';
+    document.querySelector('#btn-auto .font-serif').className='font-serif text-[22px] leading-none text-[#1e3e35]';
+  } else {
+    document.querySelector('#btn-body .font-serif').className='font-serif text-[22px] leading-none text-[#1e3e35]';
+    document.querySelector('#btn-auto .font-serif').className='font-serif text-[22px] leading-none';
+  }
+}
+
+function selectCategory(cat){
+  currentCategory = cat;
+  updateCategoryUI();
+  renderProducts();
+}
+function updateCategoryUI(){
+  const sensa = document.getElementById('cat-sensa');
+  const aura = document.getElementById('cat-aura');
+  if(!sensa) return;
+  if(currentCategory==='sensa'){
+    sensa.className='px-6 py-3 rounded-full bg-[#1e3e35] text-white text-[13px] tracking-[0.12em] font-bold';
+    aura.className='px-6 py-3 rounded-full bg-white border border-black/10 text-[#1e3e35] text-[13px] tracking-[0.12em] font-bold hover:bg-black/5';
+  } else if(currentCategory==='aura'){
+    aura.className='px-6 py-3 rounded-full bg-[#1e3e35] text-white text-[13px] tracking-[0.12em] font-bold';
+    sensa.className='px-6 py-3 rounded-full bg-white border border-black/10 text-[#1e3e35] text-[13px] tracking-[0.12em] font-bold hover:bg-black/5';
+  }
+}
+
+function renderProducts(){
+  const grid = document.getElementById('products-grid');
+  let list = products.filter(p=> p.line===currentLine);
+  if(currentLine==='body') list = list.filter(p=> p.category===currentCategory);
+  if(list.length===0){
+    grid.innerHTML = `<div class="col-span-full bg-white rounded-2xl p-10 text-center border border-black/5"><div class="font-semibold">Скоро новые ароматы</div><div class="text-sm text-black/50 mt-1">Следите за обновлениями</div></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(p=> `
+    <div class="bg-white rounded-[24px] overflow-hidden border border-black/[0.06] shadow-[0_10px_30px_rgba(0,0,0,0.04)] flex flex-col group hover:shadow-[0_20px_50px_rgba(30,62,53,0.12)] transition-all duration-300 hover:-translate-y-1">
+      <div class="relative h-[300px] bg-gradient-to-b from-[#f4f7f5] to-white flex items-center justify-center p-6 overflow-hidden">
+        ${p.badge? `<div class="absolute top-4 left-4 bg-[#1e3e35] text-white text-[10px] tracking-[0.14em] font-bold px-3 py-1.5 rounded-full">${p.badge}</div>`:''}
+        <div class="absolute top-4 right-4 bg-white border border-black/5 text-[11px] font-bold px-3 py-1 rounded-full">${p.volume}</div>
+        <!-- bottle illustration -->
+        <div class="relative w-[140px] h-[220px] rounded-[22px] border border-black/5 shadow-[0_15px_35px_rgba(0,0,0,0.08)] flex flex-col items-center pt-5 overflow-hidden" style="background:${p.color===' #1e3e35'?'#1e3e35': p.id.includes('modul')?'#1e3e35':'white'}; ${p.id==='modul-20'?'color:white':''}">
+          <div class="w-[46px] h-[32px] rounded-t-[9px] ${p.id==='modul-20'?'bg-white':'bg-[#1e3e35]'} relative"><div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-7 h-3 ${p.id==='modul-20'?'bg-white':'bg-[#1e3e35]'} rounded-t-full"></div></div>
+          <div class="mt-3 w-[88%] ${p.id==='modul-20'?'bg-white text-[#1e3e35]':'bg-[#1e3e35] text-white'} rounded-[16px] p-3 text-center">
+            <div class="text-[8px] tracking-[0.18em] font-bold ${p.id==='modul-20'?'text-[#7a9d8f]':'text-white/60'}">MIREA</div>
+            <div class="font-serif text-[18px] leading-none mt-1">${p.name}</div>
+            <div class="text-[8px] tracking-[0.12em] mt-1 leading-tight ${p.id==='modul-20'?'text-black/50':'text-white/70'}">${p.subtitle}</div>
+            ${p.id==='modul-20'? `<div class="mt-2 bg-[#1e3e35] text-white text-[7px] tracking-[0.12em] font-bold px-2 py-1 rounded-full inline-block">20 Л • 3500 ₽</div>`:''}
+          </div>
+          <div class="mt-auto mb-3 text-[9px] tracking-[0.12em] font-bold ${p.id==='modul-20'?'text-white/40':'text-black/30'}">${p.volume}</div>
+          <div class="absolute bottom-0 h-1.5 w-full ${p.accent===' #e8b44f'?'bg-[#e8b44f]': p.accent==='#e8b44f'?'bg-[#e8b44f]':'bg-[#1e3e35]'} " style="background:${p.accent}"></div>
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-1">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="font-serif text-[20px] leading-none font-semibold">${p.name} <span class="font-normal text-black/60 text-[15px]">— ${p.subtitle}</span></div>
+            <div class="text-[11px] tracking-[0.12em] font-bold text-black/30 mt-1">${p.id.includes('sensa')?'ГЕЛЬ ДЛЯ ДУША': p.id.includes('aura')?'ЖИДКОЕ МЫЛО':'АВТОШАМПУНЬ'} • ${p.volume}</div>
+          </div>
+          <div class="text-right shrink-0">
+            <div class="font-extrabold text-[18px] leading-none">${p.price.toLocaleString('ru-RU')} ₽</div>
+            ${p.oldPrice? `<div class="text-xs text-black/30 line-through">${p.oldPrice.toLocaleString('ru-RU')} ₽</div>`:''}
+          </div>
+        </div>
+        <p class="text-[13px] leading-relaxed text-black/55 mt-3 line-clamp-2">${p.desc}</p>
+        <div class="flex items-center gap-2 mt-3 text-[11px] text-black/40"><span class="w-1.5 h-1.5 rounded-full bg-[#7a9d8f]"></span> ${p.scent}</div>
+        <div class="flex gap-2 mt-5">
+          <button onclick="addToCart('${p.id}')" class="flex-1 bg-[#1e3e35] text-white rounded-full py-3 text-[12px] tracking-[0.12em] font-bold hover:bg-[#162e27] transition">В КОРЗИНУ</button>
+          <button onclick="addToCart('${p.id}', true)" class="w-12 h-12 rounded-full border border-black/10 grid place-items-center hover:bg-black/5">♡</button>
+        </div>
+        <div class="mt-3 flex items-center justify-between text-[11px]"><span class="text-[#7a9d8f] font-semibold">● В наличии</span><span class="text-black/30">арт. ${p.id.toUpperCase()}</span></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// CART
+function addToCart(id, open=false){
+  const prod = products.find(p=>p.id===id);
+  const existing = cart.find(c=>c.id===id);
+  if(existing) existing.qty++;
+  else cart.push({id, qty:1, price:prod.price, name: prod.name+' — '+prod.subtitle});
+  localStorage.setItem('mirea_cart', JSON.stringify(cart));
+  updateCartUI();
+  showToast('Товар добавлен в корзину');
+  if(open) toggleCart(true);
+}
+function updateCartUI(){
+  const count = cart.reduce((s,c)=>s+c.qty,0);
+  const badge = document.getElementById('cart-badge');
+  const countEl = document.getElementById('cart-count');
+  if(count>0){ badge.classList.remove('hidden'); badge.textContent=count; } else badge.classList.add('hidden');
+  if(countEl) countEl.textContent=count;
+  const subtotal = cart.reduce((s,c)=> s + c.price*c.qty,0);
+  document.getElementById('cart-subtotal').textContent = subtotal.toLocaleString('ru-RU')+' ₽';
+  document.getElementById('cart-total').textContent = subtotal.toLocaleString('ru-RU')+' ₽';
+  const itemsEl = document.getElementById('cart-items');
+  if(cart.length===0){
+    itemsEl.innerHTML = `<div class="text-center py-16"><div class="w-16 h-16 rounded-full bg-[#f4f7f5] grid place-items-center mx-auto text-2xl">🛒</div><div class="font-semibold mt-4">Корзина пуста</div><div class="text-sm text-black/40 mt-1">Добавьте ароматы из каталога</div><a href="#products" onclick="toggleCart(false)" class="inline-block mt-4 bg-[#1e3e35] text-white rounded-full px-6 py-2.5 text-xs tracking-[0.12em] font-bold">В КАТАЛОГ</a></div>`;
+  } else {
+    itemsEl.innerHTML = cart.map(item=>{
+      const p = products.find(x=>x.id===item.id);
+      return `<div class="flex gap-4 bg-[#f4f7f5] rounded-2xl p-4">
+        <div class="w-16 h-20 bg-white rounded-xl border border-black/5 grid place-items-center text-[10px] font-bold text-center leading-tight p-2 shrink-0">${p.name}<br><span class="text-black/40">${p.volume}</span></div>
+        <div class="flex-1">
+          <div class="font-semibold text-sm leading-tight">${p.name} — ${p.subtitle}</div>
+          <div class="text-xs text-black/40">${p.volume} • ${p.price.toLocaleString('ru-RU')} ₽</div>
+          <div class="flex items-center gap-2 mt-2">
+            <button onclick="changeQty('${item.id}',-1)" class="w-7 h-7 rounded-full bg-white border border-black/10 grid place-items-center">−</button>
+            <span class="w-8 text-center font-bold text-sm">${item.qty}</span>
+            <button onclick="changeQty('${item.id}',1)" class="w-7 h-7 rounded-full bg-[#1e3e35] text-white grid place-items-center">+</button>
+            <span class="ml-auto font-bold text-sm">${(item.price*item.qty).toLocaleString('ru-RU')} ₽</span>
+          </div>
+        </div>
+        <button onclick="removeFromCart('${item.id}')" class="self-start w-7 h-7 rounded-full bg-white grid place-items-center text-black/40 hover:text-red-500">✕</button>
+      </div>`;
+    }).join('');
+  }
+  // checkout summary
+  const sumEl = document.getElementById('checkout-summary');
+  if(sumEl){
+    if(cart.length===0) sumEl.innerHTML = 'Корзина пуста';
+    else {
+      const total = cart.reduce((s,c)=>s+c.price*c.qty,0);
+      sumEl.innerHTML = cart.map(c=> `<div class="flex justify-between py-1"><span>${c.name} × ${c.qty}</span><span class="font-bold">${(c.price*c.qty).toLocaleString('ru-RU')} ₽</span></div>`).join('') + `<div class="border-t border-black/10 mt-2 pt-2 flex justify-between font-extrabold"><span>Итого</span><span>${total.toLocaleString('ru-RU')} ₽</span></div>`;
+    }
+  }
+}
+function changeQty(id, delta){
+  const item = cart.find(c=>c.id===id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty<=0) cart = cart.filter(c=>c.id!==id);
+  localStorage.setItem('mirea_cart', JSON.stringify(cart));
+  updateCartUI();
+}
+function removeFromCart(id){
+  cart = cart.filter(c=>c.id!==id);
+  localStorage.setItem('mirea_cart', JSON.stringify(cart));
+  updateCartUI();
+}
+function toggleCart(show){
+  const drawer = document.getElementById('cart-drawer');
+  const overlay = document.getElementById('cart-overlay');
+  if(show){
+    overlay.classList.remove('hidden'); setTimeout(()=> overlay.classList.remove('opacity-0'),10);
+    drawer.classList.remove('translate-x-full');
+    updateCartUI();
+  } else {
+    overlay.classList.add('opacity-0'); drawer.classList.add('translate-x-full');
+    setTimeout(()=> overlay.classList.add('hidden'),300);
+  }
+}
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.remove('hidden');
+  setTimeout(()=> t.classList.add('hidden'), 2500);
+}
+
+// MODALS
+function openWholesale(){ document.getElementById('wholesale-modal').classList.remove('hidden'); }
+function closeWholesale(){ document.getElementById('wholesale-modal').classList.add('hidden'); }
+function openCheckout(){
+  if(cart.length===0){ showToast('Корзина пуста'); return; }
+  toggleCart(false);
+  updateCartUI();
+  document.getElementById('checkout-modal').classList.remove('hidden');
+}
+function closeCheckout(){ document.getElementById('checkout-modal').classList.add('hidden'); }
+
+async function submitWholesale(e){
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const data = Object.fromEntries(fd.entries());
+  data.cart = [];
+  data.date = new Date().toISOString();
+  // save for admin
+  const leads = JSON.parse(localStorage.getItem('mirea_leads')||'[]');
+  leads.push(data);
+  localStorage.setItem('mirea_leads', JSON.stringify(leads));
+  // try php
+  try{
+    await fetch('api/send_cooperation.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
+  } catch(err){}
+  // mailto fallback
+  const body = `Запрос опта MIREA%0AИмя: ${data.name}%0AТелефон: ${data.phone}%0AEmail: ${data.email}%0AКомпания: ${data.company}%0AСообщение: ${data.message}`;
+  // window.open(`mailto:cooperation@mireacare.ru?subject=Опт MIREA&body=${body}`);
+  e.target.reset();
+  closeWholesale();
+  showToast('Запрос отправлен на cooperation@mireacare.ru ✓');
+}
+
+async function submitOrder(e){
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const data = Object.fromEntries(fd.entries());
+  data.cart = [...cart];
+  data.total = cart.reduce((s,c)=>s+c.price*c.qty,0);
+  data.date = new Date().toISOString();
+  data.id = 'ORD-'+Date.now().toString(36).toUpperCase();
+  // save sale for admin
+  const sales = JSON.parse(localStorage.getItem('mirea_sales')||'[]');
+  sales.push({id:data.id, date:data.date, customer:data.name, phone:data.phone, email:data.email, address:data.address, items: data.cart.map(c=> ({...c})), total:data.total, payment:'при получении', status:'новый'});
+  localStorage.setItem('mirea_sales', JSON.stringify(sales));
+  // also save clients
+  const clients = JSON.parse(localStorage.getItem('mirea_clients')||'[]');
+  if(!clients.find(c=>c.phone===data.phone)){
+    clients.push({id:'CLI-'+Date.now().toString(36), fio:data.name, phone:data.phone, email:data.email, address:data.address, type:'физлицо', date:data.date});
+    localStorage.setItem('mirea_clients', JSON.stringify(clients));
+  }
+  try{
+    await fetch('api/send_order.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
+  } catch(err){}
+  cart=[]; localStorage.setItem('mirea_cart', JSON.stringify(cart)); updateCartUI();
+  e.target.reset();
+  closeCheckout();
+  showToast('Заказ '+data.id+' отправлен на order@mireacare.ru ✓');
+}
+
+// NAV scroll effect
+window.addEventListener('scroll', ()=>{
+  const nav = document.getElementById('navbar');
+  if(window.scrollY>10) nav.classList.add('shadow-sm');
+  else nav.classList.remove('shadow-sm');
+});
+document.getElementById('burger').addEventListener('click', ()=>{
+  document.getElementById('mobile-menu').classList.toggle('hidden');
+});
+function closeMobile(){ document.getElementById('mobile-menu').classList.add('hidden'); }
+
+// init
+selectLine('body');
+renderProducts();
+updateCartUI();
+</script>
+</body>
+</html>

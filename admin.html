@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIREA — Админ-панель</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gold:'#e8b44f',light:'#f4f7f5'}},fontFamily:{sans:['Manrope','sans-serif'],display:['Space Grotesk','sans-serif']}}}}
+</script>
+<style>::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#7a9d8f;border-radius:99px}</style>
+</head>
+<body class="bg-[#f4f7f5] text-[#1e3e35] font-sans antialiased">
+
+<!-- LOGIN -->
+<div id="login-screen" class="min-h-screen grid place-items-center bg-[#1e3e35] p-4">
+  <div class="bg-white rounded-[24px] max-w-[420px] w-full p-8 shadow-2xl">
+    <div class="w-12 h-12 rounded-xl bg-[#1e3e35] text-white grid place-items-center font-bold tracking-widest">M</div>
+    <h1 class="font-display text-[22px] font-semibold mt-4">Админ-панель MIREA</h1>
+    <p class="text-sm text-black/50 mt-1">Вход для управления каталогом и продажами</p>
+    <form onsubmit="login(event)" class="mt-6 space-y-4">
+      <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ЛОГИН</span><input id="login-user" value="admin" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
+      <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ПАРОЛЬ</span><input id="login-pass" type="password" value="mirea2024" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
+      <button class="w-full bg-[#1e3e35] text-white rounded-full py-3.5 text-sm tracking-[0.12em] font-bold">ВОЙТИ →</button>
+      <div class="text-[11px] text-center text-black/30">Демо: admin / mirea2024 • Сменить в настройках</div>
+      <div id="login-error" class="text-sm text-red-600 hidden text-center"></div>
+    </form>
+    <a href="index.html" class="block text-center text-xs font-bold tracking-[0.12em] text-black/30 mt-4 hover:text-black/60">← ВЕРНУТЬСЯ НА САЙТ</a>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden min-h-screen flex">
+  <!-- sidebar -->
+  <aside class="hidden lg:flex w-[260px] bg-[#1e3e35] text-white flex-col sticky top-0 h-screen">
+    <div class="p-6 border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-white text-[#1e3e35] grid place-items-center font-bold">M</div>
+        <div><div class="font-display font-bold tracking-[0.14em]">MIREA</div><div class="text-[10px] tracking-[0.14em] text-white/50 font-bold">ADMIN PANEL</div></div>
+      </div>
+    </div>
+    <nav class="flex-1 p-4 space-y-1 overflow-auto">
+      <button onclick="switchTab('dash')" data-tab="dash" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl bg-white text-[#1e3e35] font-bold text-sm"><span>◈</span> Дашборд</button>
+      <button onclick="switchTab('products')" data-tab="products" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>⬢</span> Товары и линейки</button>
+      <button onclick="switchTab('sales')" data-tab="sales" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>◍</span> Продажи</button>
+      <button onclick="switchTab('clients')" data-tab="clients" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>◎</span> Клиенты</button>
+      <button onclick="switchTab('leads')" data-tab="leads" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>✉</span> Оптовые заявки</button>
+      <button onclick="switchTab('stats')" data-tab="stats" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>▦</span> Статистика</button>
+      <button onclick="switchTab('settings')" data-tab="settings" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>⚙</span> Настройки</button>
+    </nav>
+    <div class="p-4 border-t border-white/10">
+      <div class="bg-white/10 rounded-xl p-3 flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-[#e8b44f] grid place-items-center text-[#1e3e35] font-bold text-xs">A</div>
+        <div class="flex-1"><div class="text-sm font-bold leading-none">Администратор</div><div class="text-xs text-white/50">admin@mireacare.ru</div></div>
+      </div>
+      <button onclick="logout()" class="w-full mt-3 text-xs tracking-[0.12em] font-bold text-white/50 hover:text-white">ВЫЙТИ</button>
+    </div>
+  </aside>
+
+  <!-- main -->
+  <div class="flex-1 min-w-0">
+    <!-- topbar mobile -->
+    <div class="lg:hidden bg-[#1e3e35] text-white p-4 flex items-center justify-between sticky top-0 z-20">
+      <div class="font-bold tracking-[0.14em]">MIREA ADMIN</div>
+      <select onchange="switchTab(this.value)" class="bg-white text-[#1e3e35] rounded-full px-4 py-2 text-sm font-bold">
+        <option value="dash">Дашборд</option>
+        <option value="products">Товары</option>
+        <option value="sales">Продажи</option>
+        <option value="clients">Клиенты</option>
+        <option value="leads">Оптовые заявки</option>
+        <option value="stats">Статистика</option>
+        <option value="settings">Настройки</option>
+      </select>
+    </div>
+
+    <!-- DASH -->
+    <div id="tab-dash" class="tab-panel p-4 lg:p-8 max-w-[1200px] mx-auto">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div><h2 class="font-display text-[28px] font-semibold">Дашборд</h2><p class="text-sm text-black/50">Сводка по продажам и активности</p></div>
+        <div class="flex gap-2">
+          <button onclick="exportData()" class="bg-white border border-black/10 rounded-full px-5 py-2.5 text-xs tracking-[0.12em] font-bold">ЭКСПОРТ CSV</button>
+          <button onclick="switchTab('sales')" class="bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs tracking-[0.12em] font-bold">+ ПРОДАЖА</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+        <div class="bg-white rounded-2xl p-5 border border-black/5">
+          <div class="text-[11px] tracking-[0.14em] font-bold text-black/40">ВЫРУЧКА</div>
+          <div id="dash-revenue" class="font-display text-[24px] font-semibold mt-1">—</div>
+          <div class="text-xs text-[#7a9d8f] font-semibold mt-1">за выбранный период</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-black/5">
+          <div class="text-[11px] tracking-[0.14em] font-bold text-black/40">ЗАКАЗОВ</div>
+          <div id="dash-orders" class="font-display text-[24px] font-semibold mt-1">—</div>
+          <div id="dash-orders-sub" class="text-xs text-black/40 mt-1">—</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-black/5">
+          <div class="text-[11px] tracking-[0.14em] font-bold text-black/40">СРЕДНИЙ ЧЕК</div>
+          <div id="dash-aov" class="font-display text-[24px] font-semibold mt-1">—</div>
+          <div class="text-xs text-black/40 mt-1">на заказ</div>
+        </div>
+        <div class="bg-[#1e3e35] text-white rounded-2xl p-5">
+          <div class="text-[11px] tracking-[0.14em] font-bold text-white/50">ТОП ТОВАР</div>
+          <div id="dash-top" class="font-display text-[16px] font-semibold mt-2 leading-tight">—</div>
+          <div id="dash-top-sub" class="text-xs text-white/60 mt-1">—</div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-4 mt-6">
+        <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-black/5">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold">Выручка по дням</h3>
+            <select id="dash-period" onchange="renderDash()" class="bg-[#f4f7f5] rounded-full px-3 py-1.5 text-xs font-bold">
+              <option value="7">7 дней</option>
+              <option value="30">30 дней</option>
+              <option value="90">90 дней</option>
+              <option value="365">Год</option>
+            </select>
+          </div>
+          <canvas id="dash-chart" height="120" class="mt-4"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-black/5">
+          <h3 class="font-bold">Последние продажи</h3>
+          <div id="dash-recent" class="mt-4 space-y-3"></div>
+          <button onclick="switchTab('sales')" class="w-full mt-4 bg-[#f4f7f5] rounded-full py-2.5 text-xs tracking-[0.12em] font-bold">ВСЕ ПРОДАЖИ →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div id="tab-products" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
+      <div class="flex flex-wrap justify-between gap-4 items-start">
+        <div><h2 class="font-display text-[28px] font-semibold">Товары и линейки</h2><p class="text-sm text-black/50">Управляйте каталогом: добавляйте линейки, категории и товары</p></div>
+        <button onclick="openProductModal()" class="bg-[#e8b44f] text-[#1e3e35] rounded-full px-6 py-3 text-xs tracking-[0.12em] font-extrabold">+ ДОБАВИТЬ ТОВАР</button>
+      </div>
+
+      <!-- line manager -->
+      <div class="mt-6 bg-white rounded-2xl p-6 border border-black/5">
+        <h3 class="font-bold text-sm tracking-[0.1em]">ЛИНЕЙКИ</h3>
+        <div id="lines-list" class="flex flex-wrap gap-3 mt-3"></div>
+        <div class="flex gap-2 mt-4">
+          <input id="new-line-name" placeholder="Название линейки, напр. Home" class="flex-1 max-w-[220px] rounded-xl border border-black/10 px-4 py-2.5 text-sm">
+          <input id="new-line-id" placeholder="id (home)" class="w-[140px] rounded-xl border border-black/10 px-4 py-2.5 text-sm">
+          <button onclick="addLine()" class="bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs font-bold">+ ЛИНЕЙКА</button>
+        </div>
+      </div>
+
+      <div id="products-list" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+
+    <!-- SALES -->
+    <div id="tab-sales" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
+      <div class="flex flex-wrap justify-between gap-4">
+        <div><h2 class="font-display text-[28px] font-semibold">Продажи</h2><p class="text-sm text-black/50">Все заказы с сайта и ручные продажи</p></div>
+        <button onclick="openSaleModal()" class="bg-[#1e3e35] text-white rounded-full px-6 py-3 text-xs tracking-[0.12em] font-bold">+ ДОБАВИТЬ ПРОДАЖУ</button>
+      </div>
+      <div class="mt-6 bg-white rounded-2xl border border-black/5 overflow-hidden">
+        <div class="p-4 flex flex-wrap gap-2 border-b border-black/5">
+          <input id="sales-search" oninput="renderSales()" placeholder="Поиск по клиенту, ID…" class="flex-1 min-w-[220px] rounded-full border border-black/10 px-4 py-2.5 text-sm">
+          <select id="sales-filter-payment" onchange="renderSales()" class="rounded-full border border-black/10 px-4 py-2.5 text-sm font-semibold">
+            <option value="">Все оплаты</option>
+            <option value="при получении">При получении</option>
+            <option value="картой">Картой</option>
+            <option value="по счёту">По счёту</option>
+            <option value="перевод">Перевод</option>
+          </select>
+        </div>
+        <div class="overflow-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-[#f4f7f5] text-[11px] tracking-[0.12em] font-bold text-black/40"><tr><th class="text-left p-3">ID / ДАТА</th><th class="text-left p-3">КЛИЕНТ</th><th class="text-left p-3">ТОВАРЫ</th><th class="text-right p-3">СУММА</th><th class="text-left p-3">ОПЛАТА</th><th class="p-3"></th></tr></thead>
+            <tbody id="sales-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div id="tab-clients" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
+      <div class="flex flex-wrap justify-between gap-4">
+        <div><h2 class="font-display text-[28px] font-semibold">Клиенты</h2><p class="text-sm text-black/50">База клиентов с типами и историей</p></div>
+        <button onclick="openClientModal()" class="bg-[#1e3e35] text-white rounded-full px-6 py-3 text-xs tracking-[0.12em] font-bold">+ ДОБАВИТЬ КЛИЕНТА</button>
+      </div>
+      <div class="mt-6 bg-white rounded-2xl border border-black/5 overflow-hidden">
+        <div class="p-4 border-b border-black/5 flex gap-2">
+          <input id="clients-search" oninput="renderClients()" placeholder="Поиск ФИО, телефон…" class="flex-1 rounded-full border border-black/10 px-4 py-2.5 text-sm">
+          <select id="clients-filter-type" onchange="renderClients()" class="rounded-full border border-black/10 px-4 py-2.5 text-sm font-semibold">
+            <option value="">Все типы</option>
+            <option value="физлицо">Физлицо</option>
+            <option value="самозанятый">Самозанятый</option>
+            <option value="ИП">ИП</option>
+            <option value="юрлицо">Юрлицо</option>
+          </select>
+        </div>
+        <div id="clients-list" class="divide-y divide-black/5"></div>
+      </div>
+    </div>
+
+    <!-- LEADS -->
+    <div id="tab-leads" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
+      <h2 class="font-display text-[28px] font-semibold">Оптовые заявки</h2>
+      <p class="text-sm text-black/50">Запросы с формы «Оптовые закупки» → cooperation@mireacare.ru</p>
+      <div id="leads-list" class="mt-6 space-y-3"></div>
+    </div>
+
+    <!-- STATS -->
+    <div id="tab-stats" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
+      <h2 class="font-display text-[28px] font-semibold">Статистика</h2>
+      <p class="text-sm text-black/50">Аналитика по периодам и товарам</p>
+
+      <div class="mt-6 flex flex-wrap gap-2">
+        <button onclick="setStatsPeriod('1')" data-p="1" class="stats-period-btn bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs font-bold">1 ДЕНЬ</button>
+        <button onclick="setStatsPeriod('7')" data-p="7" class="stats-period-btn bg-white border border-black/10 rounded-full px-5 py-2.5 text-xs font-bold">НЕДЕЛЯ</button>
+        <button onclick="setStatsPeriod('30')" data-p="30" class="stats-period-btn bg-white border border-black/10 rounded-full px-5 py-2.5 text-xs font-bold">МЕСЯЦ</button>
+        <button onclick="setStatsPeriod('365')" data-p="365" class="stats-period-btn bg-white border border-black/10 rounded-full px-5 py-2.5 text-xs font-bold">ГОД</button>
+        <span id="stats-range" class="ml-2 text-xs text-black/40 self-center"></span>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-4 mt-6">
+        <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-black/5">
+          <h3 class="font-bold">Динамика выручки</h3>
+          <canvas id="stats-chart" height="140" class="mt-4"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-black/5">
+          <h3 class="font-bold">Топ товаров</h3>
+          <div id="stats-top-products" class="mt-4 space-y-3"></div>
+        </div>
+      </div>
+
+      <div class="mt-4 grid lg:grid-cols-2 gap-4">
+        <div class="bg-white rounded-2xl p-6 border border-black/5">
+          <h3 class="font-bold">Продажи по типам оплаты</h3>
+          <canvas id="stats-pay" height="140" class="mt-4"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-black/5">
+          <h3 class="font-bold">Продажи по клиентам (тип)</h3>
+          <canvas id="stats-client-type" height="140" class="mt-4"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="tab-settings" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
+      <h2 class="font-display text-[28px] font-semibold">Настройки</h2>
+      <div class="mt-6 grid lg:grid-cols-2 gap-4">
+        <div class="bg-white rounded-2xl p-6 border border-black/5">
+          <h3 class="font-bold">Почта</h3>
+          <label class="block mt-4"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ЗАКАЗЫ →</span><input id="set-order-email" value="order@mireacare.ru" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
+          <label class="block mt-3"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ОПТ →</span><input id="set-coop-email" value="cooperation@mireacare.ru" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
+          <label class="block mt-3"><span class="text-xs font-bold tracking-[0.12em] text-black/40">АДРЕС</span><input id="set-address" value="г. Дербент, ул. Шоссейная, д 26" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
+          <label class="block mt-3"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ТЕЛЕФОН</span><input id="set-phone" value="+79384900111" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
+          <button onclick="saveSettings()" class="mt-4 bg-[#1e3e35] text-white rounded-full px-6 py-3 text-xs tracking-[0.12em] font-bold">СОХРАНИТЬ</button>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-black/5">
+          <h3 class="font-bold">Данные</h3>
+          <p class="text-sm text-black/50 mt-2">Все данные хранятся в браузере (localStorage) и доступны на сайте. Для продакшена подключите PHP/MySQL.</p>
+          <div class="flex flex-wrap gap-2 mt-4">
+            <button onclick="seedDemo()" class="bg-[#e8b44f] text-[#1e3e35] rounded-full px-5 py-2.5 text-xs font-bold">ЗАПОЛНИТЬ ДЕМО-ДАННЫМИ</button>
+            <button onclick="clearAll()" class="bg-white border border-red-200 text-red-600 rounded-full px-5 py-2.5 text-xs font-bold">ОЧИСТИТЬ ВСЁ</button>
+          </div>
+          <div class="mt-6 text-xs text-black/40">Экспорт: <button onclick="exportData()" class="underline font-bold">скачать CSV</button> • <button onclick="exportJSON()" class="underline font-bold">JSON</button></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="product-modal" class="fixed inset-0 z-50 hidden"><div onclick="closeProductModal()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div><div class="absolute inset-0 grid place-items-center p-4"><div class="bg-white rounded-[24px] max-w-[560px] w-full max-h-[90vh] overflow-auto p-6">
+  <div class="flex justify-between items-center"><h3 class="font-display text-xl font-semibold">Товар</h3><button onclick="closeProductModal()" class="w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button></div>
+  <form id="product-form" onsubmit="saveProduct(event)" class="mt-4 space-y-3">
+    <input type="hidden" name="id">
+    <div class="grid grid-cols-2 gap-3">
+      <label class="block"><span class="text-xs font-bold text-black/40">ЛИНЕЙКА (body/auto)</span><input name="line" required placeholder="body" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+      <label class="block"><span class="text-xs font-bold text-black/40">КАТЕГОРИЯ</span><input name="category" required placeholder="sensa/aura/modul" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    </div>
+    <label class="block"><span class="text-xs font-bold text-black/40">НАЗВАНИЕ</span><input name="name" required placeholder="Sensa" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    <label class="block"><span class="text-xs font-bold text-black/40">ПОДЗАГОЛОВОК (аромат)</span><input name="subtitle" required placeholder="Жасмин + Персик" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    <label class="block"><span class="text-xs font-bold text-black/40">ОПИСАНИЕ</span><textarea name="desc" rows="2" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></textarea></label>
+    <div class="grid grid-cols-3 gap-3">
+      <label class="block"><span class="text-xs font-bold text-black/40">ОБЪЁМ</span><input name="volume" required placeholder="500 мл" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+      <label class="block"><span class="text-xs font-bold text-black/40">ЦЕНА</span><input name="price" type="number" required placeholder="590" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+      <label class="block"><span class="text-xs font-bold text-black/40">СТАРАЯ ЦЕНА</span><input name="oldPrice" type="number" placeholder="750" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <label class="block"><span class="text-xs font-bold text-black/40">БЕЙДЖ</span><input name="badge" placeholder="ХИТ" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+      <label class="block"><span class="text-xs font-bold text-black/40">АРОМАТ (состав)</span><input name="scent" placeholder="Жасмин, персик" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    </div>
+    <button class="w-full bg-[#1e3e35] text-white rounded-full py-3 text-sm font-bold mt-2">СОХРАНИТЬ</button>
+  </form>
+</div></div></div>
+
+<div id="client-modal" class="fixed inset-0 z-50 hidden"><div onclick="closeClientModal()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div><div class="absolute inset-0 grid place-items-center p-4"><div class="bg-white rounded-[24px] max-w-[560px] w-full max-h-[90vh] overflow-auto p-6">
+  <div class="flex justify-between items-center"><h3 class="font-display text-xl font-semibold">Клиент</h3><button onclick="closeClientModal()" class="w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button></div>
+  <form id="client-form" onsubmit="saveClient(event)" class="mt-4 space-y-3">
+    <input type="hidden" name="id">
+    <label class="block"><span class="text-xs font-bold text-black/40">ФИО *</span><input name="fio" required placeholder="Иванов Иван Иванович" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    <div class="grid grid-cols-2 gap-3">
+      <label class="block"><span class="text-xs font-bold text-black/40">ТЕЛЕФОН *</span><input name="phone" required placeholder="+7 938 000-00-00" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+      <label class="block"><span class="text-xs font-bold text-black/40">EMAIL</span><input name="email" type="email" placeholder="mail@example.com" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    </div>
+    <label class="block"><span class="text-xs font-bold text-black/40">ТИП КЛИЕНТА</span><select name="type" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"><option value="физлицо">Физлицо</option><option value="самозанятый">Самозанятый</option><option value="ИП">ИП</option><option value="юрлицо">Юрлицо</option></select></label>
+    <label class="block"><span class="text-xs font-bold text-black/40">АДРЕС</span><input name="address" placeholder="Город, улица" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    <label class="block"><span class="text-xs font-bold text-black/40">КОМПАНИЯ / ИНН</span><input name="company" placeholder="ООО Ромашка, ИНН" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    <label class="block"><span class="text-xs font-bold text-black/40">КОММЕНТАРИЙ</span><textarea name="comment" rows="2" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></textarea></label>
+    <button class="w-full bg-[#1e3e35] text-white rounded-full py-3 text-sm font-bold">СОХРАНИТЬ</button>
+  </form>
+</div></div></div>
+
+<div id="sale-modal" class="fixed inset-0 z-50 hidden"><div onclick="closeSaleModal()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div><div class="absolute inset-0 grid place-items-center p-4"><div class="bg-white rounded-[24px] max-w-[560px] w-full max-h-[90vh] overflow-auto p-6">
+  <div class="flex justify-between items-center"><h3 class="font-display text-xl font-semibold">Продажа</h3><button onclick="closeSaleModal()" class="w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button></div>
+  <form id="sale-form" onsubmit="saveSale(event)" class="mt-4 space-y-3">
+    <label class="block"><span class="text-xs font-bold text-black/40">КЛИЕНТ (выберите или введите)</span><input list="clients-datalist" name="customer" required placeholder="ФИО" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"><datalist id="clients-datalist"></datalist></label>
+    <label class="block"><span class="text-xs font-bold text-black/40">ТЕЛЕФОН</span><input name="phone" placeholder="+7..." class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    <div id="sale-items" class="space-y-2"></div>
+    <button type="button" onclick="addSaleItem()" class="w-full bg-[#f4f7f5] rounded-full py-2.5 text-xs font-bold border border-black/5">+ ТОВАР</button>
+    <div class="grid grid-cols-2 gap-3">
+      <label class="block"><span class="text-xs font-bold text-black/40">СУММА (автомат или вручную)</span><input name="total" type="number" placeholder="0" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+      <label class="block"><span class="text-xs font-bold text-black/40">ОПЛАТА</span><select name="payment" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"><option value="при получении">При получении</option><option value="картой">Картой</option><option value="по счёту">По счёту</option><option value="перевод">Перевод</option><option value="наличные">Наличные</option></select></label>
+    </div>
+    <label class="block"><span class="text-xs font-bold text-black/40">ДАТА</span><input name="date" type="date" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    <button class="w-full bg-[#e8b44f] text-[#1e3e35] rounded-full py-3 text-sm font-extrabold">СОХРАНИТЬ ПРОДАЖУ</button>
+  </form>
+</div></div></div>
+
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#1e3e35] text-white px-6 py-3 rounded-full text-sm font-semibold shadow-xl z-[80] hidden"></div>
+
+<script>
+let products = JSON.parse(localStorage.getItem('mirea_products')||'null') || [
+  { id:'sensa-jasmin', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', scent:'Жасмин, персик, белый мускус' },
+  { id:'sensa-grape', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', scent:'Грейпфрут, розовый перец, кедр' },
+  { id:'aura-almond', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', scent:'Миндаль, вишня, ваниль' },
+  { id:'aura-honey', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом.', volume:'500 мл', price:490, oldPrice:650, badge:'', scent:'Мёд, молоко' },
+  { id:'modul-20', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь 1:50', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', scent:'—' },
+];
+let sales = JSON.parse(localStorage.getItem('mirea_sales')||'[]');
+let clients = JSON.parse(localStorage.getItem('mirea_clients')||'[]');
+let leads = JSON.parse(localStorage.getItem('mirea_leads')||'[]');
+let lines = JSON.parse(localStorage.getItem('mirea_lines')||'null') || [{id:'body', name:'Body'}, {id:'auto', name:'Auto'}];
+let statsPeriod = 7;
+let dashChart, statsChart, payChart, clientTypeChart;
+
+function saveAll(){
+  localStorage.setItem('mirea_products', JSON.stringify(products));
+  localStorage.setItem('mirea_sales', JSON.stringify(sales));
+  localStorage.setItem('mirea_clients', JSON.stringify(clients));
+  localStorage.setItem('mirea_lines', JSON.stringify(lines));
+}
+
+function login(e){
+  e.preventDefault();
+  const u = document.getElementById('login-user').value;
+  const p = document.getElementById('login-pass').value;
+  const savedPass = localStorage.getItem('mirea_admin_pass') || 'mirea2024';
+  if(u==='admin' && p===savedPass){
+    localStorage.setItem('mirea_admin_auth','1');
+    showApp();
+  } else {
+    document.getElementById('login-error').textContent='Неверный логин или пароль';
+    document.getElementById('login-error').classList.remove('hidden');
+  }
+}
+function logout(){ localStorage.removeItem('mirea_admin_auth'); location.reload(); }
+function showApp(){
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  renderAll();
+}
+if(localStorage.getItem('mirea_admin_auth')==='1') showApp();
+
+function switchTab(tab){
+  document.querySelectorAll('.tab-panel').forEach(el=> el.classList.add('hidden'));
+  document.getElementById('tab-'+tab).classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    if(b.dataset.tab===tab) b.className='tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl bg-white text-[#1e3e35] font-bold text-sm';
+    else b.className='tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold';
+  });
+  if(tab==='dash') setTimeout(renderDash,50);
+  if(tab==='stats') setTimeout(renderStats,50);
+  if(tab==='products') renderProductsAdmin();
+  if(tab==='sales') renderSales();
+  if(tab==='clients') renderClients();
+  if(tab==='leads') renderLeads();
+}
+
+function renderAll(){ renderDash(); renderProductsAdmin(); renderSales(); renderClients(); renderLeads(); renderLines(); }
+
+// DASH
+function renderDash(){
+  const period = parseInt(document.getElementById('dash-period')?.value || 7);
+  const since = new Date(); since.setDate(since.getDate()-period);
+  const filtered = sales.filter(s=> new Date(s.date) >= since);
+  const revenue = filtered.reduce((s,x)=> s+ (x.total||0),0);
+  document.getElementById('dash-revenue').textContent = revenue.toLocaleString('ru-RU')+' ₽';
+  document.getElementById('dash-orders').textContent = filtered.length;
+  document.getElementById('dash-orders-sub').textContent = `за ${period} дн. • всего ${sales.length}`;
+  document.getElementById('dash-aov').textContent = filtered.length? Math.round(revenue/filtered.length).toLocaleString('ru-RU')+' ₽' : '—';
+  // top product
+  const counts = {};
+  filtered.forEach(s=> (s.items||[]).forEach(it=> counts[it.id]=(counts[it.id]||0)+it.qty));
+  const topId = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0];
+  const topProd = products.find(p=>p.id===topId);
+  document.getElementById('dash-top').textContent = topProd? `${topProd.name} — ${topProd.subtitle}` : 'Нет данных';
+  document.getElementById('dash-top-sub').textContent = topId? `${counts[topId]} шт. продано` : '—';
+
+  // chart
+  const labels = []; const data=[];
+  for(let i=period-1;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const key=d.toISOString().slice(0,10);
+    labels.push(d.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'}));
+    const daySum = filtered.filter(s=> s.date.slice(0,10)===key).reduce((s,x)=>s+x.total,0);
+    data.push(daySum);
+  }
+  const ctx=document.getElementById('dash-chart');
+  if(dashChart) dashChart.destroy();
+  dashChart=new Chart(ctx,{type:'line',data:{labels, datasets:[{label:'Выручка', data, borderColor:'#1e3e35', backgroundColor:'rgba(30,62,53,0.08)', fill:true, tension:0.4, pointRadius:0}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true, ticks:{callback:v=>v+' ₽'}},x:{grid:{display:false}}}}});
+
+  // recent
+  const recent = [...sales].sort((a,b)=> new Date(b.date)-new Date(a.date)).slice(0,5);
+  document.getElementById('dash-recent').innerHTML = recent.length? recent.map(s=> `<div class="flex justify-between items-center bg-[#f4f7f5] rounded-xl p-3"><div><div class="font-bold text-sm">${s.customer||'—'}</div><div class="text-xs text-black/40">${new Date(s.date).toLocaleDateString('ru-RU')} • ${s.id}</div></div><div class="font-bold">${(s.total||0).toLocaleString('ru-RU')} ₽</div></div>`).join('') : `<div class="text-sm text-black/40 text-center py-6">Нет продаж</div>`;
+}
+
+// PRODUCTS ADMIN
+function renderLines(){
+  document.getElementById('lines-list').innerHTML = lines.map(l=> `<span class="bg-[#f4f7f5] border border-black/10 rounded-full px-4 py-2 text-sm font-semibold flex items-center gap-2">${l.name} <span class="text-black/40 text-xs">${l.id}</span> <button onclick="removeLine('${l.id}')" class="ml-1 w-5 h-5 rounded-full bg-white grid place-items-center text-xs">✕</button></span>`).join('');
+}
+function addLine(){
+  const name=document.getElementById('new-line-name').value.trim();
+  const id=document.getElementById('new-line-id').value.trim().toLowerCase();
+  if(!name||!id) return showToast('Заполните название и id');
+  if(lines.find(l=>l.id===id)) return showToast('Такой id уже есть');
+  lines.push({id,name}); saveAll(); renderLines(); showToast('Линейка добавлена');
+  document.getElementById('new-line-name').value=''; document.getElementById('new-line-id').value='';
+}
+function removeLine(id){
+  if(!confirm('Удалить линейку? Товары останутся, но без линейки.')) return;
+  lines=lines.filter(l=>l.id!==id); saveAll(); renderLines();
+}
+function renderProductsAdmin(){
+  renderLines();
+  document.getElementById('products-list').innerHTML = products.map(p=> `
+    <div class="bg-white rounded-2xl p-5 border border-black/5">
+      <div class="flex justify-between items-start gap-3">
+        <div><div class="text-[11px] tracking-[0.12em] font-bold text-black/40">${p.line.toUpperCase()} • ${p.category.toUpperCase()} • ${p.volume}</div><div class="font-bold mt-1">${p.name} — ${p.subtitle}</div><div class="text-sm text-black/50 mt-1 line-clamp-2">${p.desc}</div></div>
+        <div class="text-right shrink-0"><div class="font-extrabold">${p.price.toLocaleString('ru-RU')} ₽</div><div class="text-xs text-black/30 line-through">${p.oldPrice||''}</div></div>
+      </div>
+      <div class="flex gap-2 mt-4">
+        <button onclick="editProduct('${p.id}')" class="flex-1 bg-[#f4f7f5] rounded-full py-2 text-xs font-bold">ИЗМЕНИТЬ</button>
+        <button onclick="deleteProduct('${p.id}')" class="px-4 bg-white border border-red-200 text-red-600 rounded-full py-2 text-xs font-bold">УДАЛИТЬ</button>
+      </div>
+    </div>
+  `).join('') || `<div class="col-span-full text-center py-10 text-black/40">Нет товаров</div>`;
+}
+function openProductModal(id=null){
+  document.getElementById('product-modal').classList.remove('hidden');
+  const form=document.getElementById('product-form');
+  form.reset(); form.id.value='';
+  if(id){
+    const p=products.find(x=>x.id===id);
+    if(p) Object.entries(p).forEach(([k,v])=>{ if(form[k]!==undefined) form[k].value=v; });
+  }
+}
+function closeProductModal(){ document.getElementById('product-modal').classList.add('hidden'); }
+function editProduct(id){ openProductModal(id); }
+function deleteProduct(id){
+  if(!confirm('Удалить товар?')) return;
+  products=products.filter(p=>p.id!==id); saveAll(); renderProductsAdmin(); showToast('Удалено');
+}
+function saveProduct(e){
+  e.preventDefault();
+  const fd=new FormData(e.target);
+  const d=Object.fromEntries(fd.entries());
+  d.price=parseInt(d.price); d.oldPrice= d.oldPrice? parseInt(d.oldPrice):0;
+  if(!d.id){ d.id = d.name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now().toString(36); products.push(d); }
+  else { const idx=products.findIndex(p=>p.id===d.id); if(idx>=0) products[idx]=d; else products.push(d); }
+  saveAll(); closeProductModal(); renderProductsAdmin(); showToast('Сохранено');
+}
+
+// SALES
+function renderSales(){
+  const q=(document.getElementById('sales-search').value||'').toLowerCase();
+  const pay=document.getElementById('sales-filter-payment').value;
+  let list=[...sales].sort((a,b)=> new Date(b.date)-new Date(a.date));
+  if(q) list=list.filter(s=> (s.id+s.customer+s.phone).toLowerCase().includes(q));
+  if(pay) list=list.filter(s=> s.payment===pay);
+  document.getElementById('sales-tbody').innerHTML = list.map(s=> `
+    <tr class="border-b border-black/5 hover:bg-[#f4f7f5]/50">
+      <td class="p-3"><div class="font-bold text-xs">${s.id}</div><div class="text-xs text-black/40">${new Date(s.date).toLocaleString('ru-RU')}</div></td>
+      <td class="p-3"><div class="font-semibold">${s.customer||'—'}</div><div class="text-xs text-black/40">${s.phone||''}</div></td>
+      <td class="p-3 text-xs">${(s.items||[]).map(it=> `${it.name||it.id} ×${it.qty}`).join('<br>')}</td>
+      <td class="p-3 text-right font-bold">${(s.total||0).toLocaleString('ru-RU')} ₽</td>
+      <td class="p-3"><span class="bg-[#f4f7f5] rounded-full px-2.5 py-1 text-xs font-bold">${s.payment||'—'}</span></td>
+      <td class="p-3"><button onclick="deleteSale('${s.id}')" class="text-red-500 text-xs font-bold">✕</button></td>
+    </tr>
+  `).join('') || `<tr><td colspan="6" class="p-10 text-center text-black/40">Нет продаж</td></tr>`;
+}
+function deleteSale(id){ if(!confirm('Удалить продажу?'))return; sales=sales.filter(s=>s.id!==id); localStorage.setItem('mirea_sales',JSON.stringify(sales)); renderSales(); renderDash(); }
+function openSaleModal(){
+  document.getElementById('sale-modal').classList.remove('hidden');
+  document.getElementById('sale-items').innerHTML='';
+  addSaleItem();
+  const dl=document.getElementById('clients-datalist');
+  dl.innerHTML=clients.map(c=> `<option value="${c.fio}">`).join('');
+  document.querySelector('#sale-form [name="date"]').value=new Date().toISOString().slice(0,10);
+}
+function closeSaleModal(){ document.getElementById('sale-modal').classList.add('hidden'); }
+function addSaleItem(){
+  const div=document.createElement('div');
+  div.className='flex gap-2';
+  div.innerHTML=`<select class="flex-1 rounded-xl border border-black/10 px-3 py-2.5 text-sm">${products.map(p=> `<option value="${p.id}">${p.name} — ${p.subtitle} (${p.price} ₽)</option>`).join('')}</select><input type="number" value="1" min="1" class="w-20 rounded-xl border border-black/10 px-3 py-2.5 text-sm" placeholder="шт"><button type="button" onclick="this.parentElement.remove();calcSaleTotal()" class="w-10 h-10 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button>`;
+  div.querySelectorAll('select,input').forEach(el=> el.addEventListener('input',calcSaleTotal));
+  document.getElementById('sale-items').appendChild(div);
+  calcSaleTotal();
+}
+function calcSaleTotal(){
+  let total=0;
+  document.querySelectorAll('#sale-items > div').forEach(row=>{
+    const pid=row.querySelector('select').value;
+    const qty=parseInt(row.querySelector('input').value)||0;
+    const prod=products.find(p=>p.id===pid);
+    if(prod) total+=prod.price*qty;
+  });
+  document.querySelector('#sale-form [name="total"]').value=total;
+}
+function saveSale(e){
+  e.preventDefault();
+  const fd=new FormData(e.target);
+  const items=[];
+  document.querySelectorAll('#sale-items > div').forEach(row=>{
+    const pid=row.querySelector('select').value;
+    const qty=parseInt(row.querySelector('input').value)||1;
+    const prod=products.find(p=>p.id===pid);
+    items.push({id:pid, qty, price:prod?prod.price:0, name: prod? prod.name+' — '+prod.subtitle : pid});
+  });
+  const total=parseInt(fd.get('total'))||0;
+  const sale={id:'ORD-'+Date.now().toString(36).toUpperCase(), date: new Date(fd.get('date')).toISOString(), customer:fd.get('customer'), phone:fd.get('phone'), items, total, payment:fd.get('payment'), status:'вручную'};
+  sales.push(sale); localStorage.setItem('mirea_sales',JSON.stringify(sales));
+  closeSaleModal(); renderSales(); renderDash(); showToast('Продажа добавлена');
+}
+
+// CLIENTS
+function renderClients(){
+  const q=(document.getElementById('clients-search').value||'').toLowerCase();
+  const type=document.getElementById('clients-filter-type').value;
+  let list=[...clients];
+  if(q) list=list.filter(c=> (c.fio+c.phone+c.email).toLowerCase().includes(q));
+  if(type) list=list.filter(c=> c.type===type);
+  document.getElementById('clients-list').innerHTML = list.map(c=> `
+    <div class="p-5 flex flex-wrap gap-4 items-center">
+      <div class="w-10 h-10 rounded-full bg-[#1e3e35] text-white grid place-items-center font-bold">${c.fio?.[0]||'?'}</div>
+      <div class="flex-1 min-w-[200px]"><div class="font-bold">${c.fio}</div><div class="text-xs text-black/50">${c.phone} • ${c.email||'—'} • ${c.type}</div><div class="text-xs text-black/30">${c.address||''} ${c.company? '• '+c.company:''}</div></div>
+      <div class="text-right"><div class="text-xs tracking-[0.12em] font-bold text-black/40">${c.type.toUpperCase()}</div><div class="text-xs text-black/30">${c.date? new Date(c.date).toLocaleDateString('ru-RU'):''}</div></div>
+      <div class="flex gap-2"><button onclick="editClient('${c.id}')" class="bg-[#f4f7f5] rounded-full px-4 py-2 text-xs font-bold">ИЗМЕНИТЬ</button><button onclick="deleteClient('${c.id}')" class="text-red-500 text-xs font-bold px-2">✕</button></div>
+    </div>
+  `).join('') || `<div class="p-10 text-center text-black/40">Нет клиентов</div>`;
+}
+function openClientModal(id=null){
+  document.getElementById('client-modal').classList.remove('hidden');
+  const f=document.getElementById('client-form'); f.reset(); f.id.value='';
+  if(id){
+    const c=clients.find(x=>x.id===id);
+    if(c) Object.entries(c).forEach(([k,v])=>{ if(f[k]!==undefined) f[k].value=v; });
+  }
+}
+function closeClientModal(){ document.getElementById('client-modal').classList.add('hidden'); }
+function editClient(id){ openClientModal(id); }
+function deleteClient(id){ if(!confirm('Удалить клиента?'))return; clients=clients.filter(c=>c.id!==id); localStorage.setItem('mirea_clients',JSON.stringify(clients)); renderClients(); }
+function saveClient(e){
+  e.preventDefault();
+  const fd=new FormData(e.target); const d=Object.fromEntries(fd.entries());
+  if(!d.id){ d.id='CLI-'+Date.now().toString(36).toUpperCase(); d.date=new Date().toISOString(); clients.push(d); }
+  else { const idx=clients.findIndex(c=>c.id===d.id); if(idx>=0) clients[idx]={...clients[idx],...d}; else clients.push(d); }
+  localStorage.setItem('mirea_clients',JSON.stringify(clients)); closeClientModal(); renderClients(); showToast('Сохранено');
+}
+
+// LEADS
+function renderLeads(){
+  leads=JSON.parse(localStorage.getItem('mirea_leads')||'[]');
+  document.getElementById('leads-list').innerHTML = [...leads].reverse().map(l=> `
+    <div class="bg-white rounded-2xl p-5 border border-black/5">
+      <div class="flex justify-between gap-4"><div><div class="font-bold">${l.name} <span class="text-black/40 font-normal">• ${l.phone}</span></div><div class="text-xs text-black/40">${l.email} • ${l.company||''} • ${new Date(l.date).toLocaleString('ru-RU')}</div></div><a href="mailto:${l.email}" class="text-xs font-bold text-[#1e3e35] underline">ОТВЕТИТЬ</a></div>
+      <div class="text-sm mt-3 bg-[#f4f7f5] rounded-xl p-3">${l.message||'—'}</div>
+    </div>
+  `).join('') || `<div class="bg-white rounded-2xl p-10 text-center text-black/40">Нет заявок</div>`;
+}
+
+// STATS
+function setStatsPeriod(p){
+  statsPeriod=parseInt(p);
+  document.querySelectorAll('.stats-period-btn').forEach(b=>{
+    if(b.dataset.p===p) b.className='stats-period-btn bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs font-bold';
+    else b.className='stats-period-btn bg-white border border-black/10 rounded-full px-5 py-2.5 text-xs font-bold';
+  });
+  renderStats();
+}
+function renderStats(){
+  const since=new Date(); since.setDate(since.getDate()-statsPeriod);
+  const filtered=sales.filter(s=> new Date(s.date) >= since);
+  document.getElementById('stats-range').textContent = `Выбрано: ${filtered.length} заказов на ${filtered.reduce((s,x)=>s+x.total,0).toLocaleString('ru-RU')} ₽`;
+
+  // line chart by day
+  const days = statsPeriod===1? 24 : statsPeriod;
+  let labels=[], data=[];
+  if(statsPeriod===1){
+    // hourly
+    for(let h=0;h<24;h++){ labels.push(h+':00'); const sum=filtered.filter(s=> new Date(s.date).getHours()===h).reduce((s,x)=>s+x.total,0); data.push(sum); }
+  } else {
+    for(let i=statsPeriod-1;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); const key=d.toISOString().slice(0,10); labels.push(d.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'})); const sum=filtered.filter(s=> s.date.slice(0,10)===key).reduce((s,x)=>s+x.total,0); data.push(sum); }
+  }
+  const ctx=document.getElementById('stats-chart');
+  if(statsChart) statsChart.destroy();
+  statsChart=new Chart(ctx,{type:'bar',data:{labels, datasets:[{label:'Выручка', data, backgroundColor:'#1e3e35', borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true},x:{grid:{display:false}}}}});
+
+  // top products
+  const counts={};
+  filtered.forEach(s=> (s.items||[]).forEach(it=> counts[it.id]=(counts[it.id]||0)+it.qty));
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  document.getElementById('stats-top-products').innerHTML = sorted.length? sorted.map(([id,qty])=>{
+    const prod=products.find(p=>p.id===id);
+    const max=sorted[0][1];
+    const w=Math.round(qty/max*100);
+    return `<div><div class="flex justify-between text-sm"><span class="font-semibold">${prod? prod.name+' — '+prod.subtitle : id}</span><span class="font-bold">${qty} шт</span></div><div class="h-2 bg-[#f4f7f5] rounded-full mt-1 overflow-hidden"><div class="h-full bg-[#e8b44f]" style="width:${w}%"></div></div></div>`;
+  }).join('') : `<div class="text-sm text-black/40">Нет данных</div>`;
+
+  // payment pie
+  const payCounts={};
+  filtered.forEach(s=> payCounts[s.payment]=(payCounts[s.payment]||0)+1);
+  const payCtx=document.getElementById('stats-pay');
+  if(payChart) payChart.destroy();
+  payChart=new Chart(payCtx,{type:'doughnut',data:{labels:Object.keys(payCounts), datasets:[{data:Object.values(payCounts), backgroundColor:['#1e3e35','#7a9d8f','#e8b44f','#d1d5db','#9ca3af']}]},options:{plugins:{legend:{position:'bottom'}}}});
+
+  // client type
+  const typeCounts={};
+  filtered.forEach(s=>{
+    const cli=clients.find(c=> c.phone===s.phone || c.fio===s.customer);
+    const t=cli? cli.type : 'неизвестно';
+    typeCounts[t]=(typeCounts[t]||0)+1;
+  });
+  const ctCtx=document.getElementById('stats-client-type');
+  if(clientTypeChart) clientTypeChart.destroy();
+  clientTypeChart=new Chart(ctCtx,{type:'doughnut',data:{labels:Object.keys(typeCounts), datasets:[{data:Object.values(typeCounts), backgroundColor:['#1e3e35','#7a9d8f','#e8b44f','#a7f3d0']}]},options:{plugins:{legend:{position:'bottom'}}}});
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.remove('hidden'); setTimeout(()=> t.classList.add('hidden'),2500);
+}
+function saveSettings(){
+  localStorage.setItem('mirea_settings', JSON.stringify({orderEmail:document.getElementById('set-order-email').value, coopEmail:document.getElementById('set-coop-email').value, address:document.getElementById('set-address').value, phone:document.getElementById('set-phone').value}));
+  showToast('Настройки сохранены');
+}
+function exportData(){
+  const rows=[['ID','Дата','Клиент','Телефон','Товары','Сумма','Оплата']];
+  sales.forEach(s=> rows.push([s.id, s.date, s.customer||'', s.phone||'', (s.items||[]).map(i=>i.id+':'+i.qty).join(';'), s.total, s.payment]));
+  const csv=rows.map(r=> r.map(v=> `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='mirea_sales.csv'; a.click();
+}
+function exportJSON(){
+  const data={products,sales,clients,leads,lines};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='mirea_data.json'; a.click();
+}
+function clearAll(){ if(!confirm('Очистить все данные?'))return; localStorage.removeItem('mirea_sales'); localStorage.removeItem('mirea_clients'); localStorage.removeItem('mirea_leads'); sales=[]; clients=[]; leads=[]; renderAll(); showToast('Очищено'); }
+function seedDemo(){
+  const now=new Date();
+  const demoSales=[
+    {id:'ORD-DEMO1', date:new Date(now-86400000*1).toISOString(), customer:'Алина Петрова', phone:'+79380000001', items:[{id:'sensa-jasmin', qty:2, price:590, name:'Sensa — Жасмин + Персик'}], total:1180, payment:'картой'},
+    {id:'ORD-DEMO2', date:new Date(now-86400000*2).toISOString(), customer:'ООО Чистый Дом', phone:'+79380000002', items:[{id:'modul-20', qty:1, price:3500, name:'Modul — Автошампунь'}], total:3500, payment:'по счёту'},
+    {id:'ORD-DEMO3', date:new Date(now-86400000*3).toISOString(), customer:'Иван Иванов', phone:'+79380000003', items:[{id:'aura-almond', qty:3, price:490, name:'Aura — Миндаль + Вишня'}], total:1470, payment:'при получении'},
+  ];
+  sales.push(...demoSales);
+  if(clients.length===0) clients.push({id:'CLI-DEMO1', fio:'Алина Петрова', phone:'+79380000001', email:'alina@example.com', type:'физлицо', address:'Москва', date:new Date().toISOString()},{id:'CLI-DEMO2', fio:'ООО Чистый Дом', phone:'+79380000002', email:'info@clean.ru', type:'юрлицо', address:'Дербент', company:'ООО Чистый Дом ИНН 123', date:new Date().toISOString()});
+  localStorage.setItem('mirea_sales',JSON.stringify(sales)); localStorage.setItem('mirea_clients',JSON.stringify(clients));
+  renderAll(); showToast('Демо данные добавлены');
+}
+</script>
+</body>
+</html>
