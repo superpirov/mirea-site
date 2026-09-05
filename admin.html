@@ -7,6 +7,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script>
 tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gold:'#e8b44f',light:'#f4f7f5'}},fontFamily:{sans:['Manrope','sans-serif'],display:['Space Grotesk','sans-serif']}}}}
 </script>
@@ -244,22 +245,92 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
     <div id="tab-settings" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
       <h2 class="font-display text-[28px] font-semibold">Настройки</h2>
       <div class="mt-6 grid lg:grid-cols-2 gap-4">
+        <!-- Mail -->
         <div class="bg-white rounded-2xl p-6 border border-black/5">
-          <h3 class="font-bold">Почта</h3>
+          <h3 class="font-bold">Почта и контакты</h3>
           <label class="block mt-4"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ЗАКАЗЫ →</span><input id="set-order-email" value="order@mireacare.ru" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
           <label class="block mt-3"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ОПТ →</span><input id="set-coop-email" value="cooperation@mireacare.ru" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
-          <label class="block mt-3"><span class="text-xs font-bold tracking-[0.12em] text-black/40">АДРЕС</span><input id="set-address" value="г. Дербент, ул. Шоссейная, д 26" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
+          <label class="block mt-3"><span class="text-xs font-bold tracking-[0.12em] text-black/40">АДРЕС</span><input id="set-address" value="г. Дербент, ул. Шоссейная, д. 26" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
           <label class="block mt-3"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ТЕЛЕФОН</span><input id="set-phone" value="+79384900111" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
           <button onclick="saveSettings()" class="mt-4 bg-[#1e3e35] text-white rounded-full px-6 py-3 text-xs tracking-[0.12em] font-bold">СОХРАНИТЬ</button>
         </div>
+        <!-- Logo -->
         <div class="bg-white rounded-2xl p-6 border border-black/5">
-          <h3 class="font-bold">Данные</h3>
-          <p class="text-sm text-black/50 mt-2">Все данные хранятся в браузере (localStorage) и доступны на сайте. Для продакшена подключите PHP/MySQL.</p>
-          <div class="flex flex-wrap gap-2 mt-4">
+          <h3 class="font-bold">Логотип сайта</h3>
+          <p class="text-xs text-black/50 mt-1">Загрузите PNG/SVG — отобразится в хедере вместо буквы «M».</p>
+          <div id="logo-preview" class="mt-4 w-20 h-20 rounded-xl bg-[#f4f7f5] border border-black/5 grid place-items-center overflow-hidden text-xs text-black/30">превью</div>
+          <input type="file" id="logo-upload" accept="image/*" onchange="handleLogoUpload(event)" class="mt-3 w-full text-sm">
+          <div class="flex gap-2 mt-3">
+            <button onclick="removeLogo()" class="bg-white border border-black/10 rounded-full px-4 py-2 text-xs font-bold">УДАЛИТЬ ЛОГО</button>
+            <span class="text-[11px] text-black/40 self-center">хранится в браузере, появится на сайте сразу</span>
+          </div>
+        </div>
+        <!-- Socials -->
+        <div class="bg-white rounded-2xl p-6 border border-black/5 lg:col-span-2">
+          <h3 class="font-bold">Соцсети (хедер + подвал)</h3>
+          <p class="text-xs text-black/50 mt-1">Добавляйте любые ссылки — иконки подберутся автоматически (VK, TG, IG, WA, YT и т.д.).</p>
+          <div id="socials-list" class="mt-4 space-y-2"></div>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <input id="social-name" placeholder="Название, напр. Telegram" class="flex-1 min-w-[140px] rounded-xl border border-black/10 px-3 py-2.5 text-sm">
+            <input id="social-url" placeholder="https://t.me/mirea" class="flex-1 min-w-[220px] rounded-xl border border-black/10 px-3 py-2.5 text-sm">
+            <button onclick="addSocial()" class="bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs font-bold">+ ДОБАВИТЬ</button>
+          </div>
+        </div>
+        <!-- Exports -->
+        <div class="bg-white rounded-2xl p-6 border border-black/5 lg:col-span-2">
+          <h3 class="font-bold">Экспорт данных</h3>
+          <p class="text-xs text-black/50 mt-1">Выгрузки по отдельности — CSV и Excel (XLS).</p>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+            <div class="bg-[#f4f7f5] rounded-xl p-4">
+              <div class="font-bold text-sm">Товары</div>
+              <div class="flex gap-2 mt-3">
+                <button onclick="exportProductsCSV()" class="flex-1 bg-white border border-black/10 rounded-full py-2 text-xs font-bold">CSV</button>
+                <button onclick="exportProductsExcel()" class="flex-1 bg-[#1e3e35] text-white rounded-full py-2 text-xs font-bold">EXCEL</button>
+              </div>
+            </div>
+            <div class="bg-[#f4f7f5] rounded-xl p-4">
+              <div class="font-bold text-sm">Клиенты</div>
+              <div class="flex gap-2 mt-3">
+                <button onclick="exportClientsCSV()" class="flex-1 bg-white border border-black/10 rounded-full py-2 text-xs font-bold">CSV</button>
+                <button onclick="exportClientsExcel()" class="flex-1 bg-[#1e3e35] text-white rounded-full py-2 text-xs font-bold">EXCEL</button>
+              </div>
+            </div>
+            <div class="bg-[#f4f7f5] rounded-xl p-4">
+              <div class="font-bold text-sm">Продажи</div>
+              <div class="flex gap-2 mt-3">
+                <button onclick="exportData()" class="flex-1 bg-white border border-black/10 rounded-full py-2 text-xs font-bold">CSV</button>
+                <button onclick="exportSalesExcel()" class="flex-1 bg-[#1e3e35] text-white rounded-full py-2 text-xs font-bold">EXCEL</button>
+              </div>
+            </div>
+            <div class="bg-[#f4f7f5] rounded-xl p-4">
+              <div class="font-bold text-sm">Всё сразу</div>
+              <div class="flex gap-2 mt-3">
+                <button onclick="exportJSON()" class="flex-1 bg-[#e8b44f] text-[#1e3e35] rounded-full py-2 text-xs font-bold">JSON</button>
+                <button onclick="exportAllExcel()" class="flex-1 bg-white border border-black/10 rounded-full py-2 text-xs font-bold">EXCEL</button>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 flex flex-wrap gap-2">
             <button onclick="seedDemo()" class="bg-[#e8b44f] text-[#1e3e35] rounded-full px-5 py-2.5 text-xs font-bold">ЗАПОЛНИТЬ ДЕМО-ДАННЫМИ</button>
             <button onclick="clearAll()" class="bg-white border border-red-200 text-red-600 rounded-full px-5 py-2.5 text-xs font-bold">ОЧИСТИТЬ ВСЁ</button>
           </div>
-          <div class="mt-6 text-xs text-black/40">Экспорт: <button onclick="exportData()" class="underline font-bold">скачать CSV</button> • <button onclick="exportJSON()" class="underline font-bold">JSON</button></div>
+        </div>
+        <!-- Barcode -->
+        <div class="bg-white rounded-2xl p-6 border border-black/5 lg:col-span-2">
+          <h3 class="font-bold">Генератор штрихкода</h3>
+          <p class="text-xs text-black/50 mt-1">Введите код, выберите цвет фона — скачайте PNG. Формат CODE128.</p>
+          <div class="grid sm:grid-cols-3 gap-3 mt-4">
+            <label class="block"><span class="text-xs font-bold text-black/40">КОД</span><input id="barcode-value" value="4601234567890" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+            <label class="block"><span class="text-xs font-bold text-black/40">ЦВЕТ ФОНА (hex)</span><div class="flex gap-2 mt-1"><input id="barcode-bg" value="#ffffff" class="flex-1 rounded-xl border border-black/10 px-3 py-2.5 text-sm"><input type="color" id="barcode-bg-picker" value="#ffffff" oninput="document.getElementById('barcode-bg').value=this.value" class="w-12 h-10 rounded-xl border border-black/10 p-1"></div></label>
+            <label class="block"><span class="text-xs font-bold text-black/40">ЦВЕТ ЛИНИЙ</span><div class="flex gap-2 mt-1"><input id="barcode-line" value="#1e3e35" class="flex-1 rounded-xl border border-black/10 px-3 py-2.5 text-sm"><input type="color" id="barcode-line-picker" value="#1e3e35" oninput="document.getElementById('barcode-line').value=this.value" class="w-12 h-10 rounded-xl border border-black/10 p-1"></div></label>
+          </div>
+          <div class="flex gap-2 mt-3">
+            <button onclick="generateBarcode()" class="bg-[#1e3e35] text-white rounded-full px-6 py-2.5 text-xs font-bold">СГЕНЕРИРОВАТЬ</button>
+            <button onclick="downloadBarcode()" class="bg-white border border-black/10 rounded-full px-6 py-2.5 text-xs font-bold">СКАЧАТЬ PNG</button>
+          </div>
+          <div id="barcode-wrap" class="mt-4 bg-[#f4f7f5] rounded-xl p-6 grid place-items-center min-h-[120px]">
+            <svg id="barcode-svg"></svg>
+          </div>
         </div>
       </div>
     </div>
@@ -383,9 +454,10 @@ function switchTab(tab){
   if(tab==='sales') renderSales();
   if(tab==='clients') renderClients();
   if(tab==='leads') renderLeads();
+  if(tab==='settings'){ renderLogoPreview(); renderSocials(); }
 }
 
-function renderAll(){ renderDash(); renderProductsAdmin(); renderSales(); renderClients(); renderLeads(); renderLines(); }
+function renderAll(){ renderDash(); renderProductsAdmin(); renderSales(); renderClients(); renderLeads(); renderLines(); renderLogoPreview(); renderSocials(); }
 
 // DASH
 function renderDash(){
@@ -651,14 +723,132 @@ function saveSettings(){
   localStorage.setItem('mirea_settings', JSON.stringify({orderEmail:document.getElementById('set-order-email').value, coopEmail:document.getElementById('set-coop-email').value, address:document.getElementById('set-address').value, phone:document.getElementById('set-phone').value}));
   showToast('Настройки сохранены');
 }
+// LOGO
+function handleLogoUpload(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    localStorage.setItem('mirea_logo', reader.result);
+    renderLogoPreview();
+    showToast('Логотип сохранён — обновите сайт');
+  };
+  reader.readAsDataURL(file);
+}
+function renderLogoPreview(){
+  const logo=localStorage.getItem('mirea_logo');
+  const el=document.getElementById('logo-preview');
+  if(!el) return;
+  if(logo) el.innerHTML=`<img src="${logo}" class="w-full h-full object-contain">`;
+  else el.innerHTML='превью';
+}
+function removeLogo(){ localStorage.removeItem('mirea_logo'); renderLogoPreview(); showToast('Логотип удалён'); }
+// SOCIALS
+function getSocials(){ return JSON.parse(localStorage.getItem('mirea_socials')||'[]'); }
+function renderSocials(){
+  const list=getSocials();
+  const el=document.getElementById('socials-list');
+  if(!el) return;
+  el.innerHTML = list.length ? list.map((s,i)=> `<div class="flex items-center gap-2 bg-[#f4f7f5] rounded-xl px-3 py-2 text-sm"><span class="font-bold flex-1">${s.name} — <span class="text-black/50 text-xs">${s.url}</span></span><button onclick="removeSocial(${i})" class="w-7 h-7 rounded-full bg-white grid place-items-center text-xs">✕</button></div>`).join('') : `<div class="text-xs text-black/40">Нет соцсетей</div>`;
+}
+function addSocial(){
+  const name=document.getElementById('social-name').value.trim();
+  const url=document.getElementById('social-url').value.trim();
+  if(!url) return showToast('Введите ссылку');
+  const list=getSocials();
+  list.push({name: name||url, url});
+  localStorage.setItem('mirea_socials', JSON.stringify(list));
+  document.getElementById('social-name').value=''; document.getElementById('social-url').value='';
+  renderSocials(); showToast('Соцсеть добавлена');
+}
+function removeSocial(i){
+  const list=getSocials(); list.splice(i,1);
+  localStorage.setItem('mirea_socials', JSON.stringify(list)); renderSocials();
+}
+// BARCODE
+function generateBarcode(){
+  const val=document.getElementById('barcode-value').value.trim()||'1234567890';
+  const bg=document.getElementById('barcode-bg').value.trim()||'#ffffff';
+  const line=document.getElementById('barcode-line').value.trim()||'#000000';
+  const wrap=document.getElementById('barcode-wrap');
+  wrap.style.background=bg;
+  try{ JsBarcode("#barcode-svg", val, {format:"CODE128", lineColor:line, background:bg, width:2, height:80, displayValue:true, fontSize:14, margin:10}); showToast('Штрихкод готов'); } catch(e){ showToast('Ошибка: '+e.message); }
+}
+function downloadBarcode(){
+  const svg=document.getElementById('barcode-svg');
+  if(!svg || !svg.innerHTML) return showToast('Сначала сгенерируйте');
+  const bg=document.getElementById('barcode-bg').value||'#ffffff';
+  const canvas=document.createElement('canvas');
+  const xml=new XMLSerializer().serializeToString(svg);
+  const img=new Image();
+  const svg64='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(xml)));
+  img.onload=()=>{
+    canvas.width=img.width; canvas.height=img.height;
+    const ctx=canvas.getContext('2d');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img,0,0);
+    const a=document.createElement('a'); a.download='mirea-barcode-'+document.getElementById('barcode-value').value+'.png'; a.href=canvas.toDataURL('image/png'); a.click();
+  };
+  img.src=svg64;
+}
+// EXPORTS
+function toCSV(rows){
+  return rows.map(r=> r.map(v=> `"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\n');
+}
+function downloadCSV(csv, name){
+  const blob=new Blob(["\uFEFF"+csv],{type:'text/csv;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=name; a.click();
+}
+function toExcelHTML(title, rows){
+  let html=`<html><head><meta charset="UTF-8"></head><body><table border="1"><tr><th colspan="${rows[0].length}">${title}</th></tr>`;
+  rows.forEach((r,i)=>{ html+=`<tr>${r.map(c=> `<${i===0?'th':'td'}>${c}</${i===0?'th':'td'}>`).join('')}</tr>`; });
+  html+=`</table></body></html>`;
+  return html;
+}
+function downloadExcel(html, name){
+  const blob=new Blob([html],{type:'application/vnd.ms-excel'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=name; a.click();
+}
 function exportData(){
   const rows=[['ID','Дата','Клиент','Телефон','Товары','Сумма','Оплата']];
   sales.forEach(s=> rows.push([s.id, s.date, s.customer||'', s.phone||'', (s.items||[]).map(i=>i.id+':'+i.qty).join(';'), s.total, s.payment]));
-  const csv=rows.map(r=> r.map(v=> `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='mirea_sales.csv'; a.click();
+  downloadCSV(toCSV(rows),'mirea_sales.csv');
+}
+function exportSalesExcel(){
+  const rows=[['ID','Дата','Клиент','Телефон','Товары','Сумма','Оплата']];
+  sales.forEach(s=> rows.push([s.id, s.date, s.customer||'', s.phone||'', (s.items||[]).map(i=>i.id+':'+i.qty).join(';'), s.total, s.payment]));
+  downloadExcel(toExcelHTML('Продажи MIREA', rows),'mirea_sales.xls');
+}
+function exportProductsCSV(){
+  const rows=[['ID','Линейка','Категория','Название','Подзаголовок','Объём','Цена','Старая цена','Бейдж','Описание']];
+  products.forEach(p=> rows.push([p.id,p.line,p.category,p.name,p.subtitle,p.volume,p.price,p.oldPrice||'',p.badge||'',p.desc||'']));
+  downloadCSV(toCSV(rows),'mirea_products.csv');
+}
+function exportProductsExcel(){
+  const rows=[['ID','Линейка','Категория','Название','Подзаголовок','Объём','Цена','Старая цена','Бейдж']];
+  products.forEach(p=> rows.push([p.id,p.line,p.category,p.name,p.subtitle,p.volume,p.price,p.oldPrice||'',p.badge||'']));
+  downloadExcel(toExcelHTML('Товары MIREA', rows),'mirea_products.xls');
+}
+function exportClientsCSV(){
+  const rows=[['ID','ФИО','Телефон','Email','Тип','Адрес','Компания','Дата']];
+  clients.forEach(c=> rows.push([c.id,c.fio,c.phone,c.email||'',c.type,c.address||'',c.company||'',c.date||'']));
+  downloadCSV(toCSV(rows),'mirea_clients.csv');
+}
+function exportClientsExcel(){
+  const rows=[['ID','ФИО','Телефон','Email','Тип','Адрес','Компания']];
+  clients.forEach(c=> rows.push([c.id,c.fio,c.phone,c.email||'',c.type,c.address||'',c.company||'']));
+  downloadExcel(toExcelHTML('Клиенты MIREA', rows),'mirea_clients.xls');
+}
+function exportAllExcel(){
+  let html=`<html><head><meta charset="UTF-8"></head><body>`;
+  const pRows=[['ID','Линейка','Категория','Название','Подзаголовок','Объём','Цена']]; products.forEach(p=> pRows.push([p.id,p.line,p.category,p.name,p.subtitle,p.volume,p.price]));
+  html+=toExcelHTML('Товары', pRows).replace('<html><head><meta charset="UTF-8"></head><body>','').replace('</body></html>','');
+  const cRows=[['ID','ФИО','Телефон','Email','Тип']]; clients.forEach(c=> cRows.push([c.id,c.fio,c.phone,c.email||'',c.type]));
+  html+=toExcelHTML('Клиенты', cRows).replace('<html><head><meta charset="UTF-8"></head><body>','').replace('</body></html>','');
+  const sRows=[['ID','Дата','Клиент','Сумма','Оплата']]; sales.forEach(s=> sRows.push([s.id,s.date,s.customer||'',s.total,s.payment||'']));
+  html+=toExcelHTML('Продажи', sRows).replace('<html><head><meta charset="UTF-8"></head><body>','').replace('</body></html>','');
+  html+=`</body></html>`;
+  downloadExcel(html,'mirea_all.xls');
 }
 function exportJSON(){
-  const data={products,sales,clients,leads,lines};
+  const data={products,sales,clients,leads,lines, socials:getSocials(), logo: localStorage.getItem('mirea_logo')||null};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='mirea_data.json'; a.click();
 }
 function clearAll(){ if(!confirm('Очистить все данные?'))return; localStorage.removeItem('mirea_sales'); localStorage.removeItem('mirea_clients'); localStorage.removeItem('mirea_leads'); sales=[]; clients=[]; leads=[]; renderAll(); showToast('Очищено'); }

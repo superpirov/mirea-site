@@ -44,8 +44,8 @@ html { scroll-behavior: smooth; }
 <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-white/70 glass border-b border-black/[0.04]">
   <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-[72px]">
-      <a href="#home" class="flex items-center gap-3 group">
-        <div class="w-9 h-9 rounded-xl bg-[#1e3e35] flex items-center justify-center text-white font-serif font-bold text-[18px] tracking-widest group-hover:bg-[#162e27] transition">M</div>
+      <a href="#home" id="site-logo" class="flex items-center gap-3 group">
+        <div id="site-logo-icon" class="w-9 h-9 rounded-xl bg-[#1e3e35] flex items-center justify-center text-white font-serif font-bold text-[18px] tracking-widest group-hover:bg-[#162e27] transition overflow-hidden">M</div>
         <div>
           <div class="font-serif font-bold text-[22px] leading-none tracking-[0.14em]">MIREA</div>
           <div class="text-[9px] tracking-[0.22em] text-[#7a9d8f] font-semibold -mt-0.5">CARE & CHEMISTRY</div>
@@ -58,6 +58,7 @@ html { scroll-behavior: smooth; }
         <button onclick="openWholesale()" class="nav-link text-[13px] tracking-[0.14em] font-semibold text-[#1e3e35]/60 hover:text-[#1e3e35] transition">ОПТОВЫЕ ЗАКУПКИ</button>
         <a href="#contacts" class="nav-link text-[13px] tracking-[0.14em] font-semibold text-[#1e3e35]/60 hover:text-[#1e3e35] transition">КОНТАКТЫ</a>
       </div>
+      <div id="header-socials" class="hidden lg:flex items-center gap-2"></div>
       <div class="flex items-center gap-3">
         <a href="tel:+79384900111" class="hidden md:flex items-center gap-2 text-[13px] font-semibold">
           <span class="w-8 h-8 rounded-full bg-[#1e3e35] text-white grid place-items-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
@@ -93,11 +94,11 @@ html { scroll-behavior: smooth; }
       <div class="lg:col-span-6 xl:col-span-6 relative z-10">
         <div class="inline-flex items-center gap-2 bg-white border border-[#1e3e35]/[0.06] rounded-full px-3 py-1.5 shadow-sm mb-6">
           <span class="w-2 h-2 rounded-full bg-[#e8b44f] animate-pulse"></span>
-          <span class="text-[11px] tracking-[0.14em] font-bold text-[#1e3e35]/70">ПРОИЗВОДСТВО • ДЕРБЕНТ • С 2021</span>
+          <span class="text-[11px] tracking-[0.14em] font-bold text-[#1e3e35]/70">ПРОИЗВОДСТВО • ДЕРБЕНТ</span>
           <span class="hidden sm:inline text-[11px] bg-[#1e3e35] text-white px-2 py-0.5 rounded-full font-bold">РОЗНИЦА И ОПТ</span>
         </div>
         <h1 class="font-serif font-medium leading-[0.92] tracking-[-0.03em] text-[42px] sm:text-[56px] lg:text-[64px] xl:text-[72px]">
-          <span class="block text-[#1e3e35]">Химия</span>
+          <span class="block text-[#1e3e35]">Химия,</span>
           <span class="block text-[#1e3e35]">которая</span>
           <span class="block text-[#7a9d8f] italic font-normal">заботится</span>
         </h1>
@@ -123,8 +124,8 @@ html { scroll-behavior: smooth; }
             <div class="text-[11px] tracking-[0.14em] font-bold text-[#1e3e35]/40 mt-1">АВТОШАМПУНЬ MODUL</div>
           </div>
           <div>
-            <div class="font-serif text-[28px] leading-none font-semibold">3<span class="text-[16px]"> линейки</span></div>
-            <div class="text-[11px] tracking-[0.14em] font-bold text-[#1e3e35]/40 mt-1">6 АРОМАТОВ</div>
+            <div class="font-serif text-[28px] leading-none font-semibold">2<span class="text-[16px]"> линейки</span></div>
+            <div class="text-[11px] tracking-[0.14em] font-bold text-[#1e3e35]/40 mt-1">5 АРОМАТОВ</div>
           </div>
         </div>
 
@@ -216,10 +217,10 @@ html { scroll-behavior: smooth; }
           </div>
 
           <!-- bottom info -->
-          <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-black/5 px-5 py-3 flex items-center gap-5 whitespace-nowrap">
-            <div class="flex items-center gap-2 text-[12px] font-semibold"><span class="w-6 h-6 rounded-full bg-[#e8f3ee] grid place-items-center text-[#1e3e35]">♻</span> Эко состав</div>
+          <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-black/5 px-5 py-3 flex items-center gap-4 whitespace-nowrap">
+            <div class="flex items-center gap-2 text-[12px] font-semibold"><span class="w-6 h-6 rounded-full bg-[#e8f3ee] grid place-items-center text-[#1e3e35]">♻</span> Эко-состав</div>
             <div class="w-px h-6 bg-black/10"></div>
-            <div class="flex items-center gap-2 text-[12px] font-semibold"><span class="w-6 h-6 rounded-full bg-[#fdf8ed] grid place-items-center">✦</span> Гипоаллергенно</div>
+            <div class="flex items-center gap-2 text-[12px] font-semibold"><span class="w-6 h-6 rounded-full bg-[#fdf8ed] grid place-items-center">✦</span> Дерматологически протестировано</div>
           </div>
         </div>
       </div>
@@ -264,9 +265,9 @@ html { scroll-behavior: smooth; }
       <div class="lg:col-span-7 grid sm:grid-cols-2 gap-4">
         <div class="bg-[#1e3e35] text-white rounded-[24px] p-7 relative overflow-hidden">
           <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-          <div class="text-[11px] tracking-[0.16em] font-bold text-white/50">С 2021 ГОДА</div>
-          <div class="font-serif text-[42px] leading-none mt-2">5 лет</div>
-          <div class="text-sm text-white/70 mt-2">на рынке бытовой химии, рост на 120% в год</div>
+          <div class="text-[11px] tracking-[0.16em] font-bold text-white/50">СТАНДАРТ КАЧЕСТВА</div>
+          <div class="font-serif text-[34px] leading-none mt-2">ГОСТ / ISO</div>
+          <div class="text-sm text-white/70 mt-2">сертифицированное производство и контроль каждой партии</div>
           <div class="mt-6 flex gap-2"><span class="px-3 py-1 rounded-full bg-white/10 text-xs font-bold">ISO 9001</span><span class="px-3 py-1 rounded-full bg-[#e8b44f] text-[#1e3e35] text-xs font-bold">ГОСТ</span></div>
         </div>
         <div class="bg-[#f4f7f5] rounded-[24px] p-7 border border-black/5">
@@ -281,9 +282,9 @@ html { scroll-behavior: smooth; }
         </div>
         <div class="bg-[#e8b44f] rounded-[24px] p-7 text-[#1e3e35]">
           <div class="text-[11px] tracking-[0.16em] font-bold text-[#1e3e35]/60">ПРОИЗВОДСТВО</div>
-          <div class="font-serif text-[28px] leading-none mt-2">1200 м²</div>
-          <div class="text-sm mt-1">г. Дербент, ул. Шоссейная 26</div>
-          <div class="mt-4 text-xs font-bold underline decoration-[#1e3e35]/20 underline-offset-4">СМОТРЕТЬ НА КАРТЕ →</div>
+          <div class="font-serif text-[28px] leading-none mt-2">120 м²</div>
+          <div class="text-sm mt-1">г. Дербент, ул. Шоссейная, д. 26</div>
+          <a href="#contacts" class="mt-4 inline-block text-xs font-bold underline decoration-[#1e3e35]/20 underline-offset-4 hover:decoration-[#1e3e35]/40">СМОТРЕТЬ НА КАРТЕ →</a>
         </div>
       </div>
     </div>
@@ -306,24 +307,24 @@ html { scroll-behavior: smooth; }
       <button onclick="selectLine('body')" id="btn-body" class="group relative rounded-[24px] p-[1.5px] bg-[#1e3e35] overflow-hidden">
         <div class="bg-[#1e3e35] rounded-[22px] p-6 flex items-center gap-4 text-left text-white relative overflow-hidden">
           <div class="absolute right-0 top-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-          <div class="w-14 h-14 rounded-2xl bg-white text-[#1e3e35] grid place-items-center text-xl shrink-0">◍</div>
+          <div id="btn-body-icon" class="w-14 h-14 rounded-2xl bg-white text-[#1e3e35] grid place-items-center text-xl shrink-0">◍</div>
           <div class="relative">
-            <div class="font-serif text-[22px] leading-none">Body</div>
-            <div class="text-[11px] tracking-[0.14em] font-bold text-white/60 mt-1">ГЕЛИ • МЫЛО • УХОД</div>
-            <div class="text-xs text-white/70 mt-1">4 аромата • 500 мл</div>
+            <div id="btn-body-title" class="font-serif text-[22px] leading-none">Body</div>
+            <div id="btn-body-sub1" class="text-[11px] tracking-[0.14em] font-bold text-white/60 mt-1">ГЕЛИ • МЫЛО • УХОД</div>
+            <div id="btn-body-sub2" class="text-xs text-white/70 mt-1">4 аромата • 500 мл</div>
           </div>
-          <div class="ml-auto w-8 h-8 rounded-full bg-white text-[#1e3e35] grid place-items-center">→</div>
+          <div id="btn-body-arrow" class="ml-auto w-8 h-8 rounded-full bg-white text-[#1e3e35] grid place-items-center">→</div>
         </div>
       </button>
       <button onclick="selectLine('auto')" id="btn-auto" class="group relative rounded-[24px] p-[1.5px] bg-black/10 overflow-hidden hover:bg-black/15 transition">
         <div class="bg-white rounded-[22px] p-6 flex items-center gap-4 text-left relative overflow-hidden">
-          <div class="w-14 h-14 rounded-2xl bg-[#f4f7f5] border border-black/5 grid place-items-center text-xl shrink-0">⬢</div>
+          <div id="btn-auto-icon" class="w-14 h-14 rounded-2xl bg-[#f4f7f5] border border-black/5 grid place-items-center text-xl shrink-0">⬢</div>
           <div>
-            <div class="font-serif text-[22px] leading-none text-[#1e3e35]">Auto</div>
-            <div class="text-[11px] tracking-[0.14em] font-bold text-black/40 mt-1">АВТОХИМИЯ</div>
-            <div class="text-xs text-black/50 mt-1">Modul • 20 л</div>
+            <div id="btn-auto-title" class="font-serif text-[22px] leading-none text-[#1e3e35]">Auto</div>
+            <div id="btn-auto-sub1" class="text-[11px] tracking-[0.14em] font-bold text-black/40 mt-1">АВТОХИМИЯ</div>
+            <div id="btn-auto-sub2" class="text-xs text-black/50 mt-1">Modul • 20 л</div>
           </div>
-          <div class="ml-auto w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">→</div>
+          <div id="btn-auto-arrow" class="ml-auto w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">→</div>
         </div>
       </button>
     </div>
@@ -374,10 +375,10 @@ html { scroll-behavior: smooth; }
       </div>
       <div class="lg:col-span-7">
         <div class="rounded-[24px] overflow-hidden border border-black/10 bg-[#f4f7f5] h-[420px] lg:h-[520px] relative">
-          <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A1a2b3c&source=constructor&ll=48.295%2C42.067&z=15&pt=48.295,42.067" width="100%" height="100%" frameborder="0" style="filter: grayscale(0.2) contrast(1.1);"></iframe>
+          <iframe src="https://yandex.ru/map-widget/v1/?text=%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D1%83%D0%BB.%20%D0%A8%D0%BE%D1%81%D1%81%D0%B5%D0%B9%D0%BD%D0%B0%D1%8F%20%D0%B4.%2026&z=17&ll=48.295800%2C42.069200&pt=48.295800%2C42.069200%2Cpm2rdm" width="100%" height="100%" frameborder="0" style="filter: grayscale(0.2) contrast(1.1);"></iframe>
           <div class="absolute bottom-4 left-4 right-4 bg-white rounded-2xl p-4 shadow-xl border border-black/5 flex items-center justify-between gap-4">
-            <div><div class="font-bold text-sm">Mirea — производство</div><div class="text-xs text-black/50">Дербент, Шоссейная 26 • Пн-Сб 9:00-18:00</div></div>
-            <a href="https://yandex.ru/maps/?text=Дербент%20Шоссейная%2026" target="_blank" class="shrink-0 bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs tracking-[0.12em] font-bold">ПОСТРОИТЬ МАРШРУТ</a>
+            <div><div class="font-bold text-sm">Mirea — производство</div><div class="text-xs text-black/50">г. Дербент, ул. Шоссейная, д. 26 • Пн-Сб 9:00–18:00</div></div>
+            <a href="https://yandex.ru/maps/?text=%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%20%D1%83%D0%BB.%20%D0%A8%D0%BE%D1%81%D1%81%D0%B5%D0%B9%D0%BD%D0%B0%D1%8F%2026" target="_blank" class="shrink-0 bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs tracking-[0.12em] font-bold">ПОСТРОИТЬ МАРШРУТ</a>
           </div>
         </div>
         <div class="mt-4 flex flex-wrap gap-3">
@@ -396,6 +397,7 @@ html { scroll-behavior: smooth; }
         <div class="font-serif text-[22px] tracking-[0.14em] font-bold">MIREA</div>
         <div class="text-[11px] tracking-[0.2em] text-white/50 font-bold">CARE & CHEMISTRY • ДЕРБЕНТ</div>
         <div class="text-sm text-white/60 mt-4 max-w-[360px] leading-relaxed">Производство гелей для душа, жидкого мыла и автохимии. Розница и опт по всей России.</div>
+        <div id="footer-socials" class="flex gap-2 mt-4"></div>
       </div>
       <div class="flex gap-10 text-sm">
         <div><div class="font-bold tracking-[0.12em] text-xs text-white/40">МЕНЮ</div><div class="mt-3 space-y-2 text-white/70"><a href="#home" class="block hover:text-white">Главная</a><a href="#company" class="block hover:text-white">Компания</a><a href="#products" class="block hover:text-white">Продукция</a><a href="#contacts" class="block hover:text-white">Контакты</a></div></div>
@@ -403,8 +405,8 @@ html { scroll-behavior: smooth; }
       </div>
     </div>
     <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between gap-3 text-xs text-white/40">
-      <div>© 2021–2026 MIREA. Все права защищены.</div>
-      <a href="admin.html" class="hover:text-white underline decoration-white/20 underline-offset-4">Админ-панель →</a>
+      <div>© 2026 MIREA. Все права защищены.</div>
+      <div>Сделано с заботой в Дербенте</div>
     </div>
   </div>
 </footer>
@@ -510,25 +512,34 @@ function saveProducts(){ localStorage.setItem('mirea_products', JSON.stringify(p
 
 function selectLine(line){
   currentLine = line;
-  document.getElementById('btn-body').className = line==='body' ? 'group relative rounded-[24px] p-[1.5px] bg-[#1e3e35] overflow-hidden' : 'group relative rounded-[24px] p-[1.5px] bg-black/10 overflow-hidden hover:bg-black/15 transition';
-  document.getElementById('btn-body').firstElementChild.className = line==='body' ? 'bg-[#1e3e35] rounded-[22px] p-6 flex items-center gap-4 text-left text-white relative overflow-hidden' : 'bg-white rounded-[22px] p-6 flex items-center gap-4 text-left relative overflow-hidden';
-  document.getElementById('btn-auto').className = line==='auto' ? 'group relative rounded-[24px] p-[1.5px] bg-[#1e3e35] overflow-hidden' : 'group relative rounded-[24px] p-[1.5px] bg-black/10 overflow-hidden hover:bg-black/15 transition';
-  document.getElementById('btn-auto').firstElementChild.className = line==='auto' ? 'bg-[#1e3e35] rounded-[22px] p-6 flex items-center gap-4 text-left text-white relative overflow-hidden' : 'bg-white rounded-[22px] p-6 flex items-center gap-4 text-left relative overflow-hidden';
-  // update inner colors for auto/body - simplified toggle by re-rendering
+  const bodyBtn = document.getElementById('btn-body');
+  const autoBtn = document.getElementById('btn-auto');
+  const isBody = line==='body';
+  // outer border
+  bodyBtn.className = isBody ? 'group relative rounded-[24px] p-[1.5px] bg-[#1e3e35] overflow-hidden' : 'group relative rounded-[24px] p-[1.5px] bg-black/10 overflow-hidden hover:bg-black/15 transition';
+  autoBtn.className = !isBody ? 'group relative rounded-[24px] p-[1.5px] bg-[#1e3e35] overflow-hidden' : 'group relative rounded-[24px] p-[1.5px] bg-black/10 overflow-hidden hover:bg-black/15 transition';
+  // inner container
+  bodyBtn.firstElementChild.className = isBody ? 'bg-[#1e3e35] rounded-[22px] p-6 flex items-center gap-4 text-left text-white relative overflow-hidden' : 'bg-white rounded-[22px] p-6 flex items-center gap-4 text-left relative overflow-hidden';
+  autoBtn.firstElementChild.className = !isBody ? 'bg-[#1e3e35] rounded-[22px] p-6 flex items-center gap-4 text-left text-white relative overflow-hidden' : 'bg-white rounded-[22px] p-6 flex items-center gap-4 text-left relative overflow-hidden';
+  // texts & icons
+  document.getElementById('btn-body-title').className = 'font-serif text-[22px] leading-none' + (isBody ? '' : ' text-[#1e3e35]');
+  document.getElementById('btn-body-sub1').className = 'text-[11px] tracking-[0.14em] font-bold mt-1' + (isBody ? ' text-white/60' : ' text-black/40');
+  document.getElementById('btn-body-sub2').className = 'text-xs mt-1' + (isBody ? ' text-white/70' : ' text-black/50');
+  document.getElementById('btn-body-icon').className = 'w-14 h-14 rounded-2xl grid place-items-center text-xl shrink-0' + (isBody ? ' bg-white text-[#1e3e35]' : ' bg-[#f4f7f5] border border-black/5 text-[#1e3e35]');
+  document.getElementById('btn-body-arrow').className = 'ml-auto w-8 h-8 rounded-full grid place-items-center' + (isBody ? ' bg-white text-[#1e3e35]' : ' bg-[#f4f7f5] text-[#1e3e35]');
+
+  document.getElementById('btn-auto-title').className = 'font-serif text-[22px] leading-none' + (!isBody ? '' : ' text-[#1e3e35]');
+  document.getElementById('btn-auto-sub1').className = 'text-[11px] tracking-[0.14em] font-bold mt-1' + (!isBody ? ' text-white/60' : ' text-black/40');
+  document.getElementById('btn-auto-sub2').className = 'text-xs mt-1' + (!isBody ? ' text-white/70' : ' text-black/50');
+  document.getElementById('btn-auto-icon').className = 'w-14 h-14 rounded-2xl grid place-items-center text-xl shrink-0' + (!isBody ? ' bg-white text-[#1e3e35]' : ' bg-[#f4f7f5] border border-black/5 text-[#1e3e35]');
+  document.getElementById('btn-auto-arrow').className = 'ml-auto w-8 h-8 rounded-full grid place-items-center' + (!isBody ? ' bg-white text-[#1e3e35]' : ' bg-[#f4f7f5] text-[#1e3e35]');
+
   const bodyCats = document.getElementById('body-cats');
-  bodyCats.style.display = line==='body' ? 'flex' : 'none';
-  if(line==='auto') currentCategory='modul';
+  bodyCats.style.display = isBody ? 'flex' : 'none';
+  if(!isBody) currentCategory='modul';
   else if(currentCategory==='modul') currentCategory='sensa';
   updateCategoryUI();
   renderProducts();
-  // adjust button styles inner text colors
-  if(line==='body'){
-    document.querySelector('#btn-body .font-serif').className='font-serif text-[22px] leading-none';
-    document.querySelector('#btn-auto .font-serif').className='font-serif text-[22px] leading-none text-[#1e3e35]';
-  } else {
-    document.querySelector('#btn-body .font-serif').className='font-serif text-[22px] leading-none text-[#1e3e35]';
-    document.querySelector('#btn-auto .font-serif').className='font-serif text-[22px] leading-none';
-  }
 }
 
 function selectCategory(cat){
@@ -753,7 +764,34 @@ document.getElementById('burger').addEventListener('click', ()=>{
 });
 function closeMobile(){ document.getElementById('mobile-menu').classList.add('hidden'); }
 
+function loadBranding(){
+  const logo = localStorage.getItem('mirea_logo');
+  if(logo){
+    const icon = document.getElementById('site-logo-icon');
+    icon.innerHTML = `<img src="${logo}" class="w-full h-full object-contain p-1" alt="MIREA">`;
+    icon.classList.remove('bg-[#1e3e35]','text-white');
+    icon.classList.add('bg-white','border','border-black/5');
+  }
+  const socials = JSON.parse(localStorage.getItem('mirea_socials')||'[]');
+  const header = document.getElementById('header-socials');
+  const footer = document.getElementById('footer-socials');
+  function iconFor(url){
+    const u = url.toLowerCase();
+    if(u.includes('vk')) return 'VK';
+    if(u.includes('telegram')||u.includes('t.me')) return 'TG';
+    if(u.includes('instagram')) return 'IG';
+    if(u.includes('whatsapp')||u.includes('wa.me')) return 'WA';
+    if(u.includes('youtube')) return 'YT';
+    if(u.includes('ok.ru')) return 'OK';
+    return '↗';
+  }
+  if(socials.length){
+    header.innerHTML = socials.map(s=> `<a href="${s.url}" target="_blank" class="w-8 h-8 rounded-full bg-[#f4f7f5] border border-black/5 grid place-items-center text-[11px] font-bold hover:bg-[#1e3e35] hover:text-white transition" title="${s.name}">${iconFor(s.url)}</a>`).join('');
+    footer.innerHTML = socials.map(s=> `<a href="${s.url}" target="_blank" class="w-8 h-8 rounded-full bg-white/10 grid place-items-center text-[11px] font-bold hover:bg-white hover:text-[#1e3e35] transition">${iconFor(s.url)}</a>`).join('');
+  }
+}
 // init
+loadBranding();
 selectLine('body');
 renderProducts();
 updateCartUI();
