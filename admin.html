@@ -260,7 +260,7 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
           <p class="text-xs text-black/50 mt-1">Загрузите картинку с компьютера — она <b>полностью заменит</b> текстовый блок «MIREA / CARE & CHEMISTRY» в шапке сайта. Размер — как текстовый блок, регулируется ползунком.</p>
           <div id="logo-preview" class="mt-4 min-h-[72px] rounded-xl bg-[#f4f7f5] border border-black/5 flex items-center px-4 py-3 overflow-hidden text-xs text-black/30">превью: загрузите логотип</div>
           <input type="file" id="logo-upload" accept="image/*" onchange="handleLogoUpload(event)" class="mt-3 w-full text-sm">
-          <label class="block mt-3"><span class="text-xs font-bold text-black/40">ВЫСОТА ЛОГОТИПА: <span id="logo-height-val">48</span> PX</span><input id="logo-height" type="range" min="32" max="80" value="48" oninput="changeLogoHeight(this.value)" class="mt-1 w-full"></label>
+          <label class="block mt-3"><span class="text-xs font-bold text-black/40">ВЫСОТА ЛОГОТИПА: <span id="logo-height-val">48</span> PX</span><input id="logo-height" type="range" min="16" max="80" value="48" oninput="changeLogoHeight(this.value)" class="mt-1 w-full"></label>
           <div class="flex gap-2 mt-3">
             <button onclick="removeLogo()" class="bg-white border border-black/10 rounded-full px-4 py-2 text-xs font-bold">УДАЛИТЬ ЛОГО</button>
             <span class="text-[11px] text-black/40 self-center">хранится в браузере, на сайте появится сразу</span>
