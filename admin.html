@@ -256,13 +256,14 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
         </div>
         <!-- Logo -->
         <div class="bg-white rounded-2xl p-6 border border-black/5">
-          <h3 class="font-bold">Логотип сайта</h3>
-          <p class="text-xs text-black/50 mt-1">Загрузите PNG/SVG — отобразится в хедере вместо буквы «M».</p>
-          <div id="logo-preview" class="mt-4 w-20 h-20 rounded-xl bg-[#f4f7f5] border border-black/5 grid place-items-center overflow-hidden text-xs text-black/30">превью</div>
+          <h3 class="font-bold">Логотип сайта (хедер)</h3>
+          <p class="text-xs text-black/50 mt-1">Загрузите картинку с компьютера — она <b>полностью заменит</b> текстовый блок «MIREA / CARE & CHEMISTRY» в шапке сайта. Размер — как текстовый блок, регулируется ползунком.</p>
+          <div id="logo-preview" class="mt-4 min-h-[72px] rounded-xl bg-[#f4f7f5] border border-black/5 flex items-center px-4 py-3 overflow-hidden text-xs text-black/30">превью: загрузите логотип</div>
           <input type="file" id="logo-upload" accept="image/*" onchange="handleLogoUpload(event)" class="mt-3 w-full text-sm">
+          <label class="block mt-3"><span class="text-xs font-bold text-black/40">ВЫСОТА ЛОГОТИПА: <span id="logo-height-val">48</span> PX</span><input id="logo-height" type="range" min="32" max="80" value="48" oninput="changeLogoHeight(this.value)" class="mt-1 w-full"></label>
           <div class="flex gap-2 mt-3">
             <button onclick="removeLogo()" class="bg-white border border-black/10 rounded-full px-4 py-2 text-xs font-bold">УДАЛИТЬ ЛОГО</button>
-            <span class="text-[11px] text-black/40 self-center">хранится в браузере, появится на сайте сразу</span>
+            <span class="text-[11px] text-black/40 self-center">хранится в браузере, на сайте появится сразу</span>
           </div>
         </div>
         <!-- Socials -->
@@ -736,12 +737,21 @@ function handleLogoUpload(e){
 }
 function renderLogoPreview(){
   const logo=localStorage.getItem('mirea_logo');
+  const h=parseInt(localStorage.getItem('mirea_logo_height')||'48',10);
   const el=document.getElementById('logo-preview');
+  const val=document.getElementById('logo-height-val');
+  const range=document.getElementById('logo-height');
+  if(val) val.textContent=h;
+  if(range) range.value=h;
   if(!el) return;
-  if(logo) el.innerHTML=`<img src="${logo}" class="w-full h-full object-contain">`;
-  else el.innerHTML='превью';
+  if(logo) el.innerHTML=`<img src="${logo}" style="height:${h}px;max-width:100%;" class="object-contain">`;
+  else el.innerHTML='превью: загрузите логотип';
 }
-function removeLogo(){ localStorage.removeItem('mirea_logo'); renderLogoPreview(); showToast('Логотип удалён'); }
+function changeLogoHeight(v){
+  localStorage.setItem('mirea_logo_height', String(v));
+  renderLogoPreview();
+}
+function removeLogo(){ localStorage.removeItem('mirea_logo'); renderLogoPreview(); showToast('Логотип удалён — вернулся текстовый MIREA'); }
 // SOCIALS
 function getSocials(){ return JSON.parse(localStorage.getItem('mirea_socials')||'[]'); }
 function renderSocials(){

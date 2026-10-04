@@ -44,12 +44,15 @@ html { scroll-behavior: smooth; }
 <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-white/70 glass border-b border-black/[0.04]">
   <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-[72px]">
-      <a href="#home" id="site-logo" class="flex items-center gap-3 group">
-        <div id="site-logo-icon" class="w-9 h-9 rounded-xl bg-[#1e3e35] flex items-center justify-center text-white font-serif font-bold text-[18px] tracking-widest group-hover:bg-[#162e27] transition overflow-hidden">M</div>
-        <div>
-          <div class="font-serif font-bold text-[22px] leading-none tracking-[0.14em]">MIREA</div>
-          <div class="text-[9px] tracking-[0.22em] text-[#7a9d8f] font-semibold -mt-0.5">CARE & CHEMISTRY</div>
+      <a href="#home" id="site-logo" class="flex items-center gap-3 group min-h-[48px]">
+        <div id="site-logo-default" class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-[#1e3e35] flex items-center justify-center text-white font-serif font-bold text-[18px] tracking-widest group-hover:bg-[#162e27] transition">M</div>
+          <div>
+            <div class="font-serif font-bold text-[22px] leading-none tracking-[0.14em]">MIREA</div>
+            <div class="text-[9px] tracking-[0.22em] text-[#7a9d8f] font-semibold -mt-0.5">CARE & CHEMISTRY</div>
+          </div>
         </div>
+        <img id="site-logo-custom" class="hidden object-contain" style="height:48px;max-width:240px;" alt="MIREA">
       </a>
       <div class="hidden lg:flex items-center gap-8">
         <a href="#home" class="nav-link text-[13px] tracking-[0.14em] font-semibold text-[#1e3e35] hover:text-[#7a9d8f] transition">ГЛАВНАЯ</a>
@@ -766,11 +769,17 @@ function closeMobile(){ document.getElementById('mobile-menu').classList.add('hi
 
 function loadBranding(){
   const logo = localStorage.getItem('mirea_logo');
-  if(logo){
-    const icon = document.getElementById('site-logo-icon');
-    icon.innerHTML = `<img src="${logo}" class="w-full h-full object-contain p-1" alt="MIREA">`;
-    icon.classList.remove('bg-[#1e3e35]','text-white');
-    icon.classList.add('bg-white','border','border-black/5');
+  const logoH = parseInt(localStorage.getItem('mirea_logo_height')||'48',10);
+  const def = document.getElementById('site-logo-default');
+  const custom = document.getElementById('site-logo-custom');
+  if(logo && def && custom){
+    custom.src = logo;
+    custom.style.height = logoH + 'px';
+    custom.classList.remove('hidden');
+    def.classList.add('hidden');
+  } else if(def && custom){
+    custom.classList.add('hidden');
+    def.classList.remove('hidden');
   }
   const socials = JSON.parse(localStorage.getItem('mirea_socials')||'[]');
   const header = document.getElementById('header-socials');
