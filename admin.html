@@ -270,7 +270,7 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
         </div>
 
         <div class="bg-[#1e3e35] text-white rounded-2xl p-6 flex flex-col">
-          <div class="text-[11px] tracking-[0.14em] font-bold text-white/50">ИТОГОВАЯ СТОИМОСТЬ ЗА 1 ШТУКУ</div>
+          <div class="text-[11px] tracking-[0.14em] font-bold text-white/50">ИТОГОВАЯ СЕБЕСТОИМОСТЬ ЗА 1 ШТУКУ</div>
           <div id="calc-total" class="font-display text-[44px] font-semibold mt-2 leading-none">0,00 ₽</div>
           <div class="mt-4 space-y-2 text-sm text-white/70">
             <div class="flex justify-between"><span>Сырьё + доставка</span><span id="calc-raw-sum" class="font-bold text-white">0,00 ₽</span></div>
@@ -797,7 +797,7 @@ function renderCalc(){
   set('calc-subtotal', fmt(r.grandTotal));
   set('calc-tax', fmt(r.tax));
   set('calc-ebit', fmt(r.ebit));
-  set('calc-total', fmt(r.pricePerUnit));
+  set('calc-total', fmt(r.costPerUnit));
 }
 function loadCalc(){
   const data = getCalcData();
@@ -837,7 +837,7 @@ function clearCalc(){
 }
 function copyCalc(){
   const r = calcTotal();
-  const text = `Себестоимость за 1 штуку: ${fmt(r.costPerUnit)}\nИнтерес предприятия: ${r.margin}%\nИТОГОВАЯ СТОИМОСТЬ ЗА 1 ШТУКУ: ${fmt(r.pricePerUnit)}\nВсего на партию (${r.qty} шт): ${fmt(r.grandTotal)}\nНалог 1%: ${fmt(r.tax)}\nEBIT (прибыль партии): ${fmt(r.ebit)}`;
+  const text = `ИТОГОВАЯ СЕБЕСТОИМОСТЬ ЗА 1 ШТУКУ: ${fmt(r.costPerUnit)}\nИнтерес предприятия: ${r.margin}%\nИтог с интересом за 1 шт: ${fmt(r.pricePerUnit)}\nВсего на партию (${r.qty} шт): ${fmt(r.grandTotal)}\nНалог 1%: ${fmt(r.tax)}\nEBIT (прибыль партии): ${fmt(r.ebit)}`;
   navigator.clipboard.writeText(text).then(()=> showToast('Итог скопирован')).catch(()=> showToast('Не удалось скопировать'));
 }
 document.addEventListener('input', e=>{ if(e.target && e.target.dataset && e.target.dataset.calc) renderCalc(); });
