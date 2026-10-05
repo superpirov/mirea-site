@@ -283,6 +283,7 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
             <div class="flex justify-between"><span>Налог 1% (от общей суммы)</span><span id="calc-tax" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
             <div class="flex justify-between"><span>Прочие расходы</span><span id="calc-other" class="font-bold text-white">0,00 ₽</span></div>
             <div class="flex justify-between border-t border-white/15 pt-2"><span class="font-bold">EBIT (прибыль партии)</span><span id="calc-ebit" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
+            <div class="flex justify-between"><span>Маржа (EBIT от общей суммы)</span><span id="calc-margin-pct" class="font-bold text-[#e8b44f]">0,0%</span></div>
           </div>
           <div class="mt-auto pt-4 text-xs text-white/40">Расчёт сохраняется в браузере и доступен при следующем визите.</div>
         </div>
@@ -787,7 +788,8 @@ function calcTotal(){
   const grandTotal = pricePerUnit*qty;
   const tax = grandTotal*0.01;
   const ebit = grandTotal - tax - subtotal - other;
-  return {rawSum, packSum, designSum, subtotal, qty, margin, other, costPerUnit, pricePerUnit, grandTotal, tax, ebit};
+  const marginPct = grandTotal>0 ? (ebit/grandTotal*100) : 0;
+  return {rawSum, packSum, designSum, subtotal, qty, margin, other, costPerUnit, pricePerUnit, grandTotal, tax, ebit, marginPct};
 }
 function renderCalc(){
   const r = calcTotal();
@@ -801,6 +803,7 @@ function renderCalc(){
   set('calc-tax', fmt(r.tax));
   set('calc-other', fmt(r.other));
   set('calc-ebit', fmt(r.ebit));
+  set('calc-margin-pct', r.marginPct.toLocaleString('ru-RU',{minimumFractionDigits:1,maximumFractionDigits:1})+'%');
   set('calc-total', fmt(r.costPerUnit));
 }
 function loadCalc(){
@@ -847,7 +850,7 @@ function clearCalc(){
 }
 function copyCalc(){
   const r = calcTotal();
-  const text = `ИТОГОВАЯ СЕБЕСТОИМОСТЬ ЗА 1 ШТУКУ: ${fmt(r.costPerUnit)}\nИнтерес предприятия: ${r.margin}%\nИтог с интересом за 1 шт: ${fmt(r.pricePerUnit)}\nВсего на партию (${r.qty} шт): ${fmt(r.grandTotal)}\nНалог 1%: ${fmt(r.tax)}\nПрочие расходы: ${fmt(r.other)}\nEBIT (прибыль партии): ${fmt(r.ebit)}`;
+  const text = `ИТОГОВАЯ СЕБЕСТОИМОСТЬ ЗА 1 ШТУКУ: ${fmt(r.costPerUnit)}\nИнтерес предприятия: ${r.margin}%\nИтог с интересом за 1 шт: ${fmt(r.pricePerUnit)}\nВсего на партию (${r.qty} шт): ${fmt(r.grandTotal)}\nНалог 1%: ${fmt(r.tax)}\nПрочие расходы: ${fmt(r.other)}\nEBIT (прибыль партии): ${fmt(r.ebit)}\nМаржа: ${r.marginPct.toLocaleString('ru-RU',{minimumFractionDigits:1,maximumFractionDigits:1})}%`;
   navigator.clipboard.writeText(text).then(()=> showToast('Итог скопирован')).catch(()=> showToast('Не удалось скопировать'));
 }
 document.addEventListener('input', e=>{ if(e.target && e.target.dataset && e.target.dataset.calc) renderCalc(); });
