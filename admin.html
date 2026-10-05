@@ -261,6 +261,7 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
             <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ДОСТАВКА ЭЛЕМЕНТОВ ДИЗАЙНА</span><input type="number" min="0" step="0.01" data-calc="designDelivery" placeholder="0" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
           </div>
           <label class="block mt-4"><span class="text-xs font-bold tracking-[0.12em] text-black/40">КОЛИЧЕСТВО ШТУК В ПАРТИИ</span><input type="number" min="1" step="1" data-calc="qty" value="1" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
+          <label class="block mt-4"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ИНТЕРЕС ПРЕДПРИЯТИЯ (ДОБАВОЧНАЯ СТОИМОСТЬ, %)</span><input type="number" min="0" step="0.1" data-calc="margin" value="0" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
           <div class="mt-3 flex flex-wrap gap-2">
             <button onclick="saveCalc()" class="bg-[#1e3e35] text-white rounded-full px-6 py-2.5 text-xs font-bold">СОХРАНИТЬ РАСЧЁТ</button>
             <button onclick="clearCalc()" class="bg-white border border-black/10 rounded-full px-6 py-2.5 text-xs font-bold">ОЧИСТИТЬ</button>
@@ -269,13 +270,15 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
         </div>
 
         <div class="bg-[#1e3e35] text-white rounded-2xl p-6 flex flex-col">
-          <div class="text-[11px] tracking-[0.14em] font-bold text-white/50">СЕБЕСТОИМОСТЬ ЗА 1 ШТУКУ</div>
+          <div class="text-[11px] tracking-[0.14em] font-bold text-white/50">ИТОГОВАЯ СТОИМОСТЬ ЗА 1 ШТУКУ</div>
           <div id="calc-total" class="font-display text-[44px] font-semibold mt-2 leading-none">0,00 ₽</div>
           <div class="mt-4 space-y-2 text-sm text-white/70">
             <div class="flex justify-between"><span>Сырьё + доставка</span><span id="calc-raw-sum" class="font-bold text-white">0,00 ₽</span></div>
             <div class="flex justify-between"><span>Тара + доставка</span><span id="calc-pack-sum" class="font-bold text-white">0,00 ₽</span></div>
             <div class="flex justify-between"><span>Дизайн + доставка</span><span id="calc-design-sum" class="font-bold text-white">0,00 ₽</span></div>
-            <div class="flex justify-between border-t border-white/15 pt-2"><span>Всего на партию</span><span id="calc-subtotal" class="font-bold text-white">0,00 ₽</span></div>
+            <div class="flex justify-between"><span>Себестоимость за 1 шт</span><span id="calc-perunit" class="font-bold text-white">0,00 ₽</span></div>
+            <div class="flex justify-between"><span>Всего на партию</span><span id="calc-subtotal" class="font-bold text-white">0,00 ₽</span></div>
+            <div class="flex justify-between border-t border-white/15 pt-2"><span>Налог 1% (от общей суммы)</span><span id="calc-tax" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
           </div>
           <div class="mt-auto pt-4 text-xs text-white/40">Расчёт сохраняется в браузере и доступен при следующем визите.</div>
         </div>
@@ -773,8 +776,12 @@ function calcTotal(){
   const designSum = vals[4]+vals[5];
   const subtotal = rawSum+packSum+designSum;
   const qty = Math.max(1, parseFloat(document.querySelector('[data-calc="qty"]')?.value)||1);
-  const perUnit = subtotal/qty;
-  return {rawSum, packSum, designSum, subtotal, qty, perUnit};
+  const margin = Math.max(0, parseFloat(document.querySelector('[data-calc="margin"]')?.value)||0);
+  const costPerUnit = subtotal/qty;
+  const pricePerUnit = costPerUnit*(1+margin/100);
+  const grandTotal = pricePerUnit*qty;
+  const tax = grandTotal*0.01;
+  return {rawSum, packSum, designSum, subtotal, qty, margin, costPerUnit, pricePerUnit, grandTotal, tax};
 }
 function renderCalc(){
   const r = calcTotal();
@@ -782,8 +789,10 @@ function renderCalc(){
   set('calc-raw-sum', fmt(r.rawSum));
   set('calc-pack-sum', fmt(r.packSum));
   set('calc-design-sum', fmt(r.designSum));
-  set('calc-subtotal', fmt(r.subtotal));
-  set('calc-total', fmt(r.perUnit));
+  set('calc-perunit', fmt(r.costPerUnit));
+  set('calc-subtotal', fmt(r.grandTotal));
+  set('calc-tax', fmt(r.tax));
+  set('calc-total', fmt(r.pricePerUnit));
 }
 function loadCalc(){
   const data = getCalcData();
@@ -793,6 +802,8 @@ function loadCalc(){
   });
   const qtyEl = document.querySelector('[data-calc="qty"]');
   if(qtyEl && data.qty!==undefined) qtyEl.value = data.qty;
+  const marginEl = document.querySelector('[data-calc="margin"]');
+  if(marginEl && data.margin!==undefined) marginEl.value = data.margin;
   renderCalc();
 }
 function saveCalc(){
@@ -803,6 +814,8 @@ function saveCalc(){
   });
   const qtyEl = document.querySelector('[data-calc="qty"]');
   data.qty = qtyEl? Math.max(1, parseInt(qtyEl.value)||1) : 1;
+  const marginEl = document.querySelector('[data-calc="margin"]');
+  data.margin = marginEl? Math.max(0, parseFloat(marginEl.value)||0) : 0;
   localStorage.setItem('mirea_calc', JSON.stringify(data));
   renderCalc();
   showToast('Расчёт сохранён');
@@ -811,13 +824,15 @@ function clearCalc(){
   CALC_FIELDS.forEach(f=>{ const el=document.querySelector(`[data-calc="${f}"]`); if(el) el.value=''; });
   const qtyEl = document.querySelector('[data-calc="qty"]');
   if(qtyEl) qtyEl.value = 1;
+  const marginEl = document.querySelector('[data-calc="margin"]');
+  if(marginEl) marginEl.value = 0;
   localStorage.removeItem('mirea_calc');
   renderCalc();
   showToast('Очищено');
 }
 function copyCalc(){
   const r = calcTotal();
-  const text = `Себестоимость за 1 штуку\nСырьё + доставка: ${fmt(r.rawSum)}\nТара + доставка: ${fmt(r.packSum)}\nДизайн + доставка: ${fmt(r.designSum)}\nВсего на партию (${r.qty} шт): ${fmt(r.subtotal)}\nИТОГО ЗА 1 ШТУКУ: ${fmt(r.perUnit)}`;
+  const text = `Себестоимость за 1 штуку: ${fmt(r.costPerUnit)}\nИнтерес предприятия: ${r.margin}%\nИТОГОВАЯ СТОИМОСТЬ ЗА 1 ШТУКУ: ${fmt(r.pricePerUnit)}\nВсего на партию (${r.qty} шт): ${fmt(r.grandTotal)}\nНалог 1%: ${fmt(r.tax)}`;
   navigator.clipboard.writeText(text).then(()=> showToast('Итог скопирован')).catch(()=> showToast('Не удалось скопировать'));
 }
 document.addEventListener('input', e=>{ if(e.target && e.target.dataset && e.target.dataset.calc) renderCalc(); });
