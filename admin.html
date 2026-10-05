@@ -279,7 +279,8 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
             <div class="flex justify-between"><span>Себестоимость за 1 шт</span><span id="calc-perunit" class="font-bold text-white">0,00 ₽</span></div>
             <div class="flex justify-between bg-white/10 rounded-lg px-2 py-1.5 -mx-2"><span class="font-bold">Итог с интересом за 1 шт</span><span id="calc-price" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
             <div class="flex justify-between"><span>Всего на партию</span><span id="calc-subtotal" class="font-bold text-white">0,00 ₽</span></div>
-            <div class="flex justify-between border-t border-white/15 pt-2"><span>Налог 1% (от общей суммы)</span><span id="calc-tax" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
+            <div class="flex justify-between"><span>Налог 1% (от общей суммы)</span><span id="calc-tax" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
+            <div class="flex justify-between border-t border-white/15 pt-2"><span class="font-bold">EBIT (прибыль партии)</span><span id="calc-ebit" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
           </div>
           <div class="mt-auto pt-4 text-xs text-white/40">Расчёт сохраняется в браузере и доступен при следующем визите.</div>
         </div>
@@ -782,7 +783,8 @@ function calcTotal(){
   const pricePerUnit = costPerUnit*(1+margin/100);
   const grandTotal = pricePerUnit*qty;
   const tax = grandTotal*0.01;
-  return {rawSum, packSum, designSum, subtotal, qty, margin, costPerUnit, pricePerUnit, grandTotal, tax};
+  const ebit = grandTotal - tax - subtotal;
+  return {rawSum, packSum, designSum, subtotal, qty, margin, costPerUnit, pricePerUnit, grandTotal, tax, ebit};
 }
 function renderCalc(){
   const r = calcTotal();
@@ -794,6 +796,7 @@ function renderCalc(){
   set('calc-price', fmt(r.pricePerUnit));
   set('calc-subtotal', fmt(r.grandTotal));
   set('calc-tax', fmt(r.tax));
+  set('calc-ebit', fmt(r.ebit));
   set('calc-total', fmt(r.pricePerUnit));
 }
 function loadCalc(){
@@ -834,7 +837,7 @@ function clearCalc(){
 }
 function copyCalc(){
   const r = calcTotal();
-  const text = `Себестоимость за 1 штуку: ${fmt(r.costPerUnit)}\nИнтерес предприятия: ${r.margin}%\nИТОГОВАЯ СТОИМОСТЬ ЗА 1 ШТУКУ: ${fmt(r.pricePerUnit)}\nВсего на партию (${r.qty} шт): ${fmt(r.grandTotal)}\nНалог 1%: ${fmt(r.tax)}`;
+  const text = `Себестоимость за 1 штуку: ${fmt(r.costPerUnit)}\nИнтерес предприятия: ${r.margin}%\nИТОГОВАЯ СТОИМОСТЬ ЗА 1 ШТУКУ: ${fmt(r.pricePerUnit)}\nВсего на партию (${r.qty} шт): ${fmt(r.grandTotal)}\nНалог 1%: ${fmt(r.tax)}\nEBIT (прибыль партии): ${fmt(r.ebit)}`;
   navigator.clipboard.writeText(text).then(()=> showToast('Итог скопирован')).catch(()=> showToast('Не удалось скопировать'));
 }
 document.addEventListener('input', e=>{ if(e.target && e.target.dataset && e.target.dataset.calc) renderCalc(); });
