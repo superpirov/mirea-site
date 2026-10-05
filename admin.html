@@ -277,6 +277,7 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
             <div class="flex justify-between"><span>Тара + доставка</span><span id="calc-pack-sum" class="font-bold text-white">0,00 ₽</span></div>
             <div class="flex justify-between"><span>Дизайн + доставка</span><span id="calc-design-sum" class="font-bold text-white">0,00 ₽</span></div>
             <div class="flex justify-between"><span>Себестоимость за 1 шт</span><span id="calc-perunit" class="font-bold text-white">0,00 ₽</span></div>
+            <div class="flex justify-between bg-white/10 rounded-lg px-2 py-1.5 -mx-2"><span class="font-bold">Итог с интересом за 1 шт</span><span id="calc-price" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
             <div class="flex justify-between"><span>Всего на партию</span><span id="calc-subtotal" class="font-bold text-white">0,00 ₽</span></div>
             <div class="flex justify-between border-t border-white/15 pt-2"><span>Налог 1% (от общей суммы)</span><span id="calc-tax" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
           </div>
@@ -790,6 +791,7 @@ function renderCalc(){
   set('calc-pack-sum', fmt(r.packSum));
   set('calc-design-sum', fmt(r.designSum));
   set('calc-perunit', fmt(r.costPerUnit));
+  set('calc-price', fmt(r.pricePerUnit));
   set('calc-subtotal', fmt(r.grandTotal));
   set('calc-tax', fmt(r.tax));
   set('calc-total', fmt(r.pricePerUnit));
