@@ -306,13 +306,13 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
         <!-- Logo -->
         <div class="bg-white rounded-2xl p-6 border border-black/5">
           <h3 class="font-bold">Логотип сайта (хедер)</h3>
-          <p class="text-xs text-black/50 mt-1">Загрузите картинку с компьютера — она <b>полностью заменит</b> текстовый блок «MIREA / CARE & CHEMISTRY» в шапке сайта. Размер — как текстовый блок, регулируется ползунком.</p>
+          <p class="text-xs text-black/50 mt-1">Загрузите картинку — она <b>зальётся на сервер</b> и будет видна на всех устройствах. Рекомендуемый размер: до 2 МБ, PNG/WebP/SVG. Размер в шапке регулируется ползунком.</p>
           <div id="logo-preview" class="mt-4 min-h-[72px] rounded-xl bg-[#f4f7f5] border border-black/5 flex items-center px-4 py-3 overflow-hidden text-xs text-black/30">превью: загрузите логотип</div>
           <input type="file" id="logo-upload" accept="image/*" onchange="handleLogoUpload(event)" class="mt-3 w-full text-sm">
           <label class="block mt-3"><span class="text-xs font-bold text-black/40">ВЫСОТА ЛОГОТИПА: <span id="logo-height-val">48</span> PX</span><input id="logo-height" type="range" min="16" max="80" value="48" oninput="changeLogoHeight(this.value)" class="mt-1 w-full"></label>
           <div class="flex gap-2 mt-3">
             <button onclick="removeLogo()" class="bg-white border border-black/10 rounded-full px-4 py-2 text-xs font-bold">УДАЛИТЬ ЛОГО</button>
-            <span class="text-[11px] text-black/40 self-center">хранится в браузере, на сайте появится сразу</span>
+            <span class="text-[11px] text-black/40 self-center">загружается на сервер, видно везде сразу</span>
           </div>
         </div>
         <!-- Socials -->
@@ -859,19 +859,26 @@ function saveSettings(){
   localStorage.setItem('mirea_settings', JSON.stringify({orderEmail:document.getElementById('set-order-email').value, coopEmail:document.getElementById('set-coop-email').value, address:document.getElementById('set-address').value, phone:document.getElementById('set-phone').value}));
   showToast('Настройки сохранены');
 }
-// LOGO
-function handleLogoUpload(e){
+// LOGO (server upload)
+async function handleLogoUpload(e){
   const file=e.target.files[0]; if(!file) return;
-  const reader=new FileReader();
-  reader.onload=()=>{
-    localStorage.setItem('mirea_logo', reader.result);
-    renderLogoPreview();
-    showToast('Логотип сохранён — обновите сайт');
-  };
-  reader.readAsDataURL(file);
+  const form=new FormData(); form.append('logo', file);
+  try{
+    const res=await fetch('api/upload_logo.php', {method:'POST', body:form});
+    const data=await res.json();
+    if(data.ok){
+      const h=parseInt(localStorage.getItem('mirea_logo_height')||'48',10);
+      const el=document.getElementById('logo-preview');
+      if(el) el.innerHTML=`<img src="${data.url}" style="height:${h}px;max-width:100%;" class="object-contain">`;
+      showToast('Логотип загружен на сервер — виден везде');
+    }else{
+      showToast('Ошибка: '+data.error);
+    }
+  }catch(err){
+    showToast('Ошибка загрузки: '+err.message);
+  }
 }
 function renderLogoPreview(){
-  const logo=localStorage.getItem('mirea_logo');
   const h=parseInt(localStorage.getItem('mirea_logo_height')||'48',10);
   const el=document.getElementById('logo-preview');
   const val=document.getElementById('logo-height-val');
@@ -879,14 +886,20 @@ function renderLogoPreview(){
   if(val) val.textContent=h;
   if(range) range.value=h;
   if(!el) return;
-  if(logo) el.innerHTML=`<img src="${logo}" style="height:${h}px;max-width:100%;" class="object-contain">`;
-  else el.innerHTML='превью: загрузите логотип';
+  el.innerHTML=`<img src="logo.png?v=${Date.now()}" style="height:${parseInt(localStorage.getItem('mirea_logo_height')||'48',10)}px;max-width:100%;" class="object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span style="display:none;color:#999;font-size:11px;">лого не найден на сервере</span>`;
 }
 function changeLogoHeight(v){
   localStorage.setItem('mirea_logo_height', String(v));
   renderLogoPreview();
 }
-function removeLogo(){ localStorage.removeItem('mirea_logo'); renderLogoPreview(); showToast('Логотип удалён — вернулся текстовый MIREA'); }
+async function removeLogo(){
+  try{
+    await fetch('api/upload_logo.php', {method:'DELETE'});
+  }catch(e){}
+  localStorage.removeItem('mirea_logo');
+  renderLogoPreview();
+  showToast('Логотип удалён с сервера — вернулся текстовый MIREA');
+}
 // SOCIALS
 function getSocials(){ return JSON.parse(localStorage.getItem('mirea_socials')||'[]'); }
 function renderSocials(){

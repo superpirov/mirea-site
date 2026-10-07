@@ -766,19 +766,26 @@ function closeMobile(){ document.getElementById('mobile-menu').classList.add('hi
 
 
 function loadBranding(){
-  const logo = localStorage.getItem('mirea_logo');
   const logoH = parseInt(localStorage.getItem('mirea_logo_height')||'48',10);
   const def = document.getElementById('site-logo-default');
   const custom = document.getElementById('site-logo-custom');
-  if(logo && def && custom){
-    custom.src = logo;
-    custom.style.height = logoH + 'px';
-    custom.classList.remove('hidden');
-    def.classList.add('hidden');
-  } else if(def && custom){
-    custom.classList.add('hidden');
-    def.classList.remove('hidden');
-  }
+  // пробуем загрузить лого с сервера
+  const img = new Image();
+  img.onload = () => {
+    if(def && custom){
+      custom.src = 'logo.png?v=' + Date.now();
+      custom.style.height = logoH + 'px';
+      custom.classList.remove('hidden');
+      def.classList.add('hidden');
+    }
+  };
+  img.onerror = () => {
+    if(def && custom){
+      custom.classList.add('hidden');
+      def.classList.remove('hidden');
+    }
+  };
+  img.src = 'logo.png?v=' + Date.now();
   const socials = JSON.parse(localStorage.getItem('mirea_socials')||'[]');
   const header = document.getElementById('header-socials');
   const footer = document.getElementById('footer-socials');
