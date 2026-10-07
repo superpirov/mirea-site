@@ -802,6 +802,7 @@ function loadBranding(){
   if(socials.length){
     header.innerHTML = socials.map(s=> `<a href="${s.url}" target="_blank" class="w-8 h-8 rounded-full bg-[#f4f7f5] border border-black/5 grid place-items-center text-[11px] font-bold hover:bg-[#1e3e35] hover:text-white transition" title="${s.name}">${iconFor(s.url)}</a>`).join('');
     footer.innerHTML = socials.map(s=> `<a href="${s.url}" target="_blank" class="w-8 h-8 rounded-full bg-white/10 grid place-items-center text-[11px] font-bold hover:bg-white hover:text-[#1e3e35] transition">${iconFor(s.url)}</a>`).join('');
+  }
 }
 
 // Yandex Maps JS API initialization
