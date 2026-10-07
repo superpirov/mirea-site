@@ -399,6 +399,7 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
     </div>
     <label class="block"><span class="text-xs font-bold text-black/40">НАЗВАНИЕ</span><input name="name" required placeholder="Sensa" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
     <label class="block"><span class="text-xs font-bold text-black/40">ПОДЗАГОЛОВОК (аромат)</span><input name="subtitle" required placeholder="Жасмин + Персик" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    <label class="block"><span class="text-xs font-bold text-black/40">АРТИКУЛ</span><input name="sku" placeholder="SNS-JSM-500" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
     <label class="block"><span class="text-xs font-bold text-black/40">ОПИСАНИЕ</span><textarea name="desc" rows="2" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></textarea></label>
     <div class="grid grid-cols-3 gap-3">
       <label class="block"><span class="text-xs font-bold text-black/40">ОБЪЁМ</span><input name="volume" required placeholder="500 мл" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
@@ -450,11 +451,11 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
 
 <script>
 let products = JSON.parse(localStorage.getItem('mirea_products')||'null') || [
-  { id:'sensa-jasmin', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', scent:'Жасмин, персик, белый мускус' },
-  { id:'sensa-grape', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', scent:'Грейпфрут, розовый перец, кедр' },
-  { id:'aura-almond', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', scent:'Миндаль, вишня, ваниль' },
-  { id:'aura-honey', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом.', volume:'500 мл', price:490, oldPrice:650, badge:'', scent:'Мёд, молоко' },
-  { id:'modul-20', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь 1:50', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', scent:'—' },
+  { id:'sensa-jasmin', sku:'SNS-JSM-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', scent:'Жасмин, персик, белый мускус' },
+  { id:'sensa-grape', sku:'SNS-GRP-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', scent:'Грейпфрут, розовый перец, кедр' },
+  { id:'aura-almond', sku:'AUR-AMD-500', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', scent:'Миндаль, вишня, ваниль' },
+  { id:'aura-honey', sku:'AUR-HON-500', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом.', volume:'500 мл', price:490, oldPrice:650, badge:'', scent:'Мёд, молоко' },
+  { id:'modul-20', sku:'MDL-20L', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь 1:50', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', scent:'—' },
 ];
 let sales = JSON.parse(localStorage.getItem('mirea_sales')||'[]');
 let clients = JSON.parse(localStorage.getItem('mirea_clients')||'[]');
@@ -567,7 +568,7 @@ function renderProductsAdmin(){
   document.getElementById('products-list').innerHTML = products.map(p=> `
     <div class="bg-white rounded-2xl p-5 border border-black/5">
       <div class="flex justify-between items-start gap-3">
-        <div><div class="text-[11px] tracking-[0.12em] font-bold text-black/40">${p.line.toUpperCase()} • ${p.category.toUpperCase()} • ${p.volume}</div><div class="font-bold mt-1">${p.name} — ${p.subtitle}</div><div class="text-sm text-black/50 mt-1 line-clamp-2">${p.desc}</div></div>
+        <div><div class="text-[11px] tracking-[0.12em] font-bold text-black/40">${p.line.toUpperCase()} • ${p.category.toUpperCase()} • ${p.volume} • арт. ${(p.sku||p.id).toUpperCase()}</div><div class="font-bold mt-1">${p.name} — ${p.subtitle}</div><div class="text-sm text-black/50 mt-1 line-clamp-2">${p.desc}</div></div>
         <div class="text-right shrink-0"><div class="font-extrabold">${p.price.toLocaleString('ru-RU')} ₽</div><div class="text-xs text-black/30 line-through">${p.oldPrice||''}</div></div>
       </div>
       <div class="flex gap-2 mt-4">
@@ -961,13 +962,13 @@ function exportSalesExcel(){
   downloadExcel(toExcelHTML('Продажи MIREA', rows),'mirea_sales.xls');
 }
 function exportProductsCSV(){
-  const rows=[['ID','Линейка','Категория','Название','Подзаголовок','Объём','Цена','Старая цена','Бейдж','Описание']];
-  products.forEach(p=> rows.push([p.id,p.line,p.category,p.name,p.subtitle,p.volume,p.price,p.oldPrice||'',p.badge||'',p.desc||'']));
+  const rows=[['ID','Артикул','Линейка','Категория','Название','Подзаголовок','Объём','Цена','Старая цена','Бейдж','Описание']];
+  products.forEach(p=> rows.push([p.id,p.sku||'',p.line,p.category,p.name,p.subtitle,p.volume,p.price,p.oldPrice||'',p.badge||'',p.desc||'']));
   downloadCSV(toCSV(rows),'mirea_products.csv');
 }
 function exportProductsExcel(){
-  const rows=[['ID','Линейка','Категория','Название','Подзаголовок','Объём','Цена','Старая цена','Бейдж']];
-  products.forEach(p=> rows.push([p.id,p.line,p.category,p.name,p.subtitle,p.volume,p.price,p.oldPrice||'',p.badge||'']));
+  const rows=[['ID','Артикул','Линейка','Категория','Название','Подзаголовок','Объём','Цена','Старая цена','Бейдж']];
+  products.forEach(p=> rows.push([p.id,p.sku||'',p.line,p.category,p.name,p.subtitle,p.volume,p.price,p.oldPrice||'',p.badge||'']));
   downloadExcel(toExcelHTML('Товары MIREA', rows),'mirea_products.xls');
 }
 function exportClientsCSV(){

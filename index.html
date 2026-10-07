@@ -176,55 +176,29 @@ html { scroll-behavior: smooth; }
             <div class="text-[11px] text-white/60">Гель для душа • 500 мл</div>
           </div>
 
-          <!-- 3 bottles -->
-          <div class="absolute inset-0 flex items-end justify-center gap-2 sm:gap-4 pb-10 pt-10">
-            <!-- bottle 1 - Aura Almond -->
-            <div class="animate-float relative w-[110px] sm:w-[150px] h-[380px] sm:h-[420px] bg-gradient-to-b from-[#fdf8ed] to-white rounded-[28px] border border-black/5 shadow-[0_20px_40px_rgba(0,0,0,0.08)] flex flex-col items-center pt-6 overflow-hidden">
-              <div class="w-[54px] h-[38px] rounded-t-[10px] bg-[#1e3e35] relative"><div class="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-4 bg-[#1e3e35] rounded-t-full"></div></div>
-              <div class="mt-3 w-[88%] bg-[#1e3e35] rounded-[18px] p-3 text-center text-white">
-                <div class="text-[9px] tracking-[0.2em] font-bold text-white/60">MIREA</div>
-                <div class="font-serif text-[20px] leading-none mt-1">Aura</div>
-                <div class="text-[9px] tracking-[0.16em] mt-1 text-white/70">МИНДАЛЬ + ВИШНЯ</div>
-                <div class="mt-3 h-px bg-white/15"></div>
-                <div class="text-[8px] tracking-[0.14em] mt-2 text-white/50">ЖИДКОЕ МЫЛО • 500 МЛ</div>
+          <!-- 3D bottles — real product photo (bottle.png, transparent bg) -->
+          <div id="hero-3d" class="absolute inset-0 flex items-end justify-center gap-0 sm:gap-1 pb-14 pt-8" style="perspective:1200px">
+            <div id="hero-3d-inner" class="flex items-end justify-center gap-0 sm:gap-1" style="transform-style:preserve-3d;transition:transform 0.25s ease-out">
+              <!-- left bottle -->
+              <div class="animate-float relative w-[120px] sm:w-[165px] shrink-0" style="transform:rotateY(16deg) translateZ(-40px)">
+                <div class="hero-photo-fallback absolute inset-0 rounded-[24px] bg-gradient-to-b from-[#7a9d8f]/30 to-[#1e3e35]/20 border border-black/5"></div>
+                <img src="bottle.png" alt="Флакон Mirea" onerror="this.classList.add('hidden')" class="relative w-full h-[300px] sm:h-[360px] object-contain" style="filter:drop-shadow(-18px 25px 25px rgba(0,0,0,0.30));">
               </div>
-              <div class="mt-auto mb-4 text-[10px] tracking-[0.12em] font-bold text-[#1e3e35]/30">500 ML</div>
-              <div class="absolute bottom-0 h-2 w-full bg-[#e8b44f]"></div>
-            </div>
-
-            <!-- bottle 2 - Sensa central larger -->
-            <div class="animate-float2 relative w-[130px] sm:w-[170px] h-[420px] sm:h-[480px] bg-white rounded-[30px] border border-black/5 shadow-[0_30px_60px_rgba(30,62,53,0.18)] flex flex-col items-center pt-7 overflow-hidden z-10 -mb-4">
-              <div class="w-[62px] h-[44px] rounded-t-[12px] bg-[#1e3e35] relative"><div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-9 h-5 bg-[#1e3e35] rounded-t-full"></div><div class="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-[2px] bg-white/20 rounded-full"></div></div>
-              <div class="mt-4 w-[86%] bg-[#1e3e35] rounded-[20px] p-4 text-center text-white relative overflow-hidden">
-                <div class="absolute inset-0 opacity-10" style="background: radial-gradient(300px 120px at 50% 0%, #7a9d8f 0%, transparent 70%)"></div>
-                <div class="relative">
-                  <div class="text-[9px] tracking-[0.22em] font-bold text-[#e8b44f]">MIREA</div>
-                  <div class="font-serif text-[26px] leading-none mt-1">Sensa</div>
-                  <div class="text-[9px] tracking-[0.16em] mt-1 text-white/70">ЖАСМИН + ПЕРСИК</div>
-                  <div class="mt-3 flex justify-center gap-1"><span class="w-1 h-1 rounded-full bg-[#e8b44f]"></span><span class="w-1 h-1 rounded-full bg-white/30"></span><span class="w-1 h-1 rounded-full bg-white/30"></span></div>
-                  <div class="text-[8px] tracking-[0.14em] mt-3 text-white/50">ГЕЛЬ ДЛЯ ДУША • 500 МЛ</div>
-                </div>
+              <!-- central bottle -->
+              <div class="animate-float2 relative w-[150px] sm:w-[205px] shrink-0 z-10 -mx-3 sm:-mx-4 -mb-3" style="transform:translateZ(70px)">
+                <div class="hero-photo-fallback absolute inset-0 rounded-[24px] bg-gradient-to-b from-[#e8b44f]/30 to-[#1e3e35]/20 border border-black/5"></div>
+                <img src="bottle.png" alt="Флакон Mirea — хит" onerror="this.classList.add('hidden')" class="relative w-full h-[360px] sm:h-[440px] object-contain" style="filter:drop-shadow(0 35px 30px rgba(0,0,0,0.35));">
+                <img src="bottle.png" alt="" aria-hidden="true" onerror="this.classList.add('hidden')" class="w-full h-[90px] object-contain object-top opacity-20" style="transform:scaleY(-1);-webkit-mask-image:linear-gradient(to top, black, transparent 90%);mask-image:linear-gradient(to top, black, transparent 90%);filter:blur(1px);">
               </div>
-              <div class="mt-4 w-[70%] h-[70px] rounded-full bg-gradient-to-b from-[#7a9d8f]/10 to-transparent blur-[0.5px]"></div>
-              <div class="mt-auto mb-5 flex items-center gap-2">
-                <span class="text-[11px] font-bold tracking-[0.12em]">590 ₽</span><span class="text-[10px] text-black/30 line-through">750 ₽</span>
+              <!-- right bottle -->
+              <div class="animate-float relative w-[120px] sm:w-[165px] shrink-0" style="transform:rotateY(-16deg) translateZ(-40px);animation-delay:1s">
+                <div class="hero-photo-fallback absolute inset-0 rounded-[24px] bg-gradient-to-b from-[#7a9d8f]/30 to-[#1e3e35]/20 border border-black/5"></div>
+                <img src="bottle.png" alt="Флакон Mirea" onerror="this.classList.add('hidden')" class="relative w-full h-[300px] sm:h-[360px] object-contain" style="filter:drop-shadow(18px 25px 25px rgba(0,0,0,0.30));">
               </div>
-              <div class="absolute bottom-0 h-2.5 w-full bg-[#1e3e35]"></div>
-            </div>
-
-            <!-- bottle 3 - Modul -->
-            <div class="animate-float relative w-[110px] sm:w-[150px] h-[380px] sm:h-[420px] bg-[#1e3e35] rounded-[28px] border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.18)] flex flex-col items-center pt-6 overflow-hidden text-white">
-              <div class="w-[54px] h-[38px] rounded-t-[10px] bg-white relative"><div class="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-4 bg-white rounded-t-full"></div></div>
-              <div class="mt-3 w-[88%] bg-white rounded-[18px] p-3 text-center text-[#1e3e35]">
-                <div class="text-[9px] tracking-[0.2em] font-bold text-[#7a9d8f]">MIREA</div>
-                <div class="font-serif text-[20px] leading-none mt-1 font-bold">Modul</div>
-                <div class="text-[9px] tracking-[0.16em] mt-1 text-black/50">АВТОШАМПУНЬ</div>
-                <div class="mt-2 inline-flex bg-[#1e3e35] text-white text-[8px] tracking-[0.14em] font-bold px-2 py-1 rounded-full">20 Л • 3500 ₽</div>
-              </div>
-              <div class="mt-auto mb-4 text-[10px] tracking-[0.12em] font-bold text-white/40">PRO LINE</div>
-              <div class="absolute bottom-0 h-2 w-full bg-[#e8b44f]"></div>
             </div>
           </div>
+          <!-- floor shadow -->
+          <div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-[70%] h-[26px] rounded-[50%] bg-[#1e3e35]/20 blur-xl"></div>
 
           <!-- bottom info -->
           <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-black/5 px-5 py-3 flex items-center gap-4 whitespace-nowrap">
@@ -506,11 +480,11 @@ html { scroll-behavior: smooth; }
 <script>
 // DATA
 const defaultProducts = [
-  { id:'sensa-jasmin', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', color:'#1e3e35', accent:'#e8b44f', scent:'Жасмин, персик, белый мускус' },
-  { id:'sensa-grape', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца. Для утреннего заряда.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', color:'#7a9d8f', accent:'#1e3e35', scent:'Грейпфрут, розовый перец, кедр' },
-  { id:'aura-almond', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной. Не сушит кожу, аромат вишнёвого десерта.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', color:'#fdf8ed', accent:'#1e3e35', scent:'Миндаль, вишня, ваниль' },
-  { id:'aura-honey', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом и молочными протеинами. Для сухой кожи.', volume:'500 мл', price:490, oldPrice:650, badge:'', color:'#fff7e6', accent:'#e8b44f', scent:'Мёд, молоко, овсяное молочко' },
-  { id:'modul-20', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь для бесконтактной мойки. 1:50, густая пена, без разводов.', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', color:'#1e3e35', accent:'#e8b44f', scent:'—', extra:'20 литров • концентрат' },
+  { id:'sensa-jasmin', sku:'SNS-JSM-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', color:'#1e3e35', accent:'#e8b44f', scent:'Жасмин, персик, белый мускус' },
+  { id:'sensa-grape', sku:'SNS-GRP-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца. Для утреннего заряда.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', color:'#7a9d8f', accent:'#1e3e35', scent:'Грейпфрут, розовый перец, кедр' },
+  { id:'aura-almond', sku:'AUR-AMD-500', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной. Не сушит кожу, аромат вишнёвого десерта.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', color:'#fdf8ed', accent:'#1e3e35', scent:'Миндаль, вишня, ваниль' },
+  { id:'aura-honey', sku:'AUR-HON-500', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом и молочными протеинами. Для сухой кожи.', volume:'500 мл', price:490, oldPrice:650, badge:'', color:'#fff7e6', accent:'#e8b44f', scent:'Мёд, молоко, овсяное молочко' },
+  { id:'modul-20', sku:'MDL-20L', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь для бесконтактной мойки. 1:50, густая пена, без разводов.', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', color:'#1e3e35', accent:'#e8b44f', scent:'—', extra:'20 литров • концентрат' },
 ];
 
 let products = JSON.parse(localStorage.getItem('mirea_products') || 'null') || defaultProducts;
@@ -613,7 +587,7 @@ function renderProducts(){
           <button onclick="addToCart('${p.id}')" class="flex-1 bg-[#1e3e35] text-white rounded-full py-3 text-[12px] tracking-[0.12em] font-bold hover:bg-[#162e27] transition">В КОРЗИНУ</button>
           <button onclick="addToCart('${p.id}', true)" class="w-12 h-12 rounded-full border border-black/10 grid place-items-center hover:bg-black/5">♡</button>
         </div>
-        <div class="mt-3 flex items-center justify-between text-[11px]"><span class="text-[#7a9d8f] font-semibold">● В наличии</span><span class="text-black/30">арт. ${p.id.toUpperCase()}</span></div>
+        <div class="mt-3 flex items-center justify-between text-[11px]"><span class="text-[#7a9d8f] font-semibold">● В наличии</span><span class="text-black/30">арт. ${(p.sku||p.id).toUpperCase()}</span></div>
       </div>
     </div>
   `).join('');
@@ -773,6 +747,20 @@ document.getElementById('burger').addEventListener('click', ()=>{
   document.getElementById('mobile-menu').classList.toggle('hidden');
 });
 function closeMobile(){ document.getElementById('mobile-menu').classList.add('hidden'); }
+
+// 3D tilt for hero bottles
+(function(){
+  const inner = document.getElementById('hero-3d-inner');
+  const zone = document.getElementById('hero-3d');
+  if(!inner || !zone) return;
+  zone.addEventListener('mousemove', (e)=>{
+    const r = zone.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    inner.style.transform = `rotateY(${x*14}deg) rotateX(${-y*8}deg)`;
+  });
+  zone.addEventListener('mouseleave', ()=>{ inner.style.transform = 'rotateY(0deg) rotateX(0deg)'; });
+})();
 
 function loadBranding(){
   const logo = localStorage.getItem('mirea_logo');
