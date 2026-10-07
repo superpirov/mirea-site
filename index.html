@@ -767,9 +767,8 @@ function closeMobile(){ document.getElementById('mobile-menu').classList.add('hi
   if(!el || typeof L === 'undefined') return;
   const coords = [42.0692, 48.2958];
   const map = L.map('map', { scrollWheelZoom: false, attributionControl: false }).setView(coords, 16);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    maxZoom: 19,
-    subdomains: 'abcd'
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
   }).addTo(map);
   const icon = L.divIcon({
     className: 'mirea-marker',
