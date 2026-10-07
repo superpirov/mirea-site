@@ -361,7 +361,7 @@ html { scroll-behavior: smooth; }
           <div id="map" class="w-full h-full z-0"></div>
           <div class="absolute bottom-4 left-4 right-4 bg-white rounded-2xl p-4 shadow-xl border border-black/5 flex items-center justify-between gap-4 z-[500]">
             <div><div class="font-bold text-sm">Mirea — производство</div><div class="text-xs text-black/50">г. Дербент, ул. Шоссейная, д. 26 • Пн-Сб 9:00–18:00</div></div>
-            <a href="https://www.openstreetmap.org/?mlat=42.0692&mlon=48.2958#map=17/42.0692/48.2958" target="_blank" class="shrink-0 bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs tracking-[0.12em] font-bold">ПОСТРОИТЬ МАРШРУТ</a>
+            <a href="https://www.openstreetmap.org/?mlat=42.0807804&mlon=48.2544179#map=17/42.0807804/48.2544179" target="_blank" class="shrink-0 bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs tracking-[0.12em] font-bold">ПОСТРОИТЬ МАРШРУТ</a>
           </div>
         </div>
         <div class="mt-4 flex flex-wrap gap-3">
@@ -765,7 +765,7 @@ function closeMobile(){ document.getElementById('mobile-menu').classList.add('hi
 (function(){
   const el = document.getElementById('map');
   if(!el || typeof L === 'undefined') return;
-  const coords = [42.0692, 48.2958];
+  const coords = [42.0807804, 48.2544179];
   const map = L.map('map', { scrollWheelZoom: false, attributionControl: false }).setView(coords, 16);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19
