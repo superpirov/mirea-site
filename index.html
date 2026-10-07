@@ -7,6 +7,8 @@
 <meta name="description" content="MIREA — российский производитель гелей для душа Sensa, жидкого мыла Aura и автошампуня Modul. Розница и опт. г. Дербент.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="favicon.svg">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +40,9 @@ html { scroll-behavior: smooth; }
 .animate-float2 { animation: float 6s ease-in-out infinite 2s; }
 @keyframes float { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-12px) } }
 .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+#map { filter: grayscale(0.35) sepia(0.12) hue-rotate(-10deg) saturate(0.85) contrast(1.02); background: #e8ece9; }
+.leaflet-container { font-family: 'Manrope', sans-serif; }
+.mirea-marker { background: transparent; border: none; }
 </style>
 </head>
 <body class="bg-[#fdfdfb] text-[#1e3e35] font-sans antialiased overflow-x-hidden">
@@ -353,10 +358,10 @@ html { scroll-behavior: smooth; }
       </div>
       <div class="lg:col-span-7">
         <div class="rounded-[24px] overflow-hidden border border-black/10 bg-[#f4f7f5] h-[420px] lg:h-[520px] relative">
-          <iframe src="https://yandex.ru/map-widget/v1/?text=%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D1%83%D0%BB.%20%D0%A8%D0%BE%D1%81%D1%81%D0%B5%D0%B9%D0%BD%D0%B0%D1%8F%20%D0%B4.%2026&z=17&ll=48.295800%2C42.069200&pt=48.295800%2C42.069200%2Cpm2rdm" width="100%" height="100%" frameborder="0" style="filter: grayscale(0.2) contrast(1.1);"></iframe>
-          <div class="absolute bottom-4 left-4 right-4 bg-white rounded-2xl p-4 shadow-xl border border-black/5 flex items-center justify-between gap-4">
+          <div id="map" class="w-full h-full z-0"></div>
+          <div class="absolute bottom-4 left-4 right-4 bg-white rounded-2xl p-4 shadow-xl border border-black/5 flex items-center justify-between gap-4 z-[500]">
             <div><div class="font-bold text-sm">Mirea — производство</div><div class="text-xs text-black/50">г. Дербент, ул. Шоссейная, д. 26 • Пн-Сб 9:00–18:00</div></div>
-            <a href="https://yandex.ru/maps/?text=%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%20%D1%83%D0%BB.%20%D0%A8%D0%BE%D1%81%D1%81%D0%B5%D0%B9%D0%BD%D0%B0%D1%8F%2026" target="_blank" class="shrink-0 bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs tracking-[0.12em] font-bold">ПОСТРОИТЬ МАРШРУТ</a>
+            <a href="https://www.openstreetmap.org/?mlat=42.0692&mlon=48.2958#map=17/42.0692/48.2958" target="_blank" class="shrink-0 bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs tracking-[0.12em] font-bold">ПОСТРОИТЬ МАРШРУТ</a>
           </div>
         </div>
         <div class="mt-4 flex flex-wrap gap-3">
@@ -754,6 +759,25 @@ function closeMobile(){ document.getElementById('mobile-menu').classList.add('hi
     inner.style.transform = `rotateY(${x*14}deg) rotateX(${-y*8}deg)`;
   });
   zone.addEventListener('mouseleave', ()=>{ inner.style.transform = 'rotateY(0deg) rotateX(0deg)'; });
+})();
+
+// Brand-styled map (Leaflet + CartoDB light tiles, no ads)
+(function(){
+  const el = document.getElementById('map');
+  if(!el || typeof L === 'undefined') return;
+  const coords = [42.0692, 48.2958];
+  const map = L.map('map', { scrollWheelZoom: false, attributionControl: false }).setView(coords, 16);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19,
+    subdomains: 'abcd'
+  }).addTo(map);
+  const icon = L.divIcon({
+    className: 'mirea-marker',
+    html: '<div style="width:44px;height:44px;border-radius:50%;background:#1e3e35;border:3px solid #e8b44f;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;font-family:Georgia,serif;box-shadow:0 6px 18px rgba(30,62,53,0.4);">M</div>',
+    iconSize: [44, 44],
+    iconAnchor: [22, 22]
+  });
+  L.marker(coords, { icon }).addTo(map).bindPopup('<b>Mirea</b><br>г. Дербент, ул. Шоссейная, д. 26');
 })();
 
 function loadBranding(){
