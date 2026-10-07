@@ -7,6 +7,7 @@
 <meta name="description" content="MIREA — российский производитель гелей для душа Sensa, жидкого мыла Aura и автошампуня Modul. Розница и опт. г. Дербент.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="favicon.svg">
+<script src="https://api-maps.yandex.ru/2.1/?apikey=57141da5-bb9a-4fcb-bce8-18a6c52fc313&lang=ru_RU"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -354,13 +355,7 @@ html { scroll-behavior: smooth; }
       </div>
       <div class="lg:col-span-7">
         <div class="rounded-[24px] overflow-hidden border border-black/10 bg-[#f4f7f5] h-[420px] lg:h-[520px] relative">
-          <div class="absolute inset-0 overflow-hidden">
-            <iframe src="https://yandex.ru/map-widget/v1/?text=%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D1%83%D0%BB.%20%D0%A8%D0%BE%D1%81%D1%81%D0%B5%D0%B9%D0%BD%D0%B0%D1%8F%20%D0%B4.%2026&z=17" frameborder="0" style="width:100%;height:calc(100% + 720px);border:0;display:block;filter:grayscale(0.45) sepia(0.18) hue-rotate(-15deg) saturate(0.75) contrast(1.05) brightness(0.98);margin-top:-360px;"></iframe>
-          </div>
-          <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[500] pointer-events-none">
-            <div class="w-10 h-10 rounded-full bg-[#1e3e35] border-[3px] border-[#e8b44f] flex items-center justify-center text-white font-serif font-bold text-sm shadow-[0_4px_14px_rgba(30,62,53,0.45)]">M</div>
-            <div class="w-0 h-0 border-l-[6px] border-r-[6px] border-t-[10px] border-l-transparent border-r-transparent border-t-[#1e3e35] mx-auto -mt-[1px]"></div>
-          </div>
+          <div id="yandex-map" class="w-full h-full"></div>
           <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-black/5 px-6 shadow-[0_-10px_40px_rgba(0,0,0,0.12)] z-[500] h-[160px] flex items-center">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
               <div>
@@ -800,10 +795,93 @@ function loadBranding(){
   if(socials.length){
     header.innerHTML = socials.map(s=> `<a href="${s.url}" target="_blank" class="w-8 h-8 rounded-full bg-[#f4f7f5] border border-black/5 grid place-items-center text-[11px] font-bold hover:bg-[#1e3e35] hover:text-white transition" title="${s.name}">${iconFor(s.url)}</a>`).join('');
     footer.innerHTML = socials.map(s=> `<a href="${s.url}" target="_blank" class="w-8 h-8 rounded-full bg-white/10 grid place-items-center text-[11px] font-bold hover:bg-white hover:text-[#1e3e35] transition">${iconFor(s.url)}</a>`).join('');
-  }
 }
+
+// Yandex Maps JS API initialization
+(function(){
+  const mapContainer = document.getElementById('yandex-map');
+  if(!mapContainer || typeof ymaps === 'undefined') return;
+
+  ymaps.ready(function(){
+    const coords = [42.0692, 48.2958]; // Дербент, ул. Шоссейная, 26
+
+    const map = new ymaps.Map('yandex-map', {
+      center: coords,
+      zoom: 16,
+      controls: [],
+      behaviors: ['drag', 'dblClickZoom', 'rightMouseButtonMagnifier', 'multiTouch', 'scrollZoom']
+    }, {
+      suppressMapOpenBlock: true,
+      suppressObsoleteBrowserNotifier: true
+    });
+
+    // Скрываем копирайт Яндекса
+    map.copyrights.add('');
+
+    // Убираем все стандартные контролы
+    map.options.set('mapTypeControl', false);
+    map.options.set('zoomControl', false);
+    map.options.set('geolocationControl', false);
+    map.options.set('searchControl', false);
+    map.options.set('trafficControl', false);
+    map.options.set('fullscreenControl', false);
+    map.options.set('rulerControl', false);
+
+    // Кастомная метка с логотипом M
+    const mireaIconLayout = ymaps.templateLayoutFactory.createClass(`
+      <div style="
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        background: #1e3e35;
+        border: 3px solid #e8b44f;
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; font-family: 'Cormorant Garamond', serif;
+        font-weight: 700; font-size: 16px;
+        box-shadow: 0 6px 20px rgba(30,62,53,0.5);
+        cursor: pointer;
+      ">M</div>
+    `);
+
+    const mireaPlacemark = new ymaps.Placemark(
+      coords,
+      {
+        balloonContentHeader: '<b style="color:#1e3e35">Mirea — производство</b>',
+        balloonContentBody: 'г. Дербент, ул. Шоссейная, д. 26<br>Пн-Сб 9:00–18:00',
+        balloonContentFooter: '<a href="https://yandex.ru/maps/?text=Дербент%20ул.%20Шоссейная%2026" target="_blank" style="color:#e8b44f">Построить маршрут</a>'
+      },
+      {
+        iconLayout: mireaIconLayout,
+        iconShape: { type: 'Circle', coordinates: [0, 0], radius: 20 },
+        iconAnchor: [20, 20],
+        balloonOffset: [0, -30]
+      }
+    );
+
+    map.geoObjects.add(mireaPlacemark);
+
+    // Кастомная стилизация карты под фирменные цвета
+    const style = [
+      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#d4d9d6' }, { saturation: -100 }, { lightness: 20 }] },
+      { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#1e3e35' }] },
+      { featureType: 'road', elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }, { weight: 1.5 }] },
+      { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#e8ece9' }, { saturation: -80 }] },
+      { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#7a9d8f' }] },
+      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#a8c8c0' }, { saturation: -30 }, { lightness: 10 }] },
+      { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#1e3e35' }] },
+      { featureType: 'landscape.natural', elementType: 'geometry', stylers: [{ color: '#e8f0ed' }, { saturation: -50 }, { lightness: 15 }] },
+      { featureType: 'administrative', elementType: 'labels.text.fill', stylers: [{ color: '#1e3e35' }] },
+      { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#c8d0cb' }] },
+      { featureType: 'transit', elementType: 'labels.text.fill', stylers: [{ color: '#7a9d8f' }] }
+    ];
+
+    map.setType('yandex#map', { style });
+
+    // Открываем баллун через 500мс
+    setTimeout(() => mireaPlacemark.balloon.open(), 500);
+  });
+})();
+
 // init
-loadBranding();
 selectLine('body');
 renderProducts();
 updateCartUI();
