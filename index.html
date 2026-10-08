@@ -379,7 +379,8 @@ html { scroll-behavior: smooth; }
   <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col lg:flex-row justify-between gap-8">
       <div>
-        <div class="font-serif text-[22px] tracking-[0.14em] font-bold">MIREA</div>
+        <div id="footer-logo-default" class="font-serif text-[22px] tracking-[0.14em] font-bold">MIREA</div>
+        <img id="footer-logo-custom" class="hidden object-contain block" style="height:30px;max-width:220px;filter:brightness(0) invert(1);" alt="MIREA">
         <div class="text-[11px] tracking-[0.2em] text-white/50 font-bold">CARE & CHEMISTRY • ДЕРБЕНТ</div>
         <div class="text-sm text-white/60 mt-4 max-w-[360px] leading-relaxed">Производство гелей для душа, жидкого мыла и автохимии. Розница и опт по всей России.</div>
         <div id="footer-socials" class="flex gap-2 mt-4"></div>
@@ -772,17 +773,31 @@ function loadBranding(){
   // пробуем загрузить лого с сервера
   const img = new Image();
   img.onload = () => {
+    const url = 'logo.png?v=' + Date.now();
     if(def && custom){
-      custom.src = 'logo.png?v=' + Date.now();
+      custom.src = url;
       custom.style.height = logoH + 'px';
       custom.classList.remove('hidden');
       def.classList.add('hidden');
+    }
+    const fDef = document.getElementById('footer-logo-default');
+    const fCustom = document.getElementById('footer-logo-custom');
+    if(fDef && fCustom){
+      fCustom.src = url;
+      fCustom.classList.remove('hidden');
+      fDef.classList.add('hidden');
     }
   };
   img.onerror = () => {
     if(def && custom){
       custom.classList.add('hidden');
       def.classList.remove('hidden');
+    }
+    const fDef = document.getElementById('footer-logo-default');
+    const fCustom = document.getElementById('footer-logo-custom');
+    if(fDef && fCustom){
+      fCustom.classList.add('hidden');
+      fDef.classList.remove('hidden');
     }
   };
   img.src = 'logo.png?v=' + Date.now();
