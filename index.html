@@ -39,6 +39,18 @@ html { scroll-behavior: smooth; }
 .animate-float2 { animation: float 6s ease-in-out infinite 2s; }
 @keyframes float { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-12px) } }
 .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* Branded Yandex map: tint tiles toward sage/gold */
+#yandex-map [class*="ground-pane"] { filter: sepia(.22) hue-rotate(28deg) saturate(1.15); }
+/* Branded balloon */
+.mirea-balloon { position: absolute; width: 250px; background: #1e3e35; color: #fff; border: 1px solid rgba(232,180,79,.5); border-radius: 16px; padding: 16px 38px 15px 16px; box-shadow: 0 18px 45px rgba(30,62,53,.45); font-family: ui-sans-serif, system-ui, sans-serif; }
+.mirea-balloon-title { color: #e8b44f; font-weight: 800; font-size: 15px; letter-spacing: .02em; }
+.mirea-balloon-addr { margin-top: 6px; font-size: 13px; line-height: 1.45; color: rgba(255,255,255,.88); }
+.mirea-balloon-hours { margin-top: 2px; font-size: 12px; color: rgba(255,255,255,.6); }
+.mirea-balloon-route { display: inline-block; margin-top: 11px; background: #e8b44f; color: #1e3e35; font-size: 12px; font-weight: 800; letter-spacing: .04em; padding: 8px 15px; border-radius: 999px; text-decoration: none; }
+.mirea-balloon-route:hover { filter: brightness(1.06); }
+.mirea-balloon-close { position: absolute; top: 6px; right: 8px; width: 26px; height: 26px; border: 0; background: transparent; color: rgba(255,255,255,.55); font-size: 20px; line-height: 1; cursor: pointer; }
+.mirea-balloon-close:hover { color: #e8b44f; }
+.mirea-balloon-tail { position: absolute; left: 50%; bottom: -8px; width: 16px; height: 16px; background: #1e3e35; border-right: 1px solid rgba(232,180,79,.5); border-bottom: 1px solid rgba(232,180,79,.5); transform: translateX(-50%) rotate(45deg); }
 
 </style>
 </head>
@@ -870,39 +882,60 @@ function loadBranding(){
       ">M</div>
     `);
 
+    // Фирменный балун (тёмно-зелёный + золото), vanilla JS без jQuery
+    const MireaBalloonLayout = ymaps.templateLayoutFactory.createClass(
+      '<div class="mirea-balloon">' +
+        '<button type="button" class="mirea-balloon-close" aria-label="Закрыть">×</button>' +
+        '<div class="mirea-balloon-title">Mirea — производство</div>' +
+        '<div class="mirea-balloon-addr">г. Дербент, ул. Шоссейная, д. 26</div>' +
+        '<div class="mirea-balloon-hours">Пн–Сб 9:00–18:00</div>' +
+        '<a class="mirea-balloon-route" href="https://yandex.ru/maps/?text=Дербент%20ул.%20Шоссейная%2026" target="_blank">Построить маршрут</a>' +
+        '<div class="mirea-balloon-tail"></div>' +
+      '</div>', {
+      build: function () {
+        MireaBalloonLayout.superclass.build.call(this);
+        const el = this.getParentElement().querySelector('.mirea-balloon');
+        this._el = el;
+        this._onClose = (e) => { e.preventDefault(); this.events.fire('userclose'); };
+        el.querySelector('.mirea-balloon-close').addEventListener('click', this._onClose);
+        this.applyOffset();
+      },
+      clear: function () {
+        const btn = this._el && this._el.querySelector('.mirea-balloon-close');
+        if (btn) btn.removeEventListener('click', this._onClose);
+        this._el = null;
+        MireaBalloonLayout.superclass.clear.call(this);
+      },
+      applyOffset: function () {
+        if (!this._el) return;
+        this._el.style.left = -(this._el.offsetWidth / 2) + 'px';
+        this._el.style.top = -(this._el.offsetHeight + 16) + 'px';
+      },
+      getShape: function () {
+        if (!this._el) return null;
+        const w = this._el.offsetWidth, h = this._el.offsetHeight;
+        return new ymaps.shape.Rectangle(new ymaps.geometry.pixel.Rectangle([[-w / 2, -(h + 16)], [w / 2, 0]]));
+      }
+    });
+
     const mireaPlacemark = new ymaps.Placemark(
       coords,
-      {
-        balloonContentHeader: '<b style="color:#1e3e35">Mirea — производство</b>',
-        balloonContentBody: 'г. Дербент, ул. Шоссейная, д. 26<br>Пн-Сб 9:00–18:00',
-        balloonContentFooter: '<a href="https://yandex.ru/maps/?text=Дербент%20ул.%20Шоссейная%2026" target="_blank" style="color:#e8b44f">Построить маршрут</a>'
-      },
+      {},
       {
         iconLayout: mireaIconLayout,
         iconShape: { type: 'Circle', coordinates: [0, 0], radius: 20 },
         iconAnchor: [20, 20],
-        balloonOffset: [0, -30]
+        balloonLayout: MireaBalloonLayout,
+        balloonPanelMaxMapArea: 0,
+        balloonOffset: [0, -26],
+        hideIconOnBalloonOpen: false
       }
     );
 
     map.geoObjects.add(mireaPlacemark);
 
-    // Кастомная стилизация карты под фирменные цвета
-    const style = [
-      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#d4d9d6' }, { saturation: -100 }, { lightness: 20 }] },
-      { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#1e3e35' }] },
-      { featureType: 'road', elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }, { weight: 1.5 }] },
-      { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#e8ece9' }, { saturation: -80 }] },
-      { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#7a9d8f' }] },
-      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#a8c8c0' }, { saturation: -30 }, { lightness: 10 }] },
-      { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#1e3e35' }] },
-      { featureType: 'landscape.natural', elementType: 'geometry', stylers: [{ color: '#e8f0ed' }, { saturation: -50 }, { lightness: 15 }] },
-      { featureType: 'administrative', elementType: 'labels.text.fill', stylers: [{ color: '#1e3e35' }] },
-      { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#c8d0cb' }] },
-      { featureType: 'transit', elementType: 'labels.text.fill', stylers: [{ color: '#7a9d8f' }] }
-    ];
-
-    map.setType('yandex#map', { style });
+    // Стандартный тип карты; фирменное тонирование — CSS-фильтром тайлов (см. <style>)
+    map.setType('yandex#map');
 
     // Открываем баллун через 500мс
     setTimeout(() => mireaPlacemark.balloon.open(), 500);
