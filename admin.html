@@ -451,10 +451,10 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
 
 <script>
 let products = JSON.parse(localStorage.getItem('mirea_products')||'null') || [
-  { id:'sensa-jasmin', sku:'SNS-JSM-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', scent:'Жасмин, персик, белый мускус' },
-  { id:'sensa-grape', sku:'SNS-GRP-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', scent:'Грейпфрут, розовый перец, кедр' },
-  { id:'aura-almond', sku:'AUR-AMD-500', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', scent:'Миндаль, вишня, ваниль' },
-  { id:'aura-honey', sku:'AUR-HON-500', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом.', volume:'500 мл', price:490, oldPrice:650, badge:'', scent:'Мёд, молоко' },
+  { id:'sensa-jasmin', sku:'SNS-JSM-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', scent:'Жасмин, персик, белый мускус', img:'bottle-clean.png' },
+  { id:'sensa-grape', sku:'SNS-GRP-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', scent:'Грейпфрут, розовый перец, кедр', img:'bottle-clean.png' },
+  { id:'aura-almond', sku:'AUR-AMD-500', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', scent:'Миндаль, вишня, ваниль', img:'bottle-clean.png' },
+  { id:'aura-honey', sku:'AUR-HON-500', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом.', volume:'500 мл', price:490, oldPrice:650, badge:'', scent:'Мёд, молоко', img:'bottle-clean.png' },
   { id:'modul-20', sku:'MDL-20L', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь 1:50', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', scent:'—' },
 ];
 let sales = JSON.parse(localStorage.getItem('mirea_sales')||'[]');

@@ -482,10 +482,10 @@ html { scroll-behavior: smooth; }
 <script>
 // DATA
 const defaultProducts = [
-  { id:'sensa-jasmin', sku:'SNS-JSM-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', color:'#1e3e35', accent:'#e8b44f', scent:'Жасмин, персик, белый мускус' },
-  { id:'sensa-grape', sku:'SNS-GRP-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца. Для утреннего заряда.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', color:'#7a9d8f', accent:'#1e3e35', scent:'Грейпфрут, розовый перец, кедр' },
-  { id:'aura-almond', sku:'AUR-AMD-500', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной. Не сушит кожу, аромат вишнёвого десерта.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', color:'#fdf8ed', accent:'#1e3e35', scent:'Миндаль, вишня, ваниль' },
-  { id:'aura-honey', sku:'AUR-HON-500', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом и молочными протеинами. Для сухой кожи.', volume:'500 мл', price:490, oldPrice:650, badge:'', color:'#fff7e6', accent:'#e8b44f', scent:'Мёд, молоко, овсяное молочко' },
+  { id:'sensa-jasmin', sku:'SNS-JSM-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', color:'#1e3e35', accent:'#e8b44f', scent:'Жасмин, персик, белый мускус', img:'bottle-clean.png' },
+  { id:'sensa-grape', sku:'SNS-GRP-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца. Для утреннего заряда.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', color:'#7a9d8f', accent:'#1e3e35', scent:'Грейпфрут, розовый перец, кедр', img:'bottle-clean.png' },
+  { id:'aura-almond', sku:'AUR-AMD-500', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной. Не сушит кожу, аромат вишнёвого десерта.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', color:'#fdf8ed', accent:'#1e3e35', scent:'Миндаль, вишня, ваниль', img:'bottle-clean.png' },
+  { id:'aura-honey', sku:'AUR-HON-500', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом и молочными протеинами. Для сухой кожи.', volume:'500 мл', price:490, oldPrice:650, badge:'', color:'#fff7e6', accent:'#e8b44f', scent:'Мёд, молоко, овсяное молочко', img:'bottle-clean.png' },
   { id:'modul-20', sku:'MDL-20L', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь для бесконтактной мойки. 1:50, густая пена, без разводов.', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', color:'#1e3e35', accent:'#e8b44f', scent:'—', extra:'20 литров • концентрат' },
 ];
 
@@ -554,12 +554,16 @@ function renderProducts(){
     grid.innerHTML = `<div class="col-span-full bg-white rounded-2xl p-10 text-center border border-black/5"><div class="font-semibold">Скоро новые ароматы</div><div class="text-sm text-black/50 mt-1">Следите за обновлениями</div></div>`;
     return;
   }
-  grid.innerHTML = list.map(p=> `
+  grid.innerHTML = list.map(p=> {
+    const photo = p.img || (p.line==='body' ? 'bottle-clean.png' : '');
+    return `
     <div class="bg-white rounded-[24px] overflow-hidden border border-black/[0.06] shadow-[0_10px_30px_rgba(0,0,0,0.04)] flex flex-col group hover:shadow-[0_20px_50px_rgba(30,62,53,0.12)] transition-all duration-300 hover:-translate-y-1">
       <div class="relative h-[300px] bg-gradient-to-b from-[#f4f7f5] to-white flex items-center justify-center p-6 overflow-hidden">
         ${p.badge? `<div class="absolute top-4 left-4 bg-[#1e3e35] text-white text-[10px] tracking-[0.14em] font-bold px-3 py-1.5 rounded-full">${p.badge}</div>`:''}
         <div class="absolute top-4 right-4 bg-white border border-black/5 text-[11px] font-bold px-3 py-1 rounded-full">${p.volume}</div>
-        <!-- bottle illustration -->
+        ${photo
+          ? `<img src="${photo}" alt="${p.name} — ${p.subtitle}" loading="lazy" class="h-[240px] object-contain drop-shadow-[0_18px_25px_rgba(0,0,0,0.18)] group-hover:scale-[1.03] transition-transform duration-300">`
+          : `<!-- bottle illustration -->
         <div class="relative w-[140px] h-[220px] rounded-[22px] border border-black/5 shadow-[0_15px_35px_rgba(0,0,0,0.08)] flex flex-col items-center pt-5 overflow-hidden" style="background:${p.color===' #1e3e35'?'#1e3e35': p.id.includes('modul')?'#1e3e35':'white'}; ${p.id==='modul-20'?'color:white':''}">
           <div class="w-[46px] h-[32px] rounded-t-[9px] ${p.id==='modul-20'?'bg-white':'bg-[#1e3e35]'} relative"><div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-7 h-3 ${p.id==='modul-20'?'bg-white':'bg-[#1e3e35]'} rounded-t-full"></div></div>
           <div class="mt-3 w-[88%] ${p.id==='modul-20'?'bg-white text-[#1e3e35]':'bg-[#1e3e35] text-white'} rounded-[16px] p-3 text-center">
@@ -570,7 +574,7 @@ function renderProducts(){
           </div>
           <div class="mt-auto mb-3 text-[9px] tracking-[0.12em] font-bold ${p.id==='modul-20'?'text-white/40':'text-black/30'}">${p.volume}</div>
           <div class="absolute bottom-0 h-1.5 w-full ${p.accent===' #e8b44f'?'bg-[#e8b44f]': p.accent==='#e8b44f'?'bg-[#e8b44f]':'bg-[#1e3e35]'} " style="background:${p.accent}"></div>
-        </div>
+        </div>`}
       </div>
       <div class="p-6 flex flex-col flex-1">
         <div class="flex items-start justify-between gap-3">
@@ -592,7 +596,8 @@ function renderProducts(){
         <div class="mt-3 flex items-center justify-between text-[11px]"><span class="text-[#7a9d8f] font-semibold">● В наличии</span><span class="text-black/30">арт. ${(p.sku||p.id).toUpperCase()}</span></div>
       </div>
     </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 // CART
