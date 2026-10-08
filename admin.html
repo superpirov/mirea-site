@@ -865,6 +865,11 @@ async function handleLogoUpload(e){
   const form=new FormData(); form.append('logo', file);
   try{
     const res=await fetch('api/upload_logo.php', {method:'POST', body:form});
+    const ct=res.headers.get('content-type')||'';
+    if(!res.ok || !ct.includes('application/json')){
+      showToast('Сервер загрузки недоступен — откройте админку на хостинге с PHP (mireacare.ru/admin.html)');
+      return;
+    }
     const data=await res.json();
     if(data.ok){
       const h=parseInt(localStorage.getItem('mirea_logo_height')||'48',10);
