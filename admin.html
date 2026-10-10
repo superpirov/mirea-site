@@ -49,6 +49,7 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
       <button onclick="switchTab('products')" data-tab="products" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>⬢</span> Товары и линейки</button>
       <button onclick="switchTab('sales')" data-tab="sales" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>◍</span> Продажи</button>
       <button onclick="switchTab('clients')" data-tab="clients" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>◎</span> Клиенты</button>
+      <button onclick="switchTab('suppliers')" data-tab="suppliers" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>◉</span> Поставщики</button>
       <button onclick="switchTab('leads')" data-tab="leads" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>✉</span> Оптовые заявки</button>
       <button onclick="switchTab('stats')" data-tab="stats" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>▦</span> Статистика</button>
       <button onclick="switchTab('calc')" data-tab="calc" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>∑</span> Калькулятор себестоимости</button>
@@ -73,6 +74,7 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
         <option value="products">Товары</option>
         <option value="sales">Продажи</option>
         <option value="clients">Клиенты</option>
+        <option value="suppliers">Поставщики</option>
         <option value="leads">Оптовые заявки</option>
         <option value="stats">Статистика</option>
         <option value="calc">Калькулятор себестоимости</option>
@@ -199,6 +201,27 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
           </select>
         </div>
         <div id="clients-list" class="divide-y divide-black/5"></div>
+      </div>
+    </div>
+
+    <!-- SUPPLIERS -->
+    <div id="tab-suppliers" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
+      <div class="flex flex-wrap justify-between gap-4">
+        <div><h2 class="font-display text-[28px] font-semibold">Поставщики</h2><p class="text-sm text-black/50">Контакты и доступы поставщиков сырья и материалов</p></div>
+        <button onclick="openSupplierModal()" class="bg-[#1e3e35] text-white rounded-full px-6 py-3 text-xs tracking-[0.12em] font-bold">+ ДОБАВИТЬ ПОСТАВЩИКА</button>
+      </div>
+      <div class="mt-6 bg-white rounded-2xl border border-black/5 overflow-hidden">
+        <div class="p-4 border-b border-black/5 flex gap-2">
+          <input id="suppliers-search" oninput="renderSuppliers()" placeholder="Поиск название, телефон, сайт…" class="flex-1 rounded-full border border-black/10 px-4 py-2.5 text-sm">
+          <select id="suppliers-filter-status" onchange="renderSuppliers()" class="rounded-full border border-black/10 px-4 py-2.5 text-sm font-semibold">
+            <option value="">Все статусы</option>
+            <option value="Физ. лицо">Физ. лицо</option>
+            <option value="самозанятый">Самозанятый</option>
+            <option value="ИП">ИП</option>
+            <option value="ООО">ООО</option>
+          </select>
+        </div>
+        <div id="suppliers-list" class="divide-y divide-black/5"></div>
       </div>
     </div>
 
@@ -346,6 +369,13 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
               </div>
             </div>
             <div class="bg-[#f4f7f5] rounded-xl p-4">
+              <div class="font-bold text-sm">Поставщики</div>
+              <div class="flex gap-2 mt-3">
+                <button onclick="exportSuppliersCSV()" class="flex-1 bg-white border border-black/10 rounded-full py-2 text-xs font-bold">CSV</button>
+                <button onclick="exportSuppliersExcel()" class="flex-1 bg-[#1e3e35] text-white rounded-full py-2 text-xs font-bold">EXCEL</button>
+              </div>
+            </div>
+            <div class="bg-[#f4f7f5] rounded-xl p-4">
               <div class="font-bold text-sm">Продажи</div>
               <div class="flex gap-2 mt-3">
                 <button onclick="exportData()" class="flex-1 bg-white border border-black/10 rounded-full py-2 text-xs font-bold">CSV</button>
@@ -431,6 +461,25 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
   </form>
 </div></div></div>
 
+<div id="supplier-modal" class="fixed inset-0 z-50 hidden"><div onclick="closeSupplierModal()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div><div class="absolute inset-0 grid place-items-center p-4"><div class="bg-white rounded-[24px] max-w-[560px] w-full max-h-[90vh] overflow-auto p-6">
+  <div class="flex justify-between items-center"><h3 class="font-display text-xl font-semibold">Поставщик</h3><button onclick="closeSupplierModal()" class="w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button></div>
+  <form id="supplier-form" onsubmit="saveSupplier(event)" class="mt-4 space-y-3">
+    <input type="hidden" name="id">
+    <label class="block"><span class="text-xs font-bold text-black/40">ИМЯ / НАЗВАНИЕ *</span><input name="name" required placeholder="ООО ХимПром / Иванов Иван" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    <div class="grid grid-cols-2 gap-3">
+      <label class="block"><span class="text-xs font-bold text-black/40">СТАТУС</span><select name="status" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"><option value="Физ. лицо">Физ. лицо</option><option value="самозанятый">Самозанятый</option><option value="ИП">ИП</option><option value="ООО">ООО</option></select></label>
+      <label class="block"><span class="text-xs font-bold text-black/40">КОНТАКТНЫЙ ТЕЛЕФОН</span><input name="phone" placeholder="+7 938 000-00-00" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    </div>
+    <label class="block"><span class="text-xs font-bold text-black/40">САЙТ</span><input name="site" placeholder="https://example.ru" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+    <div class="grid grid-cols-2 gap-3">
+      <label class="block"><span class="text-xs font-bold text-black/40">ЛОГИН НА САЙТЕ</span><input name="siteLogin" autocomplete="off" placeholder="Логин" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+      <label class="block"><span class="text-xs font-bold text-black/40">ПАРОЛЬ НА САЙТЕ</span><span class="mt-1 flex gap-2"><input name="sitePass" type="password" autocomplete="new-password" placeholder="Пароль" class="flex-1 min-w-0 rounded-xl border border-black/10 px-3 py-2.5 text-sm"><button type="button" onclick="const i=this.previousElementSibling; i.type=i.type==='password'?'text':'password'; this.textContent=i.type==='password'?'👁':'🙈';" class="w-11 shrink-0 rounded-xl bg-[#f4f7f5] border border-black/5">👁</button></span></label>
+    </div>
+    <label class="block"><span class="text-xs font-bold text-black/40">ПРИМЕЧАНИЕ</span><textarea name="note" rows="2" placeholder="Что поставляет, условия…" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></textarea></label>
+    <button class="w-full bg-[#1e3e35] text-white rounded-full py-3 text-sm font-bold">СОХРАНИТЬ</button>
+  </form>
+</div></div></div>
+
 <div id="sale-modal" class="fixed inset-0 z-50 hidden"><div onclick="closeSaleModal()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div><div class="absolute inset-0 grid place-items-center p-4"><div class="bg-white rounded-[24px] max-w-[560px] w-full max-h-[90vh] overflow-auto p-6">
   <div class="flex justify-between items-center"><h3 class="font-display text-xl font-semibold">Продажа</h3><button onclick="closeSaleModal()" class="w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button></div>
   <form id="sale-form" onsubmit="saveSale(event)" class="mt-4 space-y-3">
@@ -459,6 +508,7 @@ let products = JSON.parse(localStorage.getItem('mirea_products')||'null') || [
 ];
 let sales = JSON.parse(localStorage.getItem('mirea_sales')||'[]');
 let clients = JSON.parse(localStorage.getItem('mirea_clients')||'[]');
+let suppliers = JSON.parse(localStorage.getItem('mirea_suppliers')||'[]');
 let leads = JSON.parse(localStorage.getItem('mirea_leads')||'[]');
 let lines = JSON.parse(localStorage.getItem('mirea_lines')||'null') || [{id:'body', name:'Body'}, {id:'auto', name:'Auto'}];
 let statsPeriod = 7;
@@ -468,6 +518,7 @@ function saveAll(){
   localStorage.setItem('mirea_products', JSON.stringify(products));
   localStorage.setItem('mirea_sales', JSON.stringify(sales));
   localStorage.setItem('mirea_clients', JSON.stringify(clients));
+  localStorage.setItem('mirea_suppliers', JSON.stringify(suppliers));
   localStorage.setItem('mirea_lines', JSON.stringify(lines));
 }
 
@@ -504,12 +555,13 @@ function switchTab(tab){
   if(tab==='products') renderProductsAdmin();
   if(tab==='sales') renderSales();
   if(tab==='clients') renderClients();
+  if(tab==='suppliers') renderSuppliers();
   if(tab==='leads') renderLeads();
   if(tab==='settings'){ renderLogoPreview(); renderSocials(); }
   if(tab==='calc'){ loadCalc(); }
 }
 
-function renderAll(){ renderDash(); renderProductsAdmin(); renderSales(); renderClients(); renderLeads(); renderLines(); renderLogoPreview(); renderSocials(); }
+function renderAll(){ renderDash(); renderProductsAdmin(); renderSales(); renderClients(); renderSuppliers(); renderLeads(); renderLines(); renderLogoPreview(); renderSocials(); }
 
 // DASH
 function renderDash(){
@@ -698,6 +750,54 @@ function saveClient(e){
   if(!d.id){ d.id='CLI-'+Date.now().toString(36).toUpperCase(); d.date=new Date().toISOString(); clients.push(d); }
   else { const idx=clients.findIndex(c=>c.id===d.id); if(idx>=0) clients[idx]={...clients[idx],...d}; else clients.push(d); }
   localStorage.setItem('mirea_clients',JSON.stringify(clients)); closeClientModal(); renderClients(); showToast('Сохранено');
+}
+// SUPPLIERS
+function renderSuppliers(){
+  const q=(document.getElementById('suppliers-search').value||'').toLowerCase();
+  const status=document.getElementById('suppliers-filter-status').value;
+  let list=[...suppliers];
+  if(q) list=list.filter(s=> ((s.name||'')+(s.phone||'')+(s.site||'')+(s.note||'')).toLowerCase().includes(q));
+  if(status) list=list.filter(s=> s.status===status);
+  document.getElementById('suppliers-list').innerHTML = list.map(s=> `
+    <div class="p-5 flex flex-wrap gap-4 items-center">
+      <div class="w-10 h-10 rounded-full bg-[#7a9d8f] text-white grid place-items-center font-bold shrink-0">${(s.name||'?')[0]}</div>
+      <div class="flex-1 min-w-[220px]">
+        <div class="font-bold">${s.name||'—'}</div>
+        <div class="text-xs text-black/50 mt-0.5">${s.phone? `<a href="tel:${s.phone.replace(/[^+\d]/g,'')}" class="underline">${s.phone}</a> • `:''}${s.site? `<a href="${s.site.startsWith('http')? s.site : 'https://'+s.site}" target="_blank" class="underline text-[#1e3e35]">${s.site}</a>`:''}</div>
+        ${s.siteLogin||s.sitePass? `<div class="text-xs text-black/50 mt-0.5">доступ: <b>${s.siteLogin||'—'}</b> • <span id="sup-pass-${s.id}">••••••</span> <button onclick="toggleSupPass('${s.id}')" class="underline text-[#1e3e35] font-bold">показать</button></div>`:''}
+        ${s.note? `<div class="text-xs text-black/40 mt-1 bg-[#f4f7f5] rounded-lg px-3 py-2">${s.note}</div>`:''}
+      </div>
+      <div class="text-right shrink-0"><div class="text-xs tracking-[0.12em] font-bold text-black/40">${(s.status||'').toUpperCase()}</div><div class="text-xs text-black/30">${s.date? new Date(s.date).toLocaleDateString('ru-RU'):''}</div></div>
+      <div class="flex gap-2 shrink-0"><button onclick="editSupplier('${s.id}')" class="bg-[#f4f7f5] rounded-full px-4 py-2 text-xs font-bold">ИЗМЕНИТЬ</button><button onclick="deleteSupplier('${s.id}')" class="text-red-500 text-xs font-bold px-2">✕</button></div>
+    </div>
+  `).join('') || `<div class="p-10 text-center text-black/40">Нет поставщиков</div>`;
+}
+function openSupplierModal(id=null){
+  document.getElementById('supplier-modal').classList.remove('hidden');
+  const f=document.getElementById('supplier-form'); f.reset(); f.id.value='';
+  const pass=f.sitePass; if(pass) pass.type='password';
+  const eye=f.querySelector('button[onclick*="previousElementSibling"]'); if(eye) eye.textContent='👁';
+  if(id){
+    const s=suppliers.find(x=>x.id===id);
+    if(s) Object.entries(s).forEach(([k,v])=>{ if(f[k]!==undefined) f[k].value=v; });
+  }
+}
+function closeSupplierModal(){ document.getElementById('supplier-modal').classList.add('hidden'); }
+function editSupplier(id){ openSupplierModal(id); }
+function deleteSupplier(id){ if(!confirm('Удалить поставщика?'))return; suppliers=suppliers.filter(s=>s.id!==id); localStorage.setItem('mirea_suppliers',JSON.stringify(suppliers)); renderSuppliers(); }
+function saveSupplier(e){
+  e.preventDefault();
+  const fd=new FormData(e.target); const d=Object.fromEntries(fd.entries());
+  if(!d.id){ d.id='SUP-'+Date.now().toString(36).toUpperCase(); d.date=new Date().toISOString(); suppliers.push(d); }
+  else { const idx=suppliers.findIndex(s=>s.id===d.id); if(idx>=0) suppliers[idx]={...suppliers[idx],...d}; else suppliers.push(d); }
+  localStorage.setItem('mirea_suppliers',JSON.stringify(suppliers)); closeSupplierModal(); renderSuppliers(); showToast('Сохранено');
+}
+function toggleSupPass(id){
+  const s=suppliers.find(x=>x.id===id); if(!s) return;
+  const el=document.getElementById('sup-pass-'+id); if(!el) return;
+  const btn=el.nextElementSibling;
+  if(el.textContent==='••••••'){ el.textContent=s.sitePass||'—'; if(btn) btn.textContent='скрыть'; }
+  else { el.textContent='••••••'; if(btn) btn.textContent='показать'; }
 }
 
 // LEADS
@@ -999,22 +1099,34 @@ function exportClientsExcel(){
   clients.forEach(c=> rows.push([c.id,c.fio,c.phone,c.email||'',c.type,c.address||'',c.company||'']));
   downloadExcel(toExcelHTML('Клиенты MIREA', rows),'mirea_clients.xls');
 }
+function exportSuppliersCSV(){
+  const rows=[['ID','Название','Статус','Телефон','Сайт','Логин','Пароль','Примечание','Дата']];
+  suppliers.forEach(s=> rows.push([s.id,s.name,s.status||'',s.phone||'',s.site||'',s.siteLogin||'',s.sitePass||'',s.note||'',s.date||'']));
+  downloadCSV(toCSV(rows),'mirea_suppliers.csv');
+}
+function exportSuppliersExcel(){
+  const rows=[['ID','Название','Статус','Телефон','Сайт','Логин','Пароль','Примечание']];
+  suppliers.forEach(s=> rows.push([s.id,s.name,s.status||'',s.phone||'',s.site||'',s.siteLogin||'',s.sitePass||'',s.note||'']));
+  downloadExcel(toExcelHTML('Поставщики MIREA', rows),'mirea_suppliers.xls');
+}
 function exportAllExcel(){
   let html=`<html><head><meta charset="UTF-8"></head><body>`;
   const pRows=[['ID','Линейка','Категория','Название','Подзаголовок','Объём','Цена']]; products.forEach(p=> pRows.push([p.id,p.line,p.category,p.name,p.subtitle,p.volume,p.price]));
   html+=toExcelHTML('Товары', pRows).replace('<html><head><meta charset="UTF-8"></head><body>','').replace('</body></html>','');
   const cRows=[['ID','ФИО','Телефон','Email','Тип']]; clients.forEach(c=> cRows.push([c.id,c.fio,c.phone,c.email||'',c.type]));
   html+=toExcelHTML('Клиенты', cRows).replace('<html><head><meta charset="UTF-8"></head><body>','').replace('</body></html>','');
+  const supRows=[['ID','Название','Статус','Телефон','Сайт']]; suppliers.forEach(s=> supRows.push([s.id,s.name,s.status||'',s.phone||'',s.site||'']));
+  html+=toExcelHTML('Поставщики', supRows).replace('<html><head><meta charset="UTF-8"></head><body>','').replace('</body></html>','');
   const sRows=[['ID','Дата','Клиент','Сумма','Оплата']]; sales.forEach(s=> sRows.push([s.id,s.date,s.customer||'',s.total,s.payment||'']));
   html+=toExcelHTML('Продажи', sRows).replace('<html><head><meta charset="UTF-8"></head><body>','').replace('</body></html>','');
   html+=`</body></html>`;
   downloadExcel(html,'mirea_all.xls');
 }
 function exportJSON(){
-  const data={products,sales,clients,leads,lines, socials:getSocials(), logo: localStorage.getItem('mirea_logo')||null};
+  const data={products,sales,clients,suppliers,leads,lines, socials:getSocials(), logo: localStorage.getItem('mirea_logo')||null};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='mirea_data.json'; a.click();
 }
-function clearAll(){ if(!confirm('Очистить все данные?'))return; localStorage.removeItem('mirea_sales'); localStorage.removeItem('mirea_clients'); localStorage.removeItem('mirea_leads'); sales=[]; clients=[]; leads=[]; renderAll(); showToast('Очищено'); }
+function clearAll(){ if(!confirm('Очистить все данные?'))return; localStorage.removeItem('mirea_sales'); localStorage.removeItem('mirea_clients'); localStorage.removeItem('mirea_suppliers'); localStorage.removeItem('mirea_leads'); sales=[]; clients=[]; suppliers=[]; leads=[]; renderAll(); showToast('Очищено'); }
 function seedDemo(){
   const now=new Date();
   const demoSales=[
