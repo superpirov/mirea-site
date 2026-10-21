@@ -5,539 +5,917 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MIREA — Производство бытовой химии | Гели для душа, жидкое мыло, автошампунь</title>
 <meta name="description" content="MIREA — российский производитель гелей для душа Sensa, жидкого мыла Aura и автошампуня Modul. Розница и опт. г. Дербент.">
+<meta name="theme-color" content="#1E3E35">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="favicon.svg">
-<script src="https://api-maps.yandex.ru/2.1/?apikey=57141da5-bb9a-4fcb-bce8-18a6c52fc313&lang=ru_RU"></script>
-<script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        mirea: { dark: '#1e3e35', sage: '#7a9d8f', gold: '#e8b44f', light: '#f4f7f5', cream: '#fdf8ed' },
-      },
-      fontFamily: {
-        sans: ['Manrope','sans-serif'],
-        serif: ['Cormorant Garamond','serif'],
-        display: ['Space Grotesk','sans-serif'],
-      }
-    }
-  }
-}
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://api-maps.yandex.ru/2.1/?apikey=57141da5-bb9a-4fcb-bce8-18a6c52fc313&lang=ru_RU"></script>
+<script>document.documentElement.classList.add('js');</script>
 <style>
-* { scrollbar-width: thin; scrollbar-color: #7a9d8f #f4f7f5; }
-html { scroll-behavior: smooth; }
-.hero-gradient { background: radial-gradient(1200px 600px at 70% 20%, rgba(122,157,143,0.18) 0%, transparent 60%), radial-gradient(800px 400px at 20% 80%, rgba(232,180,79,0.12) 0%, transparent 60%), linear-gradient(180deg, #fdfdfb 0%, #f4f7f5 100%); }
-.glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
-.bottle-shadow { filter: drop-shadow(0 25px 50px rgba(30,62,53,0.25)) drop-shadow(0 10px 20px rgba(30,62,53,0.15)); }
-.text-balance { text-wrap: balance; }
-.animate-float { animation: float 6s ease-in-out infinite; }
-.animate-float2 { animation: float 6s ease-in-out infinite 2s; }
-@keyframes float { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-12px) } }
-.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-/* Social icon via mask: inherits button color (adapts to hover automatically) */
-.soc-ig { width: 32px; height: 32px; display: inline-block; background: currentColor; -webkit-mask-image: url('instagram.png'); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; mask-image: url('instagram.png'); mask-size: contain; mask-repeat: no-repeat; mask-position: center; }
-/* Branded Yandex map: tint tiles toward sage/gold */
-#yandex-map [class*="ground-pane"] { filter: sepia(.22) hue-rotate(28deg) saturate(1.15); }
-/* Branded balloon */
-.mirea-balloon { position: absolute; width: 250px; background: #1e3e35; color: #fff; border: 1px solid rgba(232,180,79,.5); border-radius: 16px; padding: 16px 38px 15px 16px; box-shadow: 0 18px 45px rgba(30,62,53,.45); font-family: ui-sans-serif, system-ui, sans-serif; }
-.mirea-balloon-title { color: #e8b44f; font-weight: 800; font-size: 15px; letter-spacing: .02em; }
-.mirea-balloon-addr { margin-top: 6px; font-size: 13px; line-height: 1.45; color: rgba(255,255,255,.88); }
-.mirea-balloon-hours { margin-top: 2px; font-size: 12px; color: rgba(255,255,255,.6); }
-.mirea-balloon-route { display: inline-block; margin-top: 11px; background: #e8b44f; color: #1e3e35; font-size: 12px; font-weight: 800; letter-spacing: .04em; padding: 8px 15px; border-radius: 999px; text-decoration: none; }
-.mirea-balloon-route:hover { filter: brightness(1.06); }
-.mirea-balloon-close { position: absolute; top: 6px; right: 8px; width: 26px; height: 26px; border: 0; background: transparent; color: rgba(255,255,255,.55); font-size: 20px; line-height: 1; cursor: pointer; }
-.mirea-balloon-close:hover { color: #e8b44f; }
-.mirea-balloon-tail { position: absolute; left: 50%; bottom: -8px; width: 16px; height: 16px; background: #1e3e35; border-right: 1px solid rgba(232,180,79,.5); border-bottom: 1px solid rgba(232,180,79,.5); transform: translateX(-50%) rotate(45deg); }
+/* ---------- tokens ---------- */
+:root{
+  --green:#1E3E35; --green-deep:#12211C; --sage:#7A9D8F; --sage-soft:#E5EBE3;
+  --gold:#DFA94D; --gold-deep:#C08E36; --canvas:#F3F1EA; --paper:#FBFAF6;
+  --ink:#182420; --muted:#61685F; --line:#DDD8CB; --line-soft:#E9E5DA;
+  --max:1320px; --pad:clamp(18px,4vw,48px);
+  --ease:cubic-bezier(.22,.8,.26,1); --ease-out:cubic-bezier(.16,1,.3,1);
+  --sans:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --serif:'Instrument Serif',Georgia,'Times New Roman',serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html.lock,body.lock{overflow:hidden}
+body{margin:0;font-family:var(--sans);font-size:16px;line-height:1.55;color:var(--ink);background:var(--canvas);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input,textarea,select{font:inherit;color:inherit}
+h1,h2,h3,h4,p,ul,ol,figure,blockquote{margin:0;padding:0}
+ul,ol{list-style:none}
+::selection{background:var(--green);color:var(--paper)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.hidden{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.container{width:100%;max-width:var(--max);margin:0 auto;padding-inline:var(--pad)}
+section{scroll-margin-top:88px}
+.serif{font-family:var(--serif);font-weight:400}
 
+/* ---------- buttons / links ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;height:54px;padding:0 30px;border-radius:999px;font-size:14px;font-weight:600;letter-spacing:.01em;line-height:1;transition:background .25s,color .25s,transform .25s}
+.btn .arr{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(251,250,246,.16);transition:transform .3s var(--ease),background .25s}
+.btn:hover .arr{transform:translateX(3px)}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--gold);color:var(--green-deep)}
+.btn-primary .arr{background:var(--green);color:var(--gold)}
+.btn-primary:hover{background:#EBB65B}
+.btn-dark{background:var(--green);color:var(--paper)}
+.btn-dark .arr{background:rgba(251,250,246,.14)}
+.btn-dark:hover{background:#17332B}
+.btn-gold{background:var(--gold);color:var(--green-deep)}
+.btn-gold:hover{background:#EBB65B}
+.btn-block{width:100%}
+.link-arrow{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--ink);padding-bottom:3px;position:relative}
+.link-arrow::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform:scaleX(.35);transform-origin:left;opacity:.35;transition:transform .35s var(--ease),opacity .35s}
+.link-arrow:hover::after{transform:scaleX(1);opacity:1}
+.link-arrow svg{transition:transform .3s var(--ease)}
+.link-arrow:hover svg{transform:translate(2px,-2px)}
+
+/* ---------- nav ---------- */
+.progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--gold);z-index:65;pointer-events:none}
+.nav{position:fixed;inset:0 0 auto;z-index:50;height:76px;transform:translateY(-102%);animation:navIn .7s var(--ease) .05s forwards;transition:background .3s,box-shadow .3s,height .3s;color:var(--paper)}
+.nav::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,33,28,.45),rgba(18,33,28,0));pointer-events:none;transition:opacity .3s;z-index:-1}
+.nav.scrolled{background:rgba(251,250,246,.97);color:var(--ink);height:66px;box-shadow:0 1px 0 rgba(24,36,32,.08),0 12px 30px -24px rgba(24,36,32,.35)}
+.nav.scrolled::after{opacity:0}
+.nav-in{height:100%;display:flex;align-items:center;gap:clamp(16px,3vw,44px)}
+.brand{display:flex;align-items:center;gap:11px;flex:0 0 auto}
+.brand-mark{width:36px;height:36px;border-radius:8px;background:var(--gold);color:var(--green-deep);display:grid;place-items:center;font-family:var(--serif);font-size:21px;line-height:1;padding-bottom:2px;transition:transform .35s var(--ease)}
+.brand:hover .brand-mark{transform:rotate(-6deg)}
+.brand-name{font-family:var(--serif);font-size:21px;line-height:1;letter-spacing:.13em}
+.brand-sub{font-size:8.5px;letter-spacing:.22em;font-weight:600;opacity:.55;margin-top:3px}
+#site-logo-custom{height:44px;max-width:220px;object-fit:contain;display:none}
+.nav-links{display:flex;align-items:center;gap:clamp(14px,2.2vw,30px);margin-left:auto}
+.nav-link{font-size:11.5px;letter-spacing:.13em;font-weight:600;text-transform:uppercase;position:relative;padding:6px 0;opacity:.72;transition:opacity .25s}
+.nav-link::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.nav-link:hover,.nav-link.active{opacity:1}
+.nav-link:hover::after,.nav-link.active::after{transform:scaleX(1)}
+.nav-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+.nav-links + .nav-right{margin-left:0}
+.nav-phone{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;white-space:nowrap;opacity:.86;transition:opacity .2s}
+.nav-phone:hover{opacity:1}
+.nav-phone svg{opacity:.7}
+#header-socials{display:flex;align-items:center;gap:7px}
+.social-link{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);color:currentColor;font-size:10px;font-weight:700;letter-spacing:.04em;transition:background .25s,color .25s,transform .25s}
+.social-link:hover{background:var(--gold);color:var(--green-deep);transform:translateY(-2px)}
+.nav.scrolled .social-link{background:rgba(30,62,53,.08)}
+.nav.scrolled .social-link:hover{background:var(--green);color:var(--paper)}
+.social-link .soc-ig{width:17px;height:17px}
+.cart-btn{position:relative;width:44px;height:44px;border-radius:50%;background:var(--paper);color:var(--green);display:grid;place-items:center;transition:background .25s,color .25s,transform .25s}
+.cart-btn:hover{background:var(--gold);color:var(--green-deep);transform:translateY(-1px)}
+#cart-badge{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--gold);color:var(--green-deep);font-size:10.5px;font-weight:700;display:grid;place-items:center;line-height:1}
+.burger{display:none;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);color:currentColor;place-items:center}
+.nav.scrolled .burger{background:rgba(30,62,53,.08)}
+.burger span{display:block;width:18px;height:1.5px;background:currentColor;position:relative;transition:transform .3s,opacity .3s}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:1.5px;background:currentColor;transition:transform .3s}
+.burger span::before{top:-6px}.burger span::after{top:6px}
+.burger.open span{transform:rotate(45deg)}
+.burger.open span::before{transform:translateY(6px) rotate(-90deg)}
+.burger.open span::after{opacity:0}
+.mobile-menu{position:fixed;inset:64px 0 0;z-index:49;background:var(--green-deep);color:var(--paper);padding:26px var(--pad) 34px;display:none;overflow:auto}
+.mobile-menu.open{display:flex;flex-direction:column;animation:menuIn .35s var(--ease) both}
+.mobile-menu a.mob-link{display:block;font-family:var(--serif);font-size:33px;line-height:1.12;padding:9px 0;color:var(--paper);transition:color .2s,transform .25s}
+.mobile-menu a.mob-link:hover{color:var(--gold);transform:translateX(4px)}
+.mob-foot{margin-top:auto;padding-top:20px;display:flex;flex-direction:column;gap:8px;font-size:14px;color:rgba(251,250,246,.62)}
+.mob-foot a{color:var(--paper);font-weight:600}
+.mob-cta{margin-top:16px}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;background:var(--green-deep);color:var(--paper);overflow:hidden;display:flex;flex-direction:column;padding-top:76px;isolation:isolate}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-4;animation:heroZoom 34s ease-in-out infinite alternate}
+.hero-scrim{position:absolute;inset:0;z-index:-3;background:linear-gradient(90deg,rgba(18,33,28,.94) 0%,rgba(18,33,28,.78) 40%,rgba(18,33,28,.38) 100%)}
+.hero-shade{position:absolute;inset:0;z-index:-3;background:linear-gradient(180deg,rgba(18,33,28,.55) 0%,rgba(18,33,28,.05) 38%,rgba(18,33,28,.82) 100%)}
+.hero-grain{position:absolute;inset:0;z-index:-2;opacity:.05;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero-in{position:relative;z-index:1;display:flex;flex-direction:column;flex:1;padding-top:clamp(28px,4.5vw,64px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(20px,4vw,56px);align-items:center;flex:1;padding-block:clamp(18px,3vw,38px)}
+.hero-copy{max-width:720px}
+.hero-title{font-family:var(--serif);font-weight:400;font-size:clamp(46px,6.4vw,94px);line-height:.9;letter-spacing:-.035em;color:var(--paper)}
+.hero-title .line{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.hero-title .line>span{display:block;white-space:nowrap;transform:translateY(112%);animation:lineUp 1.05s var(--ease-out) forwards}
+.hero-title .line:nth-child(2)>span{animation-delay:.12s}
+.hero-lede{margin-top:clamp(20px,2.6vw,30px);font-size:clamp(15px,1.35vw,17.5px);line-height:1.6;color:rgba(251,250,246,.67);max-width:52ch;opacity:0;animation:fadeUp .9s var(--ease-out) .5s forwards}
+.hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:14px 26px;margin-top:clamp(24px,3.2vw,38px);opacity:0;animation:fadeUp .9s var(--ease-out) .62s forwards}
+.hero .link-arrow{color:rgba(251,250,246,.82)}
+.hero .link-arrow:hover{color:var(--paper)}
+.hero-visual{position:relative;height:clamp(400px,46vw,560px);opacity:0;transform:translateY(22px) scale(.985);animation:heroVisual 1.25s var(--ease-out) .32s forwards}
+#hero-3d{position:absolute;inset:0;perspective:1200px;will-change:transform}
+#hero-3d-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .3s ease-out}
+.bottle{position:absolute;bottom:2%;width:38%;display:flex;justify-content:center}
+.bottle::after{content:"";position:absolute;left:18%;right:18%;bottom:-5px;height:16px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,0,0,.62),rgba(0,0,0,0) 70%);filter:blur(5px);z-index:-1;pointer-events:none}
+.bottle img{width:100%;height:auto;filter:drop-shadow(0 34px 26px rgba(0,0,0,.45));-webkit-mask-image:linear-gradient(to bottom,#000 96%,transparent 100%);mask-image:linear-gradient(to bottom,#000 96%,transparent 100%);animation:bottleFloat 7s ease-in-out infinite}
+.bottle.left{left:0;width:36%;transform:rotate(-7deg) translateZ(-20px)}
+.bottle.left img{animation-delay:-2s}
+.bottle.main{left:50%;transform:translateX(-50%) translateZ(60px);width:48%;bottom:0;z-index:2}
+.bottle.main img{animation-delay:-4s;filter:drop-shadow(0 44px 32px rgba(0,0,0,.5))}
+.bottle.right{right:0;width:36%;transform:rotate(7deg) translateZ(-20px)}
+.bottle.right img{animation-delay:-1s}
+.hero-caption{position:absolute;right:2%;bottom:-6px;display:flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:rgba(251,250,246,.62)}
+.hero-caption i{width:6px;height:6px;border-radius:50%;background:var(--gold);display:block}
+.hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;padding-bottom:clamp(28px,4vw,48px);opacity:0;animation:fadeUp .9s var(--ease-out) .78s forwards}
+.hero-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(18px,3vw,44px);flex:1;max-width:900px}
+.hero-fact b{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3vw,39px);line-height:1;display:block;color:var(--paper)}
+.hero-fact span{display:block;margin-top:7px;font-size:11.5px;line-height:1.35;color:rgba(251,250,246,.58);letter-spacing:.02em}
+.scroll-hint{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(251,250,246,.42);white-space:nowrap}
+.scroll-hint i{width:1px;height:34px;background:rgba(251,250,246,.3);position:relative;overflow:hidden;display:block}
+.scroll-hint i::after{content:"";position:absolute;left:0;top:-100%;width:1px;height:100%;background:var(--gold);animation:scrollLine 2.4s ease-in-out infinite}
+@keyframes navIn{to{transform:translateY(0)}}
+@keyframes lineUp{to{transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes heroVisual{to{opacity:1;transform:none}}
+@keyframes heroZoom{from{transform:scale(1.01)}to{transform:scale(1.09)}}
+@keyframes bottleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+@keyframes scrollLine{0%{top:-100%}55%,100%{top:100%}}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+/* ---------- ticker ---------- */
+.ticker{background:var(--gold);color:var(--green-deep);height:60px;display:flex;align-items:center;overflow:hidden;position:relative;z-index:2}
+.ticker-track{display:flex;width:max-content;animation:tickerMove 42s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-group{display:flex;align-items:center;gap:30px;padding-right:30px;white-space:nowrap}
+.ticker-item{font-family:var(--serif);font-style:italic;font-size:21px;line-height:1}
+.ticker-sep{width:5px;height:5px;border-radius:50%;background:rgba(18,33,28,.42);flex:0 0 5px}
+@keyframes tickerMove{to{transform:translateX(-50%)}}
+
+/* ---------- section shared ---------- */
+.section{padding-block:clamp(84px,11vw,156px);position:relative}
+.section-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.68fr);gap:clamp(20px,4vw,60px);align-items:end;margin-bottom:clamp(38px,5vw,64px)}
+.section-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(38px,5.4vw,72px);line-height:.94;letter-spacing:-.025em;max-width:13ch}
+.section-head p{font-size:15.5px;line-height:1.6;color:var(--muted);max-width:44ch;justify-self:end}
+.reveal{--d:0ms}
+.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease-out) var(--d),transform .8s var(--ease-out) var(--d)}
+.js .reveal.in{opacity:1;transform:none}
+
+/* ---------- about ---------- */
+.about{background:var(--paper)}
+.about-top{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.82fr);gap:clamp(20px,4vw,70px);align-items:end;margin-bottom:clamp(38px,5vw,60px)}
+.about-top h2{font-family:var(--serif);font-weight:400;font-size:clamp(40px,5.6vw,78px);line-height:.92;letter-spacing:-.03em;max-width:12ch}
+.about-copy p{font-size:16.5px;line-height:1.62;color:var(--ink);max-width:48ch}
+.about-note{margin-top:24px;background:var(--sage-soft);padding:18px 22px;border-radius:4px;font-size:13.5px;line-height:1.5;color:#4C574E;max-width:46ch}
+.about-note b{color:var(--ink);font-weight:600}
+.about-body{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);gap:clamp(28px,5vw,70px);align-items:center}
+.about-photo{overflow:hidden;border-radius:4px;background:var(--sage-soft);position:relative}
+.about-photo img{width:100%;height:100%;aspect-ratio:4/3.35;object-fit:cover;object-position:50% 42%;transition:transform 1s var(--ease-out)}
+.about-photo:hover img{transform:scale(1.035)}
+.about-photo figcaption{position:absolute;left:0;right:0;bottom:0;padding:16px 20px;background:linear-gradient(0deg,rgba(18,33,28,.55),rgba(18,33,28,0));color:rgba(251,250,246,.82);font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;font-weight:600}
+.about-facts{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,46px)}
+.fact b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(34px,3.4vw,50px);line-height:.95;letter-spacing:-.02em}
+.fact p{margin-top:9px;font-size:13.5px;line-height:1.45;color:var(--muted);max-width:24ch}
+
+/* ---------- catalog ---------- */
+.catalog{background:var(--canvas)}
+.line-switch{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:26px}
+.line-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;background:var(--paper);padding:clamp(20px,2.6vw,30px);border-radius:4px;min-height:168px;transition:background .3s,color .3s,transform .35s var(--ease);overflow:hidden}
+.line-card:hover{transform:translateY(-3px)}
+.line-card-name{font-family:var(--serif);font-size:clamp(30px,3vw,44px);line-height:1;letter-spacing:-.02em}
+.line-card-desc{margin-top:auto;font-size:14px;line-height:1.4;color:var(--muted);max-width:30ch;transition:color .3s}
+.line-card-meta{margin-top:5px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#8A9087;transition:color .3s}
+.line-arrow{position:absolute;top:24px;right:24px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--sage-soft);color:var(--green);transition:background .3s,color .3s,transform .3s}
+.line-card:hover .line-arrow{transform:translateX(2px) translateY(-2px)}
+.line-card.is-active{background:var(--green);color:var(--paper)}
+.line-card.is-active .line-card-desc{color:rgba(251,250,246,.65)}
+.line-card.is-active .line-card-meta{color:rgba(251,250,246,.45)}
+.line-card.is-active .line-arrow{background:var(--gold);color:var(--green-deep)}
+.cat-switch{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:clamp(28px,3.4vw,40px)}
+.cat-btn{height:42px;padding:0 20px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--muted);background:transparent;transition:background .25s,color .25s}
+.cat-btn:hover{background:rgba(30,62,53,.07);color:var(--ink)}
+.cat-btn.is-active{background:var(--green);color:var(--paper)}
+.product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.8vw,20px)}
+.product-card{background:var(--paper);border-radius:4px;overflow:hidden;display:flex;flex-direction:column;animation:cardIn .65s var(--ease-out) both;animation-delay:calc(var(--i,0)*70ms);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+@media(hover:hover){.product-card:hover{transform:translateY(-5px);box-shadow:0 26px 50px -30px rgba(24,36,32,.45)}}
+.product-media{position:relative;aspect-ratio:4/4.6;background:var(--sage-soft);display:flex;align-items:flex-end;justify-content:center;padding:20px 20px 0;overflow:hidden}
+.product-media img{width:auto;max-width:74%;height:88%;object-fit:contain;filter:drop-shadow(0 22px 18px rgba(24,36,32,.28));transition:transform .55s var(--ease)}
+.product-card:hover .product-media img{transform:scale(1.05) translateY(-4px)}
+.product-badge{position:absolute;top:14px;left:14px;background:var(--green);color:var(--paper);font-size:10px;letter-spacing:.12em;font-weight:700;padding:6px 10px;border-radius:2px;z-index:2}
+.product-vol{position:absolute;top:14px;right:14px;font-size:11.5px;font-weight:600;color:#58645B;letter-spacing:.03em}
+.product-body{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}
+.product-kicker{font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;font-weight:600;color:#8A9087}
+.product-name{font-family:var(--serif);font-size:25px;line-height:1.02;letter-spacing:-.015em;margin-top:8px}
+.product-name span{font-size:16px;color:var(--muted);letter-spacing:0}
+.product-desc{margin-top:10px;font-size:13.5px;line-height:1.5;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.product-scent{margin-top:12px;font-size:12px;color:#7A8178;display:flex;align-items:center;gap:7px}
+.product-scent::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--gold);flex:0 0 4px}
+.product-foot{margin-top:auto;padding-top:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.product-price{font-size:20px;font-weight:600;line-height:1;letter-spacing:-.01em}
+.product-price small{display:block;margin-top:5px;font-size:11.5px;font-weight:400;color:#9AA095;text-decoration:line-through}
+.product-add{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;color:var(--green);padding:8px 0}
+.product-add i{width:34px;height:34px;border-radius:50%;background:var(--green);color:var(--paper);display:grid;place-items:center;font-style:normal;transition:background .25s,transform .25s}
+.product-add:hover i{background:var(--gold);color:var(--green-deep);transform:rotate(90deg)}
+.fallback-bottle{position:relative;width:44%;height:82%;border-radius:8px 8px 5px 5px;background:#1E3E35;color:#FBFAF6;align-self:flex-end;display:flex;flex-direction:column;align-items:center;padding-top:16%;box-shadow:0 30px 34px -20px rgba(24,36,32,.55)}
+.fallback-bottle::before{content:"";position:absolute;top:-11%;left:50%;transform:translateX(-50%);width:34%;height:14%;background:#12211C;border-radius:3px 3px 0 0}
+.fallback-bottle .fb-brand{font-size:7px;letter-spacing:.22em;opacity:.55}
+.fallback-bottle .fb-name{font-family:var(--serif);font-size:clamp(20px,2.2vw,30px);line-height:1;margin-top:6px}
+.fallback-bottle .fb-sub{font-size:8px;text-align:center;line-height:1.3;opacity:.62;margin-top:6px;padding:0 12%}
+.product-empty{grid-column:1/-1;background:var(--paper);border-radius:4px;padding:64px 24px;text-align:center}
+.product-empty b{font-family:var(--serif);font-size:30px;font-weight:400;display:block}
+.product-empty span{display:block;margin-top:6px;font-size:14px;color:var(--muted)}
+.catalog-aside{position:relative;overflow:hidden;grid-column:span 1;background:var(--green-deep);color:var(--paper);border-radius:4px;padding:clamp(26px,3vw,38px);display:flex;flex-direction:column;justify-content:space-between;gap:30px}
+.catalog-aside.wide{grid-column:span 2}
+.catalog-aside::after{content:"M";position:absolute;right:-.12em;bottom:-.32em;font-family:var(--serif);font-size:clamp(180px,20vw,300px);line-height:1;color:rgba(251,250,246,.05);pointer-events:none}
+.catalog-aside > *{position:relative;z-index:1}
+.aside-kicker{font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;color:var(--gold)}
+.aside-title{margin-top:14px;font-family:var(--serif);font-weight:400;font-size:clamp(28px,2.6vw,38px);line-height:1.02;letter-spacing:-.02em;max-width:13ch}
+.catalog-aside.wide .aside-title{max-width:16ch}
+.aside-text{margin-top:12px;font-size:13.5px;line-height:1.55;color:rgba(251,250,246,.64);max-width:34ch}
+.catalog-aside .btn{align-self:flex-start;margin-top:24px;height:48px;font-size:13px}
+@media(max-width:1023px){.catalog-aside{display:none}}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ---------- manifesto ---------- */
+.manifesto{background:var(--green-deep);color:var(--paper);overflow:hidden}
+.manifesto-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:clamp(30px,5vw,80px);align-items:stretch}
+.manifesto-copy{padding-block:clamp(10px,2vw,30px);display:flex;flex-direction:column;justify-content:center}
+.manifesto h2{font-family:var(--serif);font-weight:400;font-size:clamp(38px,5.2vw,74px);line-height:.94;letter-spacing:-.025em;max-width:12ch}
+.manifesto-lede{margin-top:22px;font-size:16px;line-height:1.6;color:rgba(251,250,246,.72);max-width:46ch}
+.manifesto-list{margin-top:clamp(28px,4vw,46px);display:flex;flex-direction:column;gap:24px;max-width:470px}
+.manifesto-list li{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+.manifesto-list b{font-family:var(--serif);font-size:23px;font-weight:400;line-height:1.1}
+.manifesto-list span{font-size:13.5px;line-height:1.5;color:rgba(251,250,246,.65)}
+.manifesto-visual{position:relative;min-height:560px}
+.manifesto-visual img{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:auto;max-width:min(78%,420px);height:100%;object-fit:contain;object-position:bottom;filter:drop-shadow(0 50px 40px rgba(0,0,0,.55))}
+.manifesto-visual::before{content:"M";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--serif);font-size:clamp(280px,30vw,460px);line-height:1;color:rgba(251,250,246,.04);pointer-events:none}
+
+/* ---------- wholesale ---------- */
+.wholesale{background:var(--sage-soft)}
+.wholesale-top{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.78fr);gap:clamp(24px,4vw,60px);align-items:end;margin-bottom:clamp(36px,5vw,60px)}
+.wholesale h2{font-family:var(--serif);font-weight:400;font-size:clamp(42px,5.8vw,80px);line-height:.92;letter-spacing:-.03em;max-width:10ch}
+.wholesale-copy p{font-size:16px;line-height:1.6;max-width:42ch;color:#45514A}
+.wholesale-actions{display:flex;align-items:center;flex-wrap:wrap;gap:14px 22px;margin-top:24px}
+.wholesale-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(18px,3vw,40px)}
+.wholesale-fact b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(34px,3.6vw,52px);line-height:1;letter-spacing:-.02em}
+.wholesale-fact span{display:block;margin-top:8px;font-size:13px;line-height:1.4;color:#556159;max-width:20ch}
+
+/* ---------- contacts ---------- */
+.contacts{background:var(--paper)}
+.contacts-grid{display:grid;grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr);gap:clamp(28px,5vw,72px);align-items:start}
+.contacts h2{font-family:var(--serif);font-weight:400;font-size:clamp(38px,5.2vw,72px);line-height:.94;letter-spacing:-.025em;max-width:14ch}
+.contact-list{margin-top:clamp(26px,4vw,42px);display:flex;flex-direction:column;gap:22px}
+.contact-item span{display:block;font-size:12px;letter-spacing:.02em;color:#8A9087;margin-bottom:4px}
+.contact-item b,.contact-item a{font-size:19px;font-weight:600;line-height:1.3;display:inline-block;transition:color .2s}
+.contact-item a:hover{color:var(--gold-deep)}
+.contact-item small{display:block;margin-top:4px;font-size:12.5px;color:var(--muted)}
+.contact-mails{display:grid;grid-template-columns:1fr 1fr;gap:19px}
+.map-frame{position:relative;height:clamp(400px,46vw,560px);border-radius:4px;overflow:hidden;background:var(--sage-soft)}
+#yandex-map{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+#yandex-map [class*="ground-pane"]{filter:sepia(.22) hue-rotate(28deg) saturate(1.12)}
+.map-plaque{padding-top:18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.map-plaque b{display:block;font-family:var(--serif);font-size:20px;font-weight:400;line-height:1.1}
+.map-plaque span{display:block;margin-top:4px;font-size:12.5px;color:var(--muted);line-height:1.4}
+.map-plaque .btn{height:44px;padding:0 20px;font-size:12.5px;background:var(--green);color:var(--paper)}
+.map-plaque .btn:hover{background:var(--green-deep)}
+.map-note{margin-top:12px;font-size:12px;color:#8A9087}
+/* branded yandex balloon */
+.mirea-balloon{position:absolute;width:262px;background:var(--green);color:var(--paper);border-radius:4px;padding:18px 40px 17px 18px;box-shadow:0 24px 50px rgba(18,33,28,.45);font-family:var(--sans)}
+.mirea-balloon-title{color:var(--gold);font-weight:600;font-size:15px;letter-spacing:.01em}
+.mirea-balloon-addr{margin-top:7px;font-size:13px;line-height:1.45;color:rgba(251,250,246,.86)}
+.mirea-balloon-hours{margin-top:2px;font-size:12px;color:rgba(251,250,246,.55)}
+.mirea-balloon-route{display:inline-block;margin-top:12px;background:var(--gold);color:var(--green-deep);font-size:12px;font-weight:600;padding:9px 15px;border-radius:999px;text-decoration:none}
+.mirea-balloon-route:hover{background:#EBB65B}
+.mirea-balloon-close{position:absolute;top:4px;right:7px;width:28px;height:28px;border:0;background:transparent;color:rgba(251,250,246,.5);font-size:21px;line-height:1;cursor:pointer}
+.mirea-balloon-close:hover{color:var(--gold)}
+.mirea-balloon-tail{position:absolute;left:50%;bottom:-7px;width:14px;height:14px;background:var(--green);transform:translateX(-50%) rotate(45deg)}
+
+/* ---------- footer ---------- */
+.footer{background:var(--green-deep);color:var(--paper);padding-top:clamp(50px,7vw,86px);padding-bottom:26px;overflow:hidden}
+.footer-mark{font-family:var(--serif);font-weight:400;font-size:clamp(78px,18.5vw,250px);line-height:.78;letter-spacing:.015em;color:var(--paper);white-space:nowrap;margin-left:-.03em;user-select:none}
+.footer-mark span{display:inline-block;opacity:.94}
+.footer-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(30px,5vw,80px);margin-top:clamp(36px,5vw,56px);padding-top:clamp(30px,4vw,44px);border-top:1px solid rgba(251,250,246,.14)}
+.footer-about p{margin-top:14px;font-size:14px;line-height:1.55;color:rgba(251,250,246,.55);max-width:36ch}
+#footer-socials{display:flex;gap:8px;margin-top:18px}
+.footer-cols{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.footer-col h3{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:rgba(251,250,246,.42);margin-bottom:12px}
+.footer-col a,.footer-col div{display:block;font-size:14px;line-height:1.9;color:rgba(251,250,246,.76);transition:color .2s}
+.footer-col a:hover{color:var(--gold)}
+.footer-bottom{margin-top:clamp(30px,4vw,48px);padding-top:20px;border-top:1px solid rgba(251,250,246,.12);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11.5px;color:rgba(251,250,246,.38);letter-spacing:.01em}
+
+/* ---------- cart ---------- */
+.cart-overlay{position:fixed;inset:0;z-index:60;background:rgba(18,33,28,.5);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.cart-overlay.is-open{opacity:1;visibility:visible}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;z-index:61;width:min(460px,100%);background:var(--paper);display:flex;flex-direction:column;transform:translateX(102%);transition:transform .42s var(--ease);box-shadow:-30px 0 70px -40px rgba(18,33,28,.6)}
+.cart-drawer.is-open{transform:none}
+.cart-head{padding:24px clamp(18px,3vw,28px);display:flex;align-items:flex-start;justify-content:space-between;gap:16px;background:var(--green);color:var(--paper)}
+.cart-head h2{font-family:var(--serif);font-size:30px;font-weight:400;line-height:1}
+.cart-head p{margin-top:5px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(251,250,246,.55)}
+.cart-close{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:var(--paper);display:grid;place-items:center;font-size:19px;line-height:1;transition:background .2s,color .2s}
+.cart-close:hover{background:var(--gold);color:var(--green-deep)}
+.cart-items{flex:1;overflow:auto;padding:22px clamp(18px,3vw,28px);display:flex;flex-direction:column;gap:16px}
+.cart-empty{text-align:center;padding:56px 10px}
+.cart-empty b{font-family:var(--serif);font-size:28px;font-weight:400;display:block}
+.cart-empty span{display:block;margin-top:6px;font-size:13.5px;color:var(--muted)}
+.cart-empty .btn{margin-top:20px;height:46px;padding:0 24px;font-size:12.5px}
+.cart-line{display:flex;gap:14px;align-items:stretch}
+.cart-thumb{width:68px;flex:0 0 68px;background:var(--sage-soft);border-radius:4px;display:grid;place-items:center;overflow:hidden}
+.cart-thumb img{width:80%;height:80%;object-fit:contain}
+.cart-thumb span{font-family:var(--serif);font-size:19px}
+.cart-line-body{flex:1;min-width:0;display:flex;flex-direction:column}
+.cart-line-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.cart-line-name{font-size:13.5px;font-weight:600;line-height:1.3}
+.cart-line-meta{font-size:11.5px;color:var(--muted);margin-top:3px}
+.cart-remove{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#98A096;font-size:16px;line-height:1;flex:0 0 24px;transition:color .2s,background .2s}
+.cart-remove:hover{color:#B0412C;background:rgba(176,65,44,.08)}
+.cart-line-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:12px}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:26px;height:26px;border-radius:50%;background:var(--sage-soft);color:var(--green);display:grid;place-items:center;font-size:14px;line-height:1;transition:background .2s,color .2s}
+.qty button:hover{background:var(--green);color:var(--paper)}
+.qty span{min-width:18px;text-align:center;font-size:13px;font-weight:600}
+.cart-line-sum{font-size:13.5px;font-weight:600;white-space:nowrap}
+.cart-foot{padding:20px clamp(18px,3vw,28px) 24px;background:var(--canvas);border-top:1px solid var(--line-soft)}
+.cart-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:7px}
+.cart-row b{color:var(--ink);font-weight:600}
+.cart-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;padding-top:12px;border-top:1px solid var(--line)}
+.cart-total span{font-size:13px;color:var(--muted)}
+.cart-total b{font-family:var(--serif);font-size:27px;font-weight:400}
+.cart-foot .btn{margin-top:16px}
+.cart-note{margin-top:10px;text-align:center;font-size:10.5px;color:#98A096}
+
+/* ---------- modals ---------- */
+.modal{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:18px}
+.modal-backdrop{position:absolute;inset:0;background:rgba(18,33,28,.58);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.modal-card{position:relative;z-index:1;width:100%;max-width:600px;max-height:90vh;overflow:auto;background:var(--paper);border-radius:6px;box-shadow:0 60px 120px -40px rgba(18,33,28,.7);animation:modalIn .3s var(--ease-out) both}
+.modal-card.modal-lg{max-width:660px}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:clamp(22px,3vw,30px) clamp(22px,3vw,32px) 0}
+.modal-title{font-family:var(--serif);font-size:clamp(28px,3.4vw,36px);font-weight:400;line-height:1;letter-spacing:-.02em}
+.modal-sub{margin-top:8px;font-size:13.5px;line-height:1.5;color:var(--muted);max-width:40ch}
+.modal-close{width:38px;height:38px;flex:0 0 38px;border-radius:50%;background:var(--canvas);display:grid;place-items:center;font-size:19px;line-height:1;color:var(--muted);transition:background .2s,color .2s}
+.modal-close:hover{background:var(--green);color:var(--paper)}
+.modal-body{padding:22px clamp(22px,3vw,32px) clamp(24px,3vw,32px)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:block}
+.field + .field{margin-top:14px}
+.field-label{display:block;font-size:12px;font-weight:600;color:#6C746B;margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;height:48px;padding:0 14px;background:#fff;border:1px solid var(--line);border-radius:6px;font-size:14px;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+.field textarea{height:auto;min-height:84px;padding:12px 14px;line-height:1.5;resize:vertical}
+.field input::placeholder,.field textarea::placeholder{color:#A3A99F}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--sage);box-shadow:0 0 0 3px rgba(122,157,143,.16)}
+.form-grid .field + .field{margin-top:0}
+.form-note{margin-top:12px;font-size:11.5px;line-height:1.5;color:#92998F;text-align:center}
+.form-note b{color:#6C746B;font-weight:600}
+.wholesale-tip{margin-top:14px;background:var(--sage-soft);border-radius:4px;padding:14px 16px;font-size:12.5px;line-height:1.5;color:#4E5A52}
+.wholesale-tip b{color:var(--ink);font-weight:600}
+.modal-body .btn{margin-top:16px}
+.summary{background:var(--canvas);border-radius:4px;padding:14px 16px;font-size:13px}
+.summary-row{display:flex;justify-content:space-between;gap:12px;padding:4px 0;color:var(--muted)}
+.summary-row b{color:var(--ink);font-weight:600;white-space:nowrap}
+.summary-total{display:flex;justify-content:space-between;gap:12px;margin-top:8px;padding-top:10px;border-top:1px solid var(--line);font-weight:600}
+.summary-total b{font-family:var(--serif);font-size:22px;font-weight:400}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:50%;bottom:24px;z-index:80;transform:translateX(-50%) translateY(14px);background:var(--green-deep);color:var(--paper);padding:13px 20px;border-radius:999px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:9px;box-shadow:0 24px 50px -20px rgba(18,33,28,.7);opacity:0;visibility:hidden;transition:opacity .25s,transform .25s,visibility .25s;max-width:calc(100vw - 32px)}
+.toast::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold);flex:0 0 6px}
+.toast.show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+
+/* ---------- responsive ---------- */
+@media(min-width:1200px) and (max-height:880px){
+  .hero{padding-top:64px}
+  .hero-in{padding-top:20px}
+  .hero-grid{padding-block:10px}
+  .hero-visual{height:clamp(400px,calc(100svh - 320px),520px)}
+  .bottle.main{width:40%}
+  .bottle.left,.bottle.right{width:30%}
+  .hero-title{font-size:clamp(46px,5.4vw,76px)}
+  .hero-lede{margin-top:18px}
+  .hero-actions{margin-top:24px}
+  .hero-bottom{padding-bottom:22px}
+}
+@media(max-width:1180px){
+  #header-socials{display:none}
+  .nav-links{gap:16px}
+}
+@media(max-width:1023px){
+  .nav-links{display:none}
+  .burger{display:grid}
+  .hero{padding-top:64px;min-height:auto}
+  .nav{height:64px}
+  .hero-grid{grid-template-columns:1fr;gap:26px;padding-block:28px 6px}
+  .hero-visual{height:460px;max-width:520px;width:100%;margin-inline:auto}
+  .bottle{bottom:0;width:auto;height:100%}
+  .bottle img{height:100%;width:auto}
+  .bottle.main,.bottle.left,.bottle.right{width:auto}
+  .bottle.main{height:95%;bottom:12px;transform-origin:50% 100%}
+  .bottle.left,.bottle.right{height:74%}
+  .hero-copy{max-width:none}
+  .hero-caption{display:none}
+  .hero-bottom{flex-direction:column;align-items:flex-start;gap:22px}
+  .hero-facts{width:100%;max-width:none}
+  .scroll-hint{display:none}
+  .about-top,.about-body,.section-head,.wholesale-top,.manifesto-grid,.contacts-grid{grid-template-columns:1fr}
+  .section-head p{justify-self:start}
+  .about-body{gap:30px}
+  .about-photo img{aspect-ratio:16/10}
+  .manifesto-visual{min-height:420px;order:2}
+  .manifesto-grid{gap:30px}
+  .contacts-grid{gap:30px}
+  .contact-mails{grid-template-columns:1fr}
+  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wholesale-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px}
+  .footer-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .brand-sub{display:none}
+  .nav-right{gap:8px}
+  .nav-phone span{display:none}
+  .nav-phone{width:40px;height:40px;justify-content:center;border-radius:50%;background:rgba(255,255,255,.12)}
+  .nav.scrolled .nav-phone{background:rgba(30,62,53,.08)}
+  .nav-phone svg{opacity:1}
+  .hero-visual{height:410px}
+  .hero-title{font-size:clamp(36px,11.8vw,46px)}
+  .hero-caption{font-size:10px;right:0;bottom:-2px}
+  .hero-facts{grid-template-columns:1fr 1fr;gap:22px}
+  .hero-fact b{font-size:32px}
+  .ticker{height:52px}
+  .ticker-item{font-size:18px}
+  .section{padding-block:78px}
+  .section-head h2,.about-top h2,.manifesto h2,.wholesale h2,.contacts h2{font-size:clamp(36px,10vw,50px)}
+  .line-switch{grid-template-columns:1fr}
+  .line-card{min-height:142px}
+  .product-grid{grid-template-columns:1fr}
+  .product-media{aspect-ratio:4/4.3}
+  .about-facts{grid-template-columns:1fr 1fr;gap:26px}
+  .wholesale-facts{grid-template-columns:1fr 1fr;gap:26px}
+  .form-grid{grid-template-columns:1fr;gap:0}
+  .form-grid .field + .field{margin-top:14px}
+  .modal{padding:10px}
+  .modal-card{max-height:94vh}
+  .map-plaque{align-items:flex-start;flex-direction:column}
+  .map-plaque .btn{width:100%}
+  .footer-mark{font-size:clamp(64px,20vw,110px)}
+  .footer-cols{grid-template-columns:1fr 1fr;gap:20px}
+  .footer-bottom{flex-direction:column;gap:6px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .js .reveal{opacity:1;transform:none}
+  .ticker-track{animation:none}
+  .hero-title .line>span{transform:none}
+}
 </style>
 </head>
-<body class="bg-[#fdfdfb] text-[#1e3e35] font-sans antialiased overflow-x-hidden">
+<body>
+
+<div id="progress" class="progress" aria-hidden="true"></div>
 
 <!-- NAV -->
-<nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-white/70 glass border-b border-black/[0.04]">
-  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-stretch justify-between h-[72px]">
-      <a href="#home" id="site-logo" class="flex items-center gap-3 group shrink-0">
-        <div id="site-logo-default" class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-[#1e3e35] flex items-center justify-center text-white font-serif font-bold text-[18px] tracking-widest group-hover:bg-[#162e27] transition">M</div>
-          <div>
-            <div class="font-serif font-bold text-[22px] leading-none tracking-[0.14em]">MIREA</div>
-            <div class="text-[9px] tracking-[0.22em] text-[#7a9d8f] font-semibold -mt-0.5">CARE & CHEMISTRY</div>
-          </div>
-        </div>
-        <img id="site-logo-custom" class="hidden object-contain block" style="height:48px;max-width:240px;" alt="MIREA">
-      </a>
-      <div class="hidden lg:flex items-center gap-8">
-        <a href="#home" class="nav-link text-[13px] leading-none tracking-[0.14em] font-semibold text-[#1e3e35] hover:text-[#7a9d8f] transition translate-y-[1px]">ГЛАВНАЯ</a>
-        <a href="#company" class="nav-link text-[13px] leading-none tracking-[0.14em] font-semibold text-[#1e3e35]/60 hover:text-[#1e3e35] transition translate-y-[1px]">КОМПАНИЯ</a>
-        <a href="#products" class="nav-link text-[13px] leading-none tracking-[0.14em] font-semibold text-[#1e3e35]/60 hover:text-[#1e3e35] transition translate-y-[1px]">ПРОДУКЦИЯ</a>
-        <button onclick="openWholesale()" class="nav-link text-[13px] leading-none tracking-[0.14em] font-semibold text-[#1e3e35]/60 hover:text-[#1e3e35] transition translate-y-[1px]">ОПТОВЫЕ ЗАКУПКИ</button>
-        <a href="#contacts" class="nav-link text-[13px] leading-none tracking-[0.14em] font-semibold text-[#1e3e35]/60 hover:text-[#1e3e35] transition translate-y-[1px]">КОНТАКТЫ</a>
+<nav id="navbar" class="nav" aria-label="Основная навигация">
+  <div class="container nav-in">
+    <a href="#home" id="site-logo" class="brand" aria-label="MIREA — на главную">
+      <div id="site-logo-default" class="brand">
+        <span class="brand-mark">M</span>
+        <span>
+          <span class="brand-name">MIREA</span>
+          <span class="brand-sub">CARE &amp; CHEMISTRY</span>
+        </span>
       </div>
-      <div id="header-socials" class="hidden lg:flex items-center gap-2 empty:hidden"></div>
-      <div class="flex items-center gap-3 shrink-0">
-        <a href="tel:+79384900111" class="hidden md:flex items-center gap-2 text-[13px] font-semibold">
-          <span class="w-8 h-8 rounded-full bg-[#1e3e35] text-white grid place-items-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
-          +7 938 490-01-11
-        </a>
-        <button onclick="toggleCart(true)" class="relative w-10 h-10 rounded-full bg-[#1e3e35] text-white grid place-items-center hover:bg-[#162e27] transition">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 8h-3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-3"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><circle cx="9" cy="19" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg>
-          <span id="cart-badge" class="absolute -top-1 -right-1 bg-[#e8b44f] text-[#1e3e35] text-[11px] font-extrabold w-5 h-5 rounded-full grid place-items-center hidden">0</span>
-        </button>
-        <button id="burger" class="lg:hidden w-10 h-10 rounded-full border border-[#1e3e35]/10 grid place-items-center">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
-      </div>
+      <img id="site-logo-custom" src="" alt="MIREA">
+    </a>
+
+    <div class="nav-links">
+      <a href="#company" class="nav-link" data-spy="company">Компания</a>
+      <a href="#products" class="nav-link" data-spy="products">Каталог</a>
+      <a href="#wholesale" class="nav-link" data-spy="wholesale">Опт</a>
+      <a href="#contacts" class="nav-link" data-spy="contacts">Контакты</a>
     </div>
-  </div>
-  <!-- mobile menu -->
-  <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-black/5">
-    <div class="px-6 py-6 flex flex-col gap-4">
-      <a href="#home" onclick="closeMobile()" class="text-sm tracking-[0.16em] font-bold">ГЛАВНАЯ</a>
-      <a href="#company" onclick="closeMobile()" class="text-sm tracking-[0.16em] font-bold">КОМПАНИЯ</a>
-      <a href="#products" onclick="closeMobile()" class="text-sm tracking-[0.16em] font-bold">ПРОДУКЦИЯ</a>
-      <button onclick="openWholesale();closeMobile()" class="text-left text-sm tracking-[0.16em] font-bold">ОПТОВЫЕ ЗАКУПКИ</button>
-      <a href="#contacts" onclick="closeMobile()" class="text-sm tracking-[0.16em] font-bold">КОНТАКТЫ</a>
+
+    <div id="header-socials" aria-label="Соцсети"></div>
+
+    <div class="nav-right">
+      <a href="tel:+79384900111" class="nav-phone" aria-label="Позвонить: +7 938 490-01-11">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+        <span>+7 938 490-01-11</span>
+      </a>
+      <button onclick="toggleCart(true)" class="cart-btn" aria-label="Открыть корзину">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 7h12l1.3 13H4.7L6 7z"/><path d="M9 7V5.8a3 3 0 0 1 6 0V7"/></svg>
+        <span id="cart-badge" class="hidden">0</span>
+      </button>
+      <button id="burger" class="burger" aria-label="Меню" aria-expanded="false" aria-controls="mobile-menu"><span></span></button>
     </div>
   </div>
 </nav>
 
+<!-- MOBILE MENU -->
+<div id="mobile-menu" class="mobile-menu">
+  <a href="#home" onclick="closeMobile()" class="mob-link">Главная</a>
+  <a href="#company" onclick="closeMobile()" class="mob-link">Компания</a>
+  <a href="#products" onclick="closeMobile()" class="mob-link">Каталог</a>
+  <a href="#wholesale" onclick="closeMobile()" class="mob-link">Оптовые закупки</a>
+  <a href="#contacts" onclick="closeMobile()" class="mob-link">Контакты</a>
+  <div class="mob-foot">
+    <a href="tel:+79384900111">+7 938 490-01-11</a>
+    <span>Дербент, ул. Шоссейная, 26 · Пн–Сб 9:00–18:00</span>
+    <button onclick="openWholesale();closeMobile()" class="btn btn-gold mob-cta">Запросить оптовый прайс</button>
+  </div>
+</div>
+
 <!-- HERO -->
-<section id="home" class="hero-gradient pt-[72px] relative overflow-hidden bg-[#1e3e35]">
-  <video class="absolute inset-0 w-full h-full object-cover" autoplay muted loop playsinline preload="metadata">
+<section id="home" class="hero">
+  <video class="hero-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
     <source src="197486-905015022.mp4" type="video/mp4">
   </video>
-  <div class="absolute inset-0 bg-[#1e3e35]/65"></div>
-  <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(30,62,53,0.35) 0%, rgba(30,62,53,0.15) 50%, rgba(30,62,53,0.55) 100%)"></div>
-  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="grid lg:grid-cols-12 gap-8 lg:gap-4 items-center pt-8 lg:pt-14 pb-10 lg:pb-16">
-      <!-- left copy -->
-      <div class="lg:col-span-6 xl:col-span-6 relative z-10">
-        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/15 rounded-full px-3 py-1.5 shadow-sm mb-6">
-          <span class="w-2 h-2 rounded-full bg-[#e8b44f] animate-pulse"></span>
-          <span class="text-[11px] tracking-[0.14em] font-bold text-white/80">ПРОИЗВОДСТВО • ДЕРБЕНТ</span>
-          <span class="hidden sm:inline text-[11px] bg-[#e8b44f] text-[#1e3e35] px-2 py-0.5 rounded-full font-bold">РОЗНИЦА И ОПТ</span>
-        </div>
-        <h1 class="font-serif font-medium leading-[0.92] tracking-[-0.03em] text-[42px] sm:text-[56px] lg:text-[64px] xl:text-[72px]">
-          <span class="block text-white">Химия,</span>
-          <span class="block text-white">которая</span>
-          <span class="block text-[#e8b44f] italic font-normal">заботится</span>
+  <div class="hero-scrim" aria-hidden="true"></div>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-grain" aria-hidden="true"></div>
+
+  <div class="container hero-in">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <h1 class="hero-title">
+          <span class="line"><span>Химия, которая</span></span>
+          <span class="line"><span>заботится</span></span>
         </h1>
-        <p class="mt-5 text-[15px] sm:text-[17px] leading-relaxed text-white/70 max-w-[560px] text-balance">Российский производитель гелей для душа, жидкого мыла и автохимии. Чистые составы, стойкие ароматы, честная цена — от одной бутылки до паллеты.</p>
-
-        <div class="flex flex-wrap gap-3 mt-8">
-          <a href="#products" class="inline-flex items-center gap-3 bg-[#e8b44f] text-[#1e3e35] rounded-full px-7 py-4 text-[13px] tracking-[0.12em] font-extrabold hover:bg-[#d9a63f] transition shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-            ПЕРЕЙТИ В КАТАЛОГ
-            <span class="w-7 h-7 rounded-full bg-[#1e3e35] text-white grid place-items-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        <p class="hero-lede">Гели для душа, жидкое мыло и автохимия. Чистые составы, стойкие ароматы и честная цена — от одной бутылки до паллеты.</p>
+        <div class="hero-actions">
+          <a href="#products" class="btn btn-primary">Смотреть каталог
+            <span class="arr"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
           </a>
-          <button onclick="openWholesale()" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/20 text-white rounded-full px-7 py-4 text-[13px] tracking-[0.12em] font-bold hover:bg-white/20 transition">
-            <span class="w-2 h-2 rounded-full bg-[#e8b44f]"></span> ОПТОВЫЙ ПРАЙС
+          <button onclick="openWholesale()" class="link-arrow">Оптовый прайс
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg>
           </button>
-        </div>
-
-        <div class="grid grid-cols-3 gap-6 mt-10 max-w-[520px] border-t border-white/15 pt-6">
-          <div>
-            <div class="font-serif text-white text-[28px] leading-none font-semibold">500<span class="text-[16px]">мл</span></div>
-            <div class="text-[11px] tracking-[0.14em] font-bold text-white/50 mt-1">ЭРГОНОМИЧНЫЙ ФЛАКОН</div>
-          </div>
-          <div>
-            <div class="font-serif text-white text-[28px] leading-none font-semibold">20<span class="text-[16px]">л</span></div>
-            <div class="text-[11px] tracking-[0.14em] font-bold text-white/50 mt-1">АВТОШАМПУНЬ MODUL</div>
-          </div>
-          <div>
-            <div class="font-serif text-white text-[28px] leading-none font-semibold">2<span class="text-[16px]"> линейки</span></div>
-            <div class="text-[11px] tracking-[0.14em] font-bold text-white/50 mt-1">5 АРОМАТОВ</div>
-          </div>
-        </div>
-
-        <!-- trust -->
-        <div class="flex items-center gap-4 mt-8">
-          <div class="flex -space-x-2">
-            <div class="w-8 h-8 rounded-full bg-[#7a9d8f] border-2 border-white/20 grid place-items-center text-white text-xs">✓</div>
-            <div class="w-8 h-8 rounded-full bg-white border-2 border-white/20 grid place-items-center text-[#1e3e35] text-xs">✓</div>
-            <div class="w-8 h-8 rounded-full bg-[#e8b44f] border-2 border-white/20 grid place-items-center text-[#1e3e35] text-xs">✓</div>
-          </div>
-          <div class="text-[12px] leading-tight">
-            <div class="font-bold text-white">Уже 12 000+ клиентов</div>
-            <div class="text-white/60">Розница и опт по всей России</div>
-          </div>
-          <div class="hidden sm:flex items-center gap-1 ml-4 text-[#e8b44f]">
-            ★★★★★ <span class="text-white text-xs font-bold ml-1">4.9/5</span>
-          </div>
         </div>
       </div>
 
-      <!-- right visual -->
-      <div class="lg:col-span-6 xl:col-span-6 relative lg:h-[620px] flex items-center justify-center">
-        <!-- decorative blob -->
-        <div class="absolute inset-0 -z-10 hidden lg:block">
-          <div class="absolute right-[8%] top-[6%] w-[520px] h-[520px] bg-[#7a9d8f]/10 rounded-full blur-[2px]"></div>
-          <div class="absolute right-[18%] top-[18%] w-[380px] h-[380px] bg-[#e8b44f]/10 rounded-full blur-[1px]"></div>
-        </div>
-
-        <!-- bottles composition -->
-        <div class="relative w-full max-w-[560px] h-[520px] sm:h-[580px] lg:h-[560px]">
-          <!-- floating badge top -->
-          <div class="absolute top-6 right-6 lg:right-2 bg-[#1e3e35] text-white rounded-2xl px-4 py-3 shadow-xl z-20">
-            <div class="text-[10px] tracking-[0.16em] font-bold text-white/60">ХИТ ПРОДАЖ</div>
-            <div class="font-serif text-[18px] leading-none mt-1">Sensa Jasmine</div>
-            <div class="text-[11px] text-white/60">Гель для душа • 500 мл</div>
-          </div>
-
-          <!-- 3D bottles — real product photo (bottle.png, transparent bg) -->
-          <div id="hero-3d" class="absolute inset-0 flex items-end justify-center gap-0 sm:gap-1 pb-14 pt-8" style="perspective:1200px">
-            <div id="hero-3d-inner" class="flex items-end justify-center gap-0 sm:gap-1" style="transform-style:preserve-3d;transition:transform 0.25s ease-out">
-              <!-- left bottle -->
-              <div class="animate-float relative w-[120px] sm:w-[165px] shrink-0" style="transform:rotateY(16deg) translateZ(-40px)">
-                <img src="bottle.png" alt="Флакон Mirea" onerror="this.classList.add('hidden')" class="relative w-full h-[300px] sm:h-[360px] object-contain" style="filter:drop-shadow(-18px 25px 25px rgba(0,0,0,0.30));">
-              </div>
-              <!-- central bottle -->
-              <div class="animate-float2 relative w-[150px] sm:w-[205px] shrink-0 z-10 -mx-3 sm:-mx-4 -mb-3" style="transform:translateZ(70px)">
-                <img src="bottle.png" alt="Флакон Mirea — хит" onerror="this.classList.add('hidden')" class="relative w-full h-[360px] sm:h-[440px] object-contain" style="filter:drop-shadow(0 35px 30px rgba(0,0,0,0.35));">
-                <img src="bottle.png" alt="" aria-hidden="true" onerror="this.classList.add('hidden')" class="w-full h-[90px] object-contain object-top opacity-20" style="transform:scaleY(-1);-webkit-mask-image:linear-gradient(to top, black, transparent 90%);mask-image:linear-gradient(to top, black, transparent 90%);filter:blur(1px);">
-              </div>
-              <!-- right bottle -->
-              <div class="animate-float relative w-[120px] sm:w-[165px] shrink-0" style="transform:rotateY(-16deg) translateZ(-40px);animation-delay:1s">
-                <img src="bottle.png" alt="Флакон Mirea" onerror="this.classList.add('hidden')" class="relative w-full h-[300px] sm:h-[360px] object-contain" style="filter:drop-shadow(18px 25px 25px rgba(0,0,0,0.30));">
-              </div>
-            </div>
-          </div>
-          <!-- floor shadow -->
-          <div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-[70%] h-[26px] rounded-[50%] bg-[#1e3e35]/20 blur-xl"></div>
-
-          <!-- bottom info -->
-          <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-black/5 px-5 py-3 flex items-center gap-4 whitespace-nowrap">
-            <div class="flex items-center gap-2 text-[12px] font-semibold"><span class="w-6 h-6 rounded-full bg-[#e8f3ee] grid place-items-center text-[#1e3e35]">♻</span> Эко-состав</div>
-            <div class="w-px h-6 bg-black/10"></div>
-            <div class="flex items-center gap-2 text-[12px] font-semibold"><span class="w-6 h-6 rounded-full bg-[#fdf8ed] grid place-items-center">✦</span> Дерматологически протестировано</div>
+      <div class="hero-visual">
+        <div id="hero-3d">
+          <div id="hero-3d-inner">
+            <div class="bottle left"><img src="bottle-clean.png" alt="" aria-hidden="true"></div>
+            <div class="bottle main"><img src="bottle-clean.png" alt="Флакон MIREA — гель для душа 500 мл"></div>
+            <div class="bottle right"><img src="bottle-clean.png" alt="" aria-hidden="true"></div>
           </div>
         </div>
+        <div class="hero-caption"><i></i>Sensa · Жасмин + Персик · 500 мл</div>
       </div>
     </div>
 
-    <!-- USP bar -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 pb-10">
-      <div class="bg-white rounded-2xl p-5 border border-black/[0.04] flex gap-3 items-start">
-        <div class="w-10 h-10 rounded-xl bg-[#1e3e35] text-white grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <div><div class="font-bold text-sm">Собственное производство</div><div class="text-xs text-black/50 leading-tight mt-1">Дербент, контроль каждой партии</div></div>
+    <div class="hero-bottom">
+      <div class="hero-facts">
+        <div class="hero-fact"><b>500 мл</b><span>флакон для ежедневного ухода</span></div>
+        <div class="hero-fact"><b>20 л</b><span>автошампунь-концентрат Modul</span></div>
+        <div class="hero-fact"><b>4</b><span>аромата в линейке Body</span></div>
+        <div class="hero-fact"><b>2</b><span>направления: уход и авто</span></div>
       </div>
-      <div class="bg-white rounded-2xl p-5 border border-black/[0.04] flex gap-3 items-start">
-        <div class="w-10 h-10 rounded-xl bg-[#e8b44f] text-[#1e3e35] grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <div><div class="font-bold text-sm">Розница и опт</div><div class="text-xs text-black/50 leading-tight mt-1">От 1 шт до паллет, гибкие цены</div></div>
-      </div>
-      <div class="bg-white rounded-2xl p-5 border border-black/[0.04] flex gap-3 items-start">
-        <div class="w-10 h-10 rounded-xl bg-[#7a9d8f] text-white grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="1" y="3" width="22" height="18" rx="2"/><path d="M1 7h22"/></svg></div>
-        <div><div class="font-bold text-sm">Быстрая доставка</div><div class="text-xs text-black/50 leading-tight mt-1">По России от 2 дней, СДЭК/Деловые линии</div></div>
-      </div>
-      <div class="bg-white rounded-2xl p-5 border border-black/[0.04] flex gap-3 items-start">
-        <div class="w-10 h-10 rounded-xl bg-[#1e3e35] text-white grid place-items-center shrink-0"> lab </div>
-        <div><div class="font-bold text-sm">Лабораторные тесты</div><div class="text-xs text-black/50 leading-tight mt-1">Дерматологически протестировано</div></div>
-      </div>
+      <div class="scroll-hint">Листайте<i></i></div>
     </div>
   </div>
 </section>
 
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <div class="ticker-group">
+      <span class="ticker-item">чистые составы</span><span class="ticker-sep"></span>
+      <span class="ticker-item">стойкие ароматы</span><span class="ticker-sep"></span>
+      <span class="ticker-item">собственное производство</span><span class="ticker-sep"></span>
+      <span class="ticker-item">розница и опт</span><span class="ticker-sep"></span>
+      <span class="ticker-item">доставка по России</span><span class="ticker-sep"></span>
+      <span class="ticker-item">без парабенов и SLS</span><span class="ticker-sep"></span>
+    </div>
+    <div class="ticker-group">
+      <span class="ticker-item">чистые составы</span><span class="ticker-sep"></span>
+      <span class="ticker-item">стойкие ароматы</span><span class="ticker-sep"></span>
+      <span class="ticker-item">собственное производство</span><span class="ticker-sep"></span>
+      <span class="ticker-item">розница и опт</span><span class="ticker-sep"></span>
+      <span class="ticker-item">доставка по России</span><span class="ticker-sep"></span>
+      <span class="ticker-item">без парабенов и SLS</span><span class="ticker-sep"></span>
+    </div>
+  </div>
+</div>
+
 <!-- COMPANY -->
-<section id="company" class="py-16 lg:py-24 bg-white relative">
-  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid lg:grid-cols-12 gap-10 items-start">
-      <div class="lg:col-span-5">
-        <div class="inline-flex items-center gap-2 text-[11px] tracking-[0.18em] font-bold text-[#7a9d8f]"><span class="w-8 h-px bg-[#7a9d8f]"></span> О КОМПАНИИ</div>
-        <h2 class="font-serif text-[36px] sm:text-[44px] leading-[0.95] mt-3">Производим<br><span class="italic text-[#7a9d8f] font-normal">химию с душой</span></h2>
-        <p class="mt-4 text-[15px] leading-relaxed text-black/55">Mirea — молодое производство в Дагестане. Мы решили, что бытовая химия может быть красивой, ароматной и честной по составу — без компромиссов.</p>
-        <div class="mt-8 bg-[#fdf8ed] rounded-2xl p-6 border border-[#e8b44f]/20">
-          <div class="flex items-center gap-3 text-sm font-bold"><span class="w-8 h-8 rounded-full bg-[#e8b44f] grid place-items-center">!</span> Раздел в разработке</div>
-          <p class="text-sm text-black/60 mt-2 leading-relaxed">Мы готовим подробную историю бренда, фото производства и сертификаты. Скоро здесь появится полная информация о компании, команде и технологиях.</p>
-          <div class="mt-4 text-xs tracking-[0.12em] font-bold text-[#1e3e35]/40">ОБНОВЛЕНИЕ — ОСЕНЬ 2026</div>
-        </div>
+<section id="company" class="section about">
+  <div class="container">
+    <div class="about-top">
+      <h2 class="reveal">Производим химию&nbsp;с&nbsp;душой</h2>
+      <div class="about-copy reveal" style="--d:90ms">
+        <p>Mirea — молодое производство в Дагестане. Мы решили, что бытовая химия может быть красивой, ароматной и честной по составу — без компромиссов.</p>
+        <div class="about-note"><b>Собственная рецептура.</b> Контроль качества на каждом этапе — от сырья до готовой партии.</div>
       </div>
-      <div class="lg:col-span-7 grid sm:grid-cols-2 gap-4">
-        <div class="bg-[#1e3e35] text-white rounded-[24px] p-7 relative overflow-hidden">
-          <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-          <div class="text-[11px] tracking-[0.16em] font-bold text-white/50">СТАНДАРТ КАЧЕСТВА</div>
-          <div class="font-serif text-[34px] leading-none mt-2">ГОСТ / ISO</div>
-          <div class="text-sm text-white/70 mt-2">сертифицированное производство и контроль каждой партии</div>
-          <div class="mt-6 flex gap-2"><span class="px-3 py-1 rounded-full bg-white/10 text-xs font-bold">ISO 9001</span><span class="px-3 py-1 rounded-full bg-[#e8b44f] text-[#1e3e35] text-xs font-bold">ГОСТ</span></div>
-        </div>
-        <div class="bg-[#f4f7f5] rounded-[24px] p-7 border border-black/5">
-          <div class="w-10 h-10 rounded-xl bg-white border border-black/5 grid place-items-center">◐</div>
-          <div class="font-bold mt-4">Натуральные отдушки</div>
-          <div class="text-sm text-black/50 mt-1 leading-relaxed">Французские аромакомпозиции, без парабенов и SLS</div>
-        </div>
-        <div class="bg-[#f4f7f5] rounded-[24px] p-7 border border-black/5">
-          <div class="w-10 h-10 rounded-xl bg-white border border-black/5 grid place-items-center">◎</div>
-          <div class="font-bold mt-4">Дизайн как в бутике</div>
-          <div class="text-sm text-black/50 mt-1 leading-relaxed">Флакон 500 мл — удобно в руке, красиво на полке</div>
-        </div>
-        <div class="bg-[#e8b44f] rounded-[24px] p-7 text-[#1e3e35]">
-          <div class="text-[11px] tracking-[0.16em] font-bold text-[#1e3e35]/60">ПРОИЗВОДСТВО</div>
-          <div class="font-serif text-[28px] leading-none mt-2">120 м²</div>
-          <div class="text-sm mt-1">г. Дербент, ул. Шоссейная, д. 26</div>
-          <a href="#contacts" class="mt-4 inline-block text-xs font-bold underline decoration-[#1e3e35]/20 underline-offset-4 hover:decoration-[#1e3e35]/40">СМОТРЕТЬ НА КАРТЕ →</a>
-        </div>
+    </div>
+
+    <div class="about-body">
+      <figure class="about-photo reveal">
+        <img src="bottle-source.jpg" alt="Флакон MIREA на каменной подставке" loading="lazy">
+        <figcaption>Флакон MIREA · 500 мл</figcaption>
+      </figure>
+
+      <div class="about-facts">
+        <div class="fact reveal" style="--d:80ms"><b>120 м²</b><p>собственное производство в Дербенте</p></div>
+        <div class="fact reveal" style="--d:150ms"><b>ISO 9001</b><p>контроль качества каждой партии</p></div>
+        <div class="fact reveal" style="--d:220ms"><b>2 линейки</b><p>уход за телом и профессиональная автохимия</p></div>
+        <div class="fact reveal" style="--d:290ms"><b>500 мл</b><p>эргономичный флакон с удобной помпой</p></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- PRODUCTS -->
-<section id="products" class="py-16 lg:py-20 bg-[#f4f7f5]">
-  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-wrap items-end justify-between gap-6">
-      <div>
-        <div class="inline-flex items-center gap-2 text-[11px] tracking-[0.18em] font-bold text-[#7a9d8f]"><span class="w-8 h-px bg-[#7a9d8f]"></span> КАТАЛОГ</div>
-        <h2 class="font-serif text-[36px] sm:text-[46px] leading-none mt-3">Выберите <span class="italic text-[#7a9d8f] font-normal">линейку</span></h2>
+<section id="products" class="section catalog">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="reveal">Каталог</h2>
+      <p class="reveal" style="--d:90ms">Выберите направление, затем аромат и объём. Вся продукция в наличии, отгрузка со склада в Дербенте.</p>
+    </div>
+
+    <div class="line-switch reveal">
+      <button id="btn-body" class="line-card is-active" onclick="selectLine('body')" aria-pressed="true">
+        <span class="line-card-name">Body</span>
+        <span class="line-card-desc">Гели для душа и жидкое мыло</span>
+        <span class="line-card-meta">Sensa · Aura · 500 мл</span>
+        <span class="line-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+      </button>
+      <button id="btn-auto" class="line-card" onclick="selectLine('auto')" aria-pressed="false">
+        <span class="line-card-name">Auto</span>
+        <span class="line-card-desc">Автошампунь для бесконтактной мойки</span>
+        <span class="line-card-meta">Modul · 20 л</span>
+        <span class="line-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+      </button>
+    </div>
+
+    <div id="body-cats" class="cat-switch reveal" style="--d:60ms">
+      <button onclick="selectCategory('sensa')" id="cat-sensa" class="cat-btn is-active">Sensa — гели для душа</button>
+      <button onclick="selectCategory('aura')" id="cat-aura" class="cat-btn">Aura — жидкое мыло</button>
+    </div>
+
+    <div id="products-grid" class="product-grid"></div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto" class="section manifesto">
+  <div class="container manifesto-grid">
+    <div class="manifesto-copy">
+      <h2 class="reveal">Честный состав. Стойкий аромат.</h2>
+      <p class="manifesto-lede reveal" style="--d:80ms">Мы не прячем формулу за красивой упаковкой. Внутри — мягкие ПАВ, французские аромакомпозиции и ничего лишнего.</p>
+      <ul class="manifesto-list">
+        <li class="reveal" style="--d:140ms"><b>Без парабенов и SLS</b><span>Мягкое очищение, подходит для ежедневного ухода.</span></li>
+        <li class="reveal" style="--d:200ms"><b>Французские отдушки</b><span>Стойкий аромат, который остаётся на коже и в помещении.</span></li>
+        <li class="reveal" style="--d:260ms"><b>Контроль каждой партии</b><span>Лабораторные тесты и сертифицированное производство.</span></li>
+      </ul>
+    </div>
+    <div class="manifesto-visual reveal" style="--d:120ms">
+      <img src="bottle-clean.png" alt="Флакон MIREA с помпой" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- WHOLESALE -->
+<section id="wholesale" class="section wholesale">
+  <div class="container">
+    <div class="wholesale-top">
+      <h2 class="reveal">Опт от 50 штук</h2>
+      <div class="wholesale-copy reveal" style="--d:90ms">
+        <p>Скидки до 35% от розницы и брендирование под вашу торговую марку. Работаем с магазинами, маркетплейсами и HoReCa по всей России.</p>
+        <div class="wholesale-actions">
+          <button onclick="openWholesale()" class="btn btn-dark">Запросить прайс
+            <span class="arr"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </button>
+          <a href="tel:+79384900111" class="link-arrow">+7 938 490-01-11</a>
+        </div>
       </div>
-      <div class="text-sm text-black/50 max-w-[420px] leading-relaxed">Сначала выберите направление — Body (уход) или Auto (автохимия), затем — аромат и объём.</div>
     </div>
 
-    <!-- line selector -->
-    <div class="mt-8 grid sm:grid-cols-2 gap-4 max-w-[760px]">
-      <button onclick="selectLine('body')" id="btn-body" class="group relative rounded-[24px] p-[1.5px] bg-[#1e3e35] overflow-hidden">
-        <div class="bg-[#1e3e35] rounded-[22px] p-6 flex items-center gap-4 text-left text-white relative overflow-hidden">
-          <div class="absolute right-0 top-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-          <div id="btn-body-icon" class="w-14 h-14 rounded-2xl bg-white text-[#1e3e35] grid place-items-center text-xl shrink-0">◍</div>
-          <div class="relative">
-            <div id="btn-body-title" class="font-serif text-[22px] leading-none">Body</div>
-            <div id="btn-body-sub1" class="text-[11px] tracking-[0.14em] font-bold text-white/60 mt-1">ГЕЛИ • МЫЛО • УХОД</div>
-            <div id="btn-body-sub2" class="text-xs text-white/70 mt-1">4 аромата • 500 мл</div>
-          </div>
-          <div id="btn-body-arrow" class="ml-auto w-8 h-8 rounded-full bg-white text-[#1e3e35] grid place-items-center">→</div>
-        </div>
-      </button>
-      <button onclick="selectLine('auto')" id="btn-auto" class="group relative rounded-[24px] p-[1.5px] bg-black/10 overflow-hidden hover:bg-black/15 transition">
-        <div class="bg-white rounded-[22px] p-6 flex items-center gap-4 text-left relative overflow-hidden">
-          <div id="btn-auto-icon" class="w-14 h-14 rounded-2xl bg-[#f4f7f5] border border-black/5 grid place-items-center text-xl shrink-0">⬢</div>
-          <div>
-            <div id="btn-auto-title" class="font-serif text-[22px] leading-none text-[#1e3e35]">Auto</div>
-            <div id="btn-auto-sub1" class="text-[11px] tracking-[0.14em] font-bold text-black/40 mt-1">АВТОХИМИЯ</div>
-            <div id="btn-auto-sub2" class="text-xs text-black/50 mt-1">Modul • 20 л</div>
-          </div>
-          <div id="btn-auto-arrow" class="ml-auto w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">→</div>
-        </div>
-      </button>
+    <div class="wholesale-facts">
+      <div class="wholesale-fact reveal"><b>50 шт</b><span>минимальная партия заказа</span></div>
+      <div class="wholesale-fact reveal" style="--d:70ms"><b>35%</b><span>максимальная скидка от розницы</span></div>
+      <div class="wholesale-fact reveal" style="--d:140ms"><b>5000 шт</b><span>тираж для собственной торговой марки</span></div>
+      <div class="wholesale-fact reveal" style="--d:210ms"><b>от 2 дней</b><span>доставка по России, СДЭК и Деловые линии</span></div>
     </div>
-
-    <!-- category tabs for Body -->
-    <div id="body-cats" class="mt-6 flex flex-wrap gap-3">
-      <button onclick="selectCategory('sensa')" id="cat-sensa" class="px-6 py-3 rounded-full bg-[#1e3e35] text-white text-[13px] tracking-[0.12em] font-bold">SENSA — ГЕЛЬ ДЛЯ ДУША</button>
-      <button onclick="selectCategory('aura')" id="cat-aura" class="px-6 py-3 rounded-full bg-white border border-black/10 text-[#1e3e35] text-[13px] tracking-[0.12em] font-bold hover:bg-black/5">AURA — ЖИДКОЕ МЫЛО</button>
-    </div>
-
-    <!-- products grid -->
-    <div id="products-grid" class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-
-    <!-- empty for auto handled same grid -->
   </div>
 </section>
 
 <!-- CONTACTS -->
-<section id="contacts" class="py-16 lg:py-20 bg-white">
-  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid lg:grid-cols-12 gap-8">
-      <div class="lg:col-span-5">
-        <div class="inline-flex items-center gap-2 text-[11px] tracking-[0.18em] font-bold text-[#7a9d8f]"><span class="w-8 h-px bg-[#7a9d8f]"></span> КОНТАКТЫ</div>
-        <h2 class="font-serif text-[36px] sm:text-[44px] leading-none mt-3">На связи<br><span class="italic text-[#7a9d8f] font-normal">каждый день</span></h2>
-
-        <div class="mt-8 space-y-4">
-          <div class="bg-[#f4f7f5] rounded-2xl p-5 flex gap-4">
-            <div class="w-11 h-11 rounded-xl bg-[#1e3e35] text-white grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-            <div><div class="text-[11px] tracking-[0.14em] font-bold text-black/40">АДРЕС ПРОИЗВОДСТВА</div><div class="font-semibold mt-1">г. Дербент, ул. Шоссейная, д. 26</div><div class="text-sm text-black/50">Республика Дагестан, 368600</div></div>
+<section id="contacts" class="section contacts">
+  <div class="container">
+    <div class="contacts-grid">
+      <div>
+        <h2 class="reveal">На связи<br>каждый день</h2>
+        <div class="contact-list">
+          <div class="contact-item reveal" style="--d:70ms">
+            <span>Производство</span>
+            <b>г. Дербент, ул. Шоссейная, 26</b>
+            <small>Республика Дагестан, 368600 · Пн–Сб 9:00–18:00</small>
           </div>
-          <div class="bg-[#f4f7f5] rounded-2xl p-5 flex gap-4">
-            <div class="w-11 h-11 rounded-xl bg-[#e8b44f] text-[#1e3e35] grid place-items-center shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-            <div><div class="text-[11px] tracking-[0.14em] font-bold text-black/40">ТЕЛЕФОН</div><a href="tel:+79384900111" class="font-semibold mt-1 block text-[18px]">+7 938 490-01-11</a><div class="text-sm text-black/50">Ежедневно 9:00—20:00</div></div>
+          <div class="contact-item reveal" style="--d:130ms">
+            <span>Телефон</span>
+            <a href="tel:+79384900111">+7 938 490-01-11</a>
+            <small>Ежедневно 9:00–20:00</small>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="bg-white border border-black/10 rounded-2xl p-5">
-              <div class="text-[11px] tracking-[0.14em] font-bold text-black/40">ЗАКАЗЫ • РОЗНИЦА</div>
-              <a href="mailto:order@mireacare.ru" class="font-semibold text-[#1e3e35] mt-1 block">order@mireacare.ru</a>
-              <div class="text-xs text-black/40 mt-1">Ответим за 15 минут</div>
+          <div class="contact-mails">
+            <div class="contact-item reveal" style="--d:190ms">
+              <span>Заказы · розница</span>
+              <a href="mailto:order@mireacare.ru">order@mireacare.ru</a>
+              <small>Ответим в течение 15 минут</small>
             </div>
-            <div class="bg-white border border-black/10 rounded-2xl p-5">
-              <div class="text-[11px] tracking-[0.14em] font-bold text-black/40">ОПТ • СОТРУДНИЧЕСТВО</div>
-              <a href="mailto:cooperation@mireacare.ru" class="font-semibold text-[#1e3e35] mt-1 block">cooperation@mireacare.ru</a>
-              <div class="text-xs text-black/40 mt-1">Прайс и условия</div>
+            <div class="contact-item reveal" style="--d:250ms">
+              <span>Опт · сотрудничество</span>
+              <a href="mailto:cooperation@mireacare.ru">cooperation@mireacare.ru</a>
+              <small>Прайс и условия</small>
             </div>
           </div>
         </div>
       </div>
-      <div class="lg:col-span-7">
-        <div class="rounded-[24px] overflow-hidden border border-black/10 bg-[#f4f7f5] h-[420px] lg:h-[520px] relative">
-          <div id="yandex-map" class="w-full h-full"></div>
-          <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-black/5 px-6 shadow-[0_-10px_40px_rgba(0,0,0,0.12)] z-10 h-[160px] flex items-center">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
-              <div>
-                <div class="font-bold text-base text-[#1e3e35]">Mirea — производство</div>
-                <div class="text-sm text-black/50 mt-1">г. Дербент, ул. Шоссейная, д. 26 • Пн-Сб 9:00–18:00</div>
-              </div>
-              <a href="https://yandex.ru/maps/?text=%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%20%D1%83%D0%BB.%20%D0%A8%D0%BE%D1%81%D1%81%D0%B5%D0%B9%D0%BD%D0%B0%D1%8F%2026" target="_blank" class="shrink-0 bg-[#1e3e35] text-white rounded-full px-7 py-3.5 text-sm tracking-[0.12em] font-bold hover:bg-[#162e27] transition">ПОСТРОИТЬ МАРШРУТ</a>
-            </div>
+
+      <div class="reveal" style="--d:120ms">
+        <div class="map-frame">
+          <div id="yandex-map"></div>
+        </div>
+        <div class="map-plaque">
+          <div>
+            <b>Mirea — производство</b>
+            <span>г. Дербент, ул. Шоссейная, 26 · Пн–Сб 9:00–18:00</span>
           </div>
+          <a href="https://yandex.ru/maps/?text=%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%20%D1%83%D0%BB.%20%D0%A8%D0%BE%D1%81%D1%81%D0%B5%D0%B9%D0%BD%D0%B0%D1%8F%2026" target="_blank" rel="noopener" class="btn">Построить маршрут</a>
         </div>
-        <div class="mt-4 flex flex-wrap gap-3">
-          <button onclick="openWholesale()" class="flex-1 bg-[#e8b44f] text-[#1e3e35] rounded-full px-6 py-4 text-[13px] tracking-[0.12em] font-extrabold">ЗАПРОСИТЬ ОПТОВЫЙ ПРАЙС</button>
-          <a href="tel:+79384900111" class="bg-white border border-black/10 rounded-full px-6 py-4 text-[13px] tracking-[0.12em] font-bold">ПОЗВОНИТЬ</a>
-        </div>
+        <div class="map-note">Нажмите на метку, чтобы открыть адрес и маршрут.</div>
       </div>
     </div>
   </div>
 </section>
 
-<footer class="bg-[#1e3e35] text-white py-10">
-  <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col lg:flex-row justify-between gap-8">
-      <div>
-        <div id="footer-logo-default" class="font-serif text-[22px] tracking-[0.14em] font-bold">MIREA</div>
-        <img id="footer-logo-custom" class="hidden object-contain block" style="height:30px;max-width:220px;filter:brightness(0) invert(1);" alt="MIREA">
-        <div class="text-[11px] tracking-[0.2em] text-white/50 font-bold">CARE & CHEMISTRY • ДЕРБЕНТ</div>
-        <div class="text-sm text-white/60 mt-4 max-w-[360px] leading-relaxed">Производство гелей для душа, жидкого мыла и автохимии. Розница и опт по всей России.</div>
-        <div id="footer-socials" class="flex gap-2 mt-4"></div>
+<!-- FOOTER -->
+<footer id="footer" class="footer">
+  <div class="container">
+    <div class="footer-mark" aria-hidden="true"><span>MIREA</span></div>
+    <div class="footer-grid">
+      <div class="footer-about">
+        <div id="footer-logo-default" class="brand-name serif" style="font-size:22px">MIREA</div>
+        <img id="footer-logo-custom" class="hidden" style="height:30px;max-width:220px;filter:brightness(0) invert(1)" alt="MIREA">
+        <p>Бытовая химия из Дагестана. Гели для душа, жидкое мыло и автохимия — розница и опт по всей России.</p>
+        <div id="footer-socials"></div>
       </div>
-      <div class="flex gap-10 text-sm">
-        <div><div class="font-bold tracking-[0.12em] text-xs text-white/40">МЕНЮ</div><div class="mt-3 space-y-2 text-white/70"><a href="#home" class="block hover:text-white">Главная</a><a href="#company" class="block hover:text-white">Компания</a><a href="#products" class="block hover:text-white">Продукция</a><a href="#contacts" class="block hover:text-white">Контакты</a></div></div>
-        <div><div class="font-bold tracking-[0.12em] text-xs text-white/40">КОНТАКТЫ</div><div class="mt-3 space-y-2 text-white/70"><div>+7 938 490-01-11</div><div>order@mireacare.ru</div><div>cooperation@mireacare.ru</div><div class="text-white/40">Дербент, Шоссейная 26</div></div></div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h3>Меню</h3>
+          <a href="#company">Компания</a>
+          <a href="#products">Каталог</a>
+          <a href="#wholesale">Оптовые закупки</a>
+          <a href="#contacts">Контакты</a>
+        </div>
+        <div class="footer-col">
+          <h3>Связь</h3>
+          <a href="tel:+79384900111">+7 938 490-01-11</a>
+          <a href="mailto:order@mireacare.ru">order@mireacare.ru</a>
+          <a href="mailto:cooperation@mireacare.ru">cooperation@mireacare.ru</a>
+          <div style="color:rgba(251,250,246,.45)">Дербент, Шоссейная 26</div>
+        </div>
       </div>
     </div>
-    <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between gap-3 text-xs text-white/40">
-      <div>© 2026 MIREA. Все права защищены.</div>
-      <div>Сделано с заботой в Дербенте</div>
+    <div class="footer-bottom">
+      <span>© 2026 MIREA. Все права защищены.</span>
+      <span>Сделано с заботой в Дербенте</span>
     </div>
   </div>
 </footer>
 
-<!-- CART SIDEBAR -->
-<div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-[#1e3e35]/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity"></div>
-<div id="cart-drawer" class="fixed right-0 top-0 h-full w-full sm:w-[440px] bg-white z-[61] translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
-  <div class="p-6 border-b border-black/5 flex items-center justify-between">
-    <div><div class="font-serif text-[22px] font-semibold leading-none">Корзина</div><div class="text-xs tracking-[0.12em] font-bold text-black/40 mt-1"><span id="cart-count">0</span> ТОВАРОВ</div></div>
-    <button onclick="toggleCart(false)" class="w-9 h-9 rounded-full bg-[#f4f7f5] grid place-items-center hover:bg-black/5">✕</button>
+<!-- CART -->
+<div id="cart-overlay" class="cart-overlay" onclick="toggleCart(false)"></div>
+<aside id="cart-drawer" class="cart-drawer" aria-hidden="true" aria-label="Корзина">
+  <div class="cart-head">
+    <div>
+      <h2>Корзина</h2>
+      <p><span id="cart-count">0</span> <span id="cart-count-label">товаров</span></p>
+    </div>
+    <button onclick="toggleCart(false)" class="cart-close" aria-label="Закрыть корзину">×</button>
   </div>
-  <div id="cart-items" class="flex-1 overflow-auto p-6 space-y-4"></div>
-  <div class="p-6 border-t border-black/5 bg-[#f4f7f5]">
-    <div class="flex justify-between text-sm"><span class="text-black/50">Подытог</span><span id="cart-subtotal" class="font-bold">0 ₽</span></div>
-    <div class="flex justify-between text-sm mt-2"><span class="text-black/50">Доставка</span><span class="font-bold text-[#7a9d8f]">рассчитывается</span></div>
-    <div class="flex justify-between text-[18px] font-extrabold mt-3 pt-3 border-t border-black/10"><span>Итого</span><span id="cart-total">0 ₽</span></div>
-    <button onclick="openCheckout()" class="w-full mt-5 bg-[#1e3e35] text-white rounded-full py-4 text-[13px] tracking-[0.12em] font-bold hover:bg-[#162e27] transition">ОФОРМИТЬ ЗАКАЗ →</button>
-    <div class="text-[11px] text-center text-black/40 mt-3">Нажимая, вы соглашаетесь с обработкой данных</div>
+  <div id="cart-items" class="cart-items"></div>
+  <div class="cart-foot">
+    <div class="cart-row"><span>Подытог</span><b id="cart-subtotal">0 ₽</b></div>
+    <div class="cart-row"><span>Доставка</span><b>рассчитывается</b></div>
+    <div class="cart-total"><span>Итого</span><b id="cart-total">0 ₽</b></div>
+    <button onclick="openCheckout()" class="btn btn-dark btn-block">Оформить заказ
+      <span class="arr"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+    </button>
+    <div class="cart-note">Нажимая кнопку, вы соглашаетесь с обработкой данных</div>
   </div>
-</div>
+</aside>
 
 <!-- WHOLESALE MODAL -->
-<div id="wholesale-modal" class="fixed inset-0 z-[70] hidden">
-  <div onclick="closeWholesale()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div>
-  <div class="absolute inset-0 grid place-items-center p-4">
-    <div class="bg-white rounded-[24px] max-w-[580px] w-full max-h-[90vh] overflow-auto shadow-2xl">
-      <div class="p-7 sm:p-8">
-        <div class="flex justify-between items-start gap-4">
-          <div>
-            <div class="inline-flex bg-[#e8b44f] text-[#1e3e35] text-[11px] tracking-[0.14em] font-extrabold px-3 py-1 rounded-full">ОПТ ОТ 50 ШТ</div>
-            <h3 class="font-serif text-[28px] leading-none mt-3">Оптовые закупки</h3>
-            <p class="text-sm text-black/50 mt-2 leading-relaxed">Оставьте контакты — вышлем прайс, условия и образцы в течение 30 минут.</p>
-          </div>
-          <button onclick="closeWholesale()" class="w-9 h-9 rounded-full bg-[#f4f7f5] grid place-items-center shrink-0">✕</button>
-        </div>
-        <form id="wholesale-form" onsubmit="submitWholesale(event)" class="mt-6 space-y-4">
-          <div class="grid sm:grid-cols-2 gap-4">
-            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ИМЯ</span><input required name="name" placeholder="Как к вам обращаться" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ТЕЛЕФОН</span><input required name="phone" placeholder="+7 ___ ___-__-__" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-          </div>
-          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">EMAIL</span><input required type="email" name="email" placeholder="you@company.ru" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">КОМПАНИЯ / ГОРОД</span><input name="company" placeholder="ИП, ООО, город" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">СООБЩЕНИЕ</span><textarea name="message" rows="3" placeholder="Какие позиции интересуют, объём, вопросы по доставке…" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></textarea></label>
-          <div class="bg-[#f4f7f5] rounded-xl p-4 flex gap-3">
-            <div class="w-8 h-8 rounded-full bg-[#1e3e35] text-white grid place-items-center shrink-0 text-xs">%</div>
-            <div class="text-xs leading-relaxed text-black/60"><b class="text-[#1e3e35]">Скидки до 35%</b> от розницы, брендирование под вашу собственную торговую марку (СТМ) от 5000 шт.</div>
-          </div>
-          <button type="submit" class="w-full bg-[#1e3e35] text-white rounded-full py-4 text-[13px] tracking-[0.12em] font-bold hover:bg-[#162e27] transition">ОТПРАВИТЬ ЗАПРОС →</button>
-          <div class="text-[11px] text-center text-black/30">Отправка на <b class="text-black/60">cooperation@mireacare.ru</b> • Ответим в течение 30 минут</div>
-        </form>
+<div id="wholesale-modal" class="modal hidden">
+  <div onclick="closeWholesale()" class="modal-backdrop"></div>
+  <div class="modal-card">
+    <div class="modal-head">
+      <div>
+        <h3 class="modal-title">Оптовые закупки</h3>
+        <p class="modal-sub">Оставьте контакты — вышлем прайс, условия и образцы в течение 30 минут.</p>
       </div>
+      <button onclick="closeWholesale()" class="modal-close" aria-label="Закрыть">×</button>
     </div>
+    <form id="wholesale-form" onsubmit="submitWholesale(event)" class="modal-body">
+      <div class="form-grid">
+        <label class="field"><span class="field-label">Имя</span><input required name="name" placeholder="Как к вам обращаться"></label>
+        <label class="field"><span class="field-label">Телефон</span><input required name="phone" placeholder="+7 ___ ___-__-__"></label>
+      </div>
+      <label class="field"><span class="field-label">Email</span><input required type="email" name="email" placeholder="you@company.ru"></label>
+      <label class="field"><span class="field-label">Компания или город</span><input name="company" placeholder="ИП, ООО, город"></label>
+      <label class="field"><span class="field-label">Сообщение</span><textarea name="message" rows="3" placeholder="Какие позиции интересуют, объём, вопросы по доставке…"></textarea></label>
+      <div class="wholesale-tip"><b>Скидки до 35%</b> от розницы. Брендирование под собственную торговую марку (СТМ) — от 5000 штук.</div>
+      <button type="submit" class="btn btn-dark btn-block">Отправить запрос
+        <span class="arr"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </button>
+      <div class="form-note">Отправка на <b>cooperation@mireacare.ru</b> · ответим в течение 30 минут</div>
+    </form>
   </div>
 </div>
 
 <!-- CHECKOUT MODAL -->
-<div id="checkout-modal" class="fixed inset-0 z-[70] hidden">
-  <div onclick="closeCheckout()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div>
-  <div class="absolute inset-0 grid place-items-center p-4">
-    <div class="bg-white rounded-[24px] max-w-[640px] w-full max-h-[90vh] overflow-auto shadow-2xl">
-      <div class="p-7 sm:p-8">
-        <div class="flex justify-between items-start">
-          <h3 class="font-serif text-[26px] leading-none">Оформление заказа</h3>
-          <button onclick="closeCheckout()" class="w-9 h-9 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button>
-        </div>
-        <p class="text-sm text-black/50 mt-2">Заполните данные — менеджер свяжется для подтверждения и расчёта доставки.</p>
-        <form id="checkout-form" onsubmit="submitOrder(event)" class="mt-6 space-y-4">
-          <div class="grid sm:grid-cols-2 gap-4">
-            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ИМЯ И ФАМИЛИЯ *</span><input required name="name" placeholder="Иван Петров" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ТЕЛЕФОН *</span><input required name="phone" placeholder="+7 938 000-00-00" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-          </div>
-          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">EMAIL</span><input type="email" name="email" placeholder="для чека и трек-номера" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">АДРЕС ДОСТАВКИ</span><input name="address" placeholder="Город, улица, дом, квартира" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-          <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">КОММЕНТАРИЙ</span><textarea name="comment" rows="2" placeholder="Удобное время, пожелания…" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></textarea></label>
-          <div id="checkout-summary" class="bg-[#f4f7f5] rounded-xl p-4 text-sm"></div>
-          <button type="submit" class="w-full bg-[#e8b44f] text-[#1e3e35] rounded-full py-4 text-[13px] tracking-[0.12em] font-extrabold hover:bg-[#d9a63f] transition">ПОДТВЕРДИТЬ ЗАКАЗ →</button>
-          <div class="text-[11px] text-center text-black/30">Заказ уйдёт на <b class="text-black/60">order@mireacare.ru</b> • Оплата при получении / по счёту</div>
-        </form>
+<div id="checkout-modal" class="modal hidden">
+  <div onclick="closeCheckout()" class="modal-backdrop"></div>
+  <div class="modal-card modal-lg">
+    <div class="modal-head">
+      <div>
+        <h3 class="modal-title">Оформление заказа</h3>
+        <p class="modal-sub">Заполните данные — менеджер свяжется для подтверждения и расчёта доставки.</p>
       </div>
+      <button onclick="closeCheckout()" class="modal-close" aria-label="Закрыть">×</button>
     </div>
+    <form id="checkout-form" onsubmit="submitOrder(event)" class="modal-body">
+      <div class="form-grid">
+        <label class="field"><span class="field-label">Имя и фамилия *</span><input required name="name" placeholder="Иван Петров"></label>
+        <label class="field"><span class="field-label">Телефон *</span><input required name="phone" placeholder="+7 938 000-00-00"></label>
+      </div>
+      <label class="field"><span class="field-label">Email</span><input type="email" name="email" placeholder="для чека и трек-номера"></label>
+      <label class="field"><span class="field-label">Адрес доставки</span><input name="address" placeholder="Город, улица, дом, квартира"></label>
+      <label class="field"><span class="field-label">Комментарий</span><textarea name="comment" rows="2" placeholder="Удобное время, пожелания…"></textarea></label>
+      <div id="checkout-summary" class="summary"></div>
+      <button type="submit" class="btn btn-primary btn-block">Подтвердить заказ
+        <span class="arr"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </button>
+      <div class="form-note">Заказ уйдёт на <b>order@mireacare.ru</b> · оплата при получении или по счёту</div>
+    </form>
   </div>
 </div>
 
-<!-- TOAST -->
-<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#1e3e35] text-white px-6 py-3 rounded-full text-sm font-semibold shadow-xl z-[80] hidden"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
 // DATA
 const defaultProducts = [
-  { id:'sensa-jasmin', sku:'SNS-JSM-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', color:'#1e3e35', accent:'#e8b44f', scent:'Жасмин, персик, белый мускус', img:'bottle-clean.png' },
-  { id:'sensa-grape', sku:'SNS-GRP-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца. Для утреннего заряда.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', color:'#7a9d8f', accent:'#1e3e35', scent:'Грейпфрут, розовый перец, кедр', img:'bottle-clean.png' },
+  { id:'sensa-jasmin', sku:'SNS-JSM-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', color:'#1e3e35', accent:'#dfa94d', scent:'Жасмин, персик, белый мускус', img:'bottle-clean.png' },
+  { id:'sensa-grape', sku:'SNS-GRP-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец', desc:'Бодрящий цитрус с пикантной нотой перца. Для утреннего заряда и чистой кожи.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', color:'#7a9d8f', accent:'#1e3e35', scent:'Грейпфрут, розовый перец, кедр', img:'bottle-clean.png' },
   { id:'aura-almond', sku:'AUR-AMD-500', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной. Не сушит кожу, аромат вишнёвого десерта.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', color:'#fdf8ed', accent:'#1e3e35', scent:'Миндаль, вишня, ваниль', img:'bottle-clean.png' },
-  { id:'aura-honey', sku:'AUR-HON-500', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом и молочными протеинами. Для сухой кожи.', volume:'500 мл', price:490, oldPrice:650, badge:'', color:'#fff7e6', accent:'#e8b44f', scent:'Мёд, молоко, овсяное молочко', img:'bottle-clean.png' },
-  { id:'modul-20', sku:'MDL-20L', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь для бесконтактной мойки. 1:50, густая пена, без разводов.', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', color:'#1e3e35', accent:'#e8b44f', scent:'—', extra:'20 литров • концентрат' },
+  { id:'aura-honey', sku:'AUR-HON-500', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом и молочными протеинами. Для сухой кожи.', volume:'500 мл', price:490, oldPrice:650, badge:'', color:'#fff7e6', accent:'#dfa94d', scent:'Мёд, молоко, овсяное молочко', img:'bottle-clean.png' },
+  { id:'modul-20', sku:'MDL-20L', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь для бесконтактной мойки. 1:50, густая пена, без разводов.', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', color:'#1e3e35', accent:'#dfa94d', scent:'—', extra:'20 литров · концентрат' }
 ];
 
 let products = JSON.parse(localStorage.getItem('mirea_products') || 'null') || defaultProducts;
 let cart = JSON.parse(localStorage.getItem('mirea_cart') || '[]');
 let currentLine = 'body';
 let currentCategory = 'sensa';
+let toastTimer = null;
 
 function saveProducts(){ localStorage.setItem('mirea_products', JSON.stringify(products)); }
 
+function lockBody(){
+  const anyOpen = (cart && document.getElementById('cart-drawer').classList.contains('is-open'))
+    || !document.getElementById('wholesale-modal').classList.contains('hidden')
+    || !document.getElementById('checkout-modal').classList.contains('hidden')
+    || document.getElementById('mobile-menu').classList.contains('open');
+  document.documentElement.classList.toggle('lock', anyOpen);
+  document.body.classList.toggle('lock', anyOpen);
+}
+
+// CATALOG
 function selectLine(line){
   currentLine = line;
+  const isBody = line === 'body';
   const bodyBtn = document.getElementById('btn-body');
   const autoBtn = document.getElementById('btn-auto');
-  const isBody = line==='body';
-  // outer border
-  bodyBtn.className = isBody ? 'group relative rounded-[24px] p-[1.5px] bg-[#1e3e35] overflow-hidden' : 'group relative rounded-[24px] p-[1.5px] bg-black/10 overflow-hidden hover:bg-black/15 transition';
-  autoBtn.className = !isBody ? 'group relative rounded-[24px] p-[1.5px] bg-[#1e3e35] overflow-hidden' : 'group relative rounded-[24px] p-[1.5px] bg-black/10 overflow-hidden hover:bg-black/15 transition';
-  // inner container
-  bodyBtn.firstElementChild.className = isBody ? 'bg-[#1e3e35] rounded-[22px] p-6 flex items-center gap-4 text-left text-white relative overflow-hidden' : 'bg-white rounded-[22px] p-6 flex items-center gap-4 text-left relative overflow-hidden';
-  autoBtn.firstElementChild.className = !isBody ? 'bg-[#1e3e35] rounded-[22px] p-6 flex items-center gap-4 text-left text-white relative overflow-hidden' : 'bg-white rounded-[22px] p-6 flex items-center gap-4 text-left relative overflow-hidden';
-  // texts & icons
-  document.getElementById('btn-body-title').className = 'font-serif text-[22px] leading-none' + (isBody ? '' : ' text-[#1e3e35]');
-  document.getElementById('btn-body-sub1').className = 'text-[11px] tracking-[0.14em] font-bold mt-1' + (isBody ? ' text-white/60' : ' text-black/40');
-  document.getElementById('btn-body-sub2').className = 'text-xs mt-1' + (isBody ? ' text-white/70' : ' text-black/50');
-  document.getElementById('btn-body-icon').className = 'w-14 h-14 rounded-2xl grid place-items-center text-xl shrink-0' + (isBody ? ' bg-white text-[#1e3e35]' : ' bg-[#f4f7f5] border border-black/5 text-[#1e3e35]');
-  document.getElementById('btn-body-arrow').className = 'ml-auto w-8 h-8 rounded-full grid place-items-center' + (isBody ? ' bg-white text-[#1e3e35]' : ' bg-[#f4f7f5] text-[#1e3e35]');
+  bodyBtn.classList.toggle('is-active', isBody);
+  autoBtn.classList.toggle('is-active', !isBody);
+  bodyBtn.setAttribute('aria-pressed', isBody ? 'true' : 'false');
+  autoBtn.setAttribute('aria-pressed', !isBody ? 'true' : 'false');
 
-  document.getElementById('btn-auto-title').className = 'font-serif text-[22px] leading-none' + (!isBody ? '' : ' text-[#1e3e35]');
-  document.getElementById('btn-auto-sub1').className = 'text-[11px] tracking-[0.14em] font-bold mt-1' + (!isBody ? ' text-white/60' : ' text-black/40');
-  document.getElementById('btn-auto-sub2').className = 'text-xs mt-1' + (!isBody ? ' text-white/70' : ' text-black/50');
-  document.getElementById('btn-auto-icon').className = 'w-14 h-14 rounded-2xl grid place-items-center text-xl shrink-0' + (!isBody ? ' bg-white text-[#1e3e35]' : ' bg-[#f4f7f5] border border-black/5 text-[#1e3e35]');
-  document.getElementById('btn-auto-arrow').className = 'ml-auto w-8 h-8 rounded-full grid place-items-center' + (!isBody ? ' bg-white text-[#1e3e35]' : ' bg-[#f4f7f5] text-[#1e3e35]');
-
-  const bodyCats = document.getElementById('body-cats');
-  bodyCats.style.display = isBody ? 'flex' : 'none';
-  if(!isBody) currentCategory='modul';
-  else if(currentCategory==='modul') currentCategory='sensa';
+  document.getElementById('body-cats').classList.toggle('hidden', !isBody);
+  if(!isBody) currentCategory = 'modul';
+  else if(currentCategory === 'modul') currentCategory = 'sensa';
   updateCategoryUI();
   renderProducts();
 }
@@ -547,167 +925,219 @@ function selectCategory(cat){
   updateCategoryUI();
   renderProducts();
 }
+
 function updateCategoryUI(){
   const sensa = document.getElementById('cat-sensa');
   const aura = document.getElementById('cat-aura');
   if(!sensa) return;
-  if(currentCategory==='sensa'){
-    sensa.className='px-6 py-3 rounded-full bg-[#1e3e35] text-white text-[13px] tracking-[0.12em] font-bold';
-    aura.className='px-6 py-3 rounded-full bg-white border border-black/10 text-[#1e3e35] text-[13px] tracking-[0.12em] font-bold hover:bg-black/5';
-  } else if(currentCategory==='aura'){
-    aura.className='px-6 py-3 rounded-full bg-[#1e3e35] text-white text-[13px] tracking-[0.12em] font-bold';
-    sensa.className='px-6 py-3 rounded-full bg-white border border-black/10 text-[#1e3e35] text-[13px] tracking-[0.12em] font-bold hover:bg-black/5';
-  }
+  sensa.classList.toggle('is-active', currentCategory === 'sensa');
+  aura.classList.toggle('is-active', currentCategory === 'aura');
+}
+
+function productType(p){
+  if(p.line === 'auto') return 'Автошампунь';
+  return p.category === 'aura' ? 'Жидкое мыло' : 'Гель для душа';
 }
 
 function renderProducts(){
   const grid = document.getElementById('products-grid');
-  let list = products.filter(p=> p.line===currentLine);
-  if(currentLine==='body') list = list.filter(p=> p.category===currentCategory);
-  if(list.length===0){
-    grid.innerHTML = `<div class="col-span-full bg-white rounded-2xl p-10 text-center border border-black/5"><div class="font-semibold">Скоро новые ароматы</div><div class="text-sm text-black/50 mt-1">Следите за обновлениями</div></div>`;
+  let list = products.filter(p => p.line === currentLine);
+  if(currentLine === 'body') list = list.filter(p => p.category === currentCategory);
+
+  if(list.length === 0){
+    grid.innerHTML = '<div class="product-empty"><b>Скоро новые ароматы</b><span>Следите за обновлениями</span></div>';
     return;
   }
-  grid.innerHTML = list.map(p=> {
-    const photo = p.img || (p.line==='body' ? 'bottle-clean.png' : '');
+
+  let aside = '';
+  if(list.length < 3){
+    const wide = list.length === 1 ? ' wide' : '';
+    if(currentLine === 'auto'){
+      aside = `<aside class="catalog-aside${wide}">
+        <div>
+          <span class="aside-kicker">Опт</span>
+          <p class="aside-title">Нужен автошампунь оптом?</p>
+          <p class="aside-text">Канистры 20 л, брендирование под вашу марку и доставка по России — от 50 штук.</p>
+        </div>
+        <button onclick="openWholesale()" class="btn btn-gold">Запросить прайс</button>
+      </aside>`;
+    } else {
+      aside = `<aside class="catalog-aside${wide}">
+        <div>
+          <span class="aside-kicker">Подбор</span>
+          <p class="aside-title">Не знаете, какой аромат ваш?</p>
+          <p class="aside-text">Позвоните — поможем выбрать ноты и объём под ваш ритуал ухода.</p>
+        </div>
+        <a href="tel:+79384900111" class="btn btn-gold">+7 938 490-01-11</a>
+      </aside>`;
+    }
+  }
+
+  grid.innerHTML = list.map((p, idx) => {
+    const photo = p.img || (p.line === 'body' ? 'bottle-clean.png' : '');
+    const fallback = `<div class="fallback-bottle"><span class="fb-brand">MIREA</span><span class="fb-name">${p.name}</span><span class="fb-sub">${p.subtitle}</span></div>`;
     return `
-    <div class="bg-white rounded-[24px] overflow-hidden border border-black/[0.06] shadow-[0_10px_30px_rgba(0,0,0,0.04)] flex flex-col group hover:shadow-[0_20px_50px_rgba(30,62,53,0.12)] transition-all duration-300 hover:-translate-y-1">
-      <div class="relative h-[300px] bg-gradient-to-b from-[#f4f7f5] to-white flex items-center justify-center p-6 overflow-hidden">
-        ${p.badge? `<div class="absolute top-4 left-4 bg-[#1e3e35] text-white text-[10px] tracking-[0.14em] font-bold px-3 py-1.5 rounded-full">${p.badge}</div>`:''}
-        <div class="absolute top-4 right-4 bg-white border border-black/5 text-[11px] font-bold px-3 py-1 rounded-full">${p.volume}</div>
-        ${photo
-          ? `<img src="${photo}" alt="${p.name} — ${p.subtitle}" loading="lazy" class="h-[240px] object-contain drop-shadow-[0_18px_25px_rgba(0,0,0,0.18)] group-hover:scale-[1.03] transition-transform duration-300">`
-          : `<!-- bottle illustration -->
-        <div class="relative w-[140px] h-[220px] rounded-[22px] border border-black/5 shadow-[0_15px_35px_rgba(0,0,0,0.08)] flex flex-col items-center pt-5 overflow-hidden" style="background:${p.color===' #1e3e35'?'#1e3e35': p.id.includes('modul')?'#1e3e35':'white'}; ${p.id==='modul-20'?'color:white':''}">
-          <div class="w-[46px] h-[32px] rounded-t-[9px] ${p.id==='modul-20'?'bg-white':'bg-[#1e3e35]'} relative"><div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-7 h-3 ${p.id==='modul-20'?'bg-white':'bg-[#1e3e35]'} rounded-t-full"></div></div>
-          <div class="mt-3 w-[88%] ${p.id==='modul-20'?'bg-white text-[#1e3e35]':'bg-[#1e3e35] text-white'} rounded-[16px] p-3 text-center">
-            <div class="text-[8px] tracking-[0.18em] font-bold ${p.id==='modul-20'?'text-[#7a9d8f]':'text-white/60'}">MIREA</div>
-            <div class="font-serif text-[18px] leading-none mt-1">${p.name}</div>
-            <div class="text-[8px] tracking-[0.12em] mt-1 leading-tight ${p.id==='modul-20'?'text-black/50':'text-white/70'}">${p.subtitle}</div>
-            ${p.id==='modul-20'? `<div class="mt-2 bg-[#1e3e35] text-white text-[7px] tracking-[0.12em] font-bold px-2 py-1 rounded-full inline-block">20 Л • 3500 ₽</div>`:''}
-          </div>
-          <div class="mt-auto mb-3 text-[9px] tracking-[0.12em] font-bold ${p.id==='modul-20'?'text-white/40':'text-black/30'}">${p.volume}</div>
-          <div class="absolute bottom-0 h-1.5 w-full ${p.accent===' #e8b44f'?'bg-[#e8b44f]': p.accent==='#e8b44f'?'bg-[#e8b44f]':'bg-[#1e3e35]'} " style="background:${p.accent}"></div>
-        </div>`}
+    <article class="product-card" style="--i:${idx}">
+      <div class="product-media">
+        ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+        <span class="product-vol">${p.volume}</span>
+        ${photo ? `<img src="${photo}" alt="${p.name} — ${p.subtitle}" loading="lazy">` : fallback}
       </div>
-      <div class="p-6 flex flex-col flex-1">
-        <div class="flex items-start justify-between gap-3">
-          <div>
-            <div class="font-serif text-[20px] leading-none font-semibold">${p.name} <span class="font-normal text-black/60 text-[15px]">— ${p.subtitle}</span></div>
-            <div class="text-[11px] tracking-[0.12em] font-bold text-black/30 mt-1">${p.id.includes('sensa')?'ГЕЛЬ ДЛЯ ДУША': p.id.includes('aura')?'ЖИДКОЕ МЫЛО':'АВТОШАМПУНЬ'} • ${p.volume}</div>
-          </div>
-          <div class="text-right shrink-0">
-            <div class="font-extrabold text-[18px] leading-none">${p.price.toLocaleString('ru-RU')} ₽</div>
-            ${p.oldPrice? `<div class="text-xs text-black/30 line-through">${p.oldPrice.toLocaleString('ru-RU')} ₽</div>`:''}
-          </div>
+      <div class="product-body">
+        <div class="product-kicker">${productType(p)}</div>
+        <h3 class="product-name">${p.name} <span>— ${p.subtitle}</span></h3>
+        <p class="product-desc">${p.desc || ''}</p>
+        ${p.scent && p.scent !== '—' ? `<div class="product-scent">${p.scent}</div>` : ''}
+        <div class="product-foot">
+          <div class="product-price">${p.price.toLocaleString('ru-RU')} ₽${p.oldPrice ? `<small>${p.oldPrice.toLocaleString('ru-RU')} ₽</small>` : ''}</div>
+          <button class="product-add" onclick="addToCart('${p.id}')">В корзину <i>+</i></button>
         </div>
-        <p class="text-[13px] leading-relaxed text-black/55 mt-3 line-clamp-2">${p.desc}</p>
-        <div class="flex items-center gap-2 mt-3 text-[11px] text-black/40"><span class="w-1.5 h-1.5 rounded-full bg-[#7a9d8f]"></span> ${p.scent}</div>
-        <div class="flex gap-2 mt-5">
-          <button onclick="addToCart('${p.id}')" class="flex-1 bg-[#1e3e35] text-white rounded-full py-3 text-[12px] tracking-[0.12em] font-bold hover:bg-[#162e27] transition">В КОРЗИНУ</button>
-          <button onclick="addToCart('${p.id}', true)" class="w-12 h-12 rounded-full border border-black/10 grid place-items-center hover:bg-black/5">♡</button>
-        </div>
-        <div class="mt-3 flex items-center justify-between text-[11px]"><span class="text-[#7a9d8f] font-semibold">● В наличии</span><span class="text-black/30">арт. ${(p.sku||p.id).toUpperCase()}</span></div>
       </div>
-    </div>
-    `;
-  }).join('');
+    </article>`;
+  }).join('') + aside;
 }
 
 // CART
-function addToCart(id, open=false){
-  const prod = products.find(p=>p.id===id);
-  const existing = cart.find(c=>c.id===id);
+function addToCart(id, open = false){
+  const prod = products.find(p => p.id === id);
+  if(!prod) return;
+  const existing = cart.find(c => c.id === id);
   if(existing) existing.qty++;
-  else cart.push({id, qty:1, price:prod.price, name: prod.name+' — '+prod.subtitle});
+  else cart.push({ id, qty: 1, price: prod.price, name: prod.name + ' — ' + prod.subtitle });
   localStorage.setItem('mirea_cart', JSON.stringify(cart));
   updateCartUI();
   showToast('Товар добавлен в корзину');
   if(open) toggleCart(true);
 }
+
+function plural(n, one, few, many){
+  const n10 = n % 10, n100 = n % 100;
+  if(n10 === 1 && n100 !== 11) return one;
+  if(n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14)) return few;
+  return many;
+}
+
 function updateCartUI(){
-  const count = cart.reduce((s,c)=>s+c.qty,0);
+  const count = cart.reduce((s, c) => s + c.qty, 0);
   const badge = document.getElementById('cart-badge');
   const countEl = document.getElementById('cart-count');
-  if(count>0){ badge.classList.remove('hidden'); badge.textContent=count; } else badge.classList.add('hidden');
-  if(countEl) countEl.textContent=count;
-  const subtotal = cart.reduce((s,c)=> s + c.price*c.qty,0);
-  document.getElementById('cart-subtotal').textContent = subtotal.toLocaleString('ru-RU')+' ₽';
-  document.getElementById('cart-total').textContent = subtotal.toLocaleString('ru-RU')+' ₽';
+  const countLabel = document.getElementById('cart-count-label');
+  if(count > 0){ badge.classList.remove('hidden'); badge.textContent = count; }
+  else badge.classList.add('hidden');
+  if(countEl) countEl.textContent = count;
+  if(countLabel) countLabel.textContent = plural(count, 'товар', 'товара', 'товаров');
+
+  const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
+  document.getElementById('cart-subtotal').textContent = subtotal.toLocaleString('ru-RU') + ' ₽';
+  document.getElementById('cart-total').textContent = subtotal.toLocaleString('ru-RU') + ' ₽';
+
   const itemsEl = document.getElementById('cart-items');
-  if(cart.length===0){
-    itemsEl.innerHTML = `<div class="text-center py-16"><div class="w-16 h-16 rounded-full bg-[#f4f7f5] grid place-items-center mx-auto text-2xl">🛒</div><div class="font-semibold mt-4">Корзина пуста</div><div class="text-sm text-black/40 mt-1">Добавьте ароматы из каталога</div><a href="#products" onclick="toggleCart(false)" class="inline-block mt-4 bg-[#1e3e35] text-white rounded-full px-6 py-2.5 text-xs tracking-[0.12em] font-bold">В КАТАЛОГ</a></div>`;
+  if(cart.length === 0){
+    itemsEl.innerHTML = `<div class="cart-empty"><b>Корзина пуста</b><span>Добавьте ароматы из каталога</span><a href="#products" onclick="toggleCart(false)" class="btn btn-dark">В каталог</a></div>`;
   } else {
-    itemsEl.innerHTML = cart.map(item=>{
-      const p = products.find(x=>x.id===item.id);
-      return `<div class="flex gap-4 bg-[#f4f7f5] rounded-2xl p-4">
-        <div class="w-16 h-20 bg-white rounded-xl border border-black/5 grid place-items-center text-[10px] font-bold text-center leading-tight p-2 shrink-0">${p.name}<br><span class="text-black/40">${p.volume}</span></div>
-        <div class="flex-1">
-          <div class="font-semibold text-sm leading-tight">${p.name} — ${p.subtitle}</div>
-          <div class="text-xs text-black/40">${p.volume} • ${p.price.toLocaleString('ru-RU')} ₽</div>
-          <div class="flex items-center gap-2 mt-2">
-            <button onclick="changeQty('${item.id}',-1)" class="w-7 h-7 rounded-full bg-white border border-black/10 grid place-items-center">−</button>
-            <span class="w-8 text-center font-bold text-sm">${item.qty}</span>
-            <button onclick="changeQty('${item.id}',1)" class="w-7 h-7 rounded-full bg-[#1e3e35] text-white grid place-items-center">+</button>
-            <span class="ml-auto font-bold text-sm">${(item.price*item.qty).toLocaleString('ru-RU')} ₽</span>
+    itemsEl.innerHTML = cart.map(item => {
+      const p = products.find(x => x.id === item.id);
+      const name = p ? p.name + ' — ' + p.subtitle : item.name;
+      const volume = p ? p.volume : '';
+      const thumb = p && p.img ? `<img src="${p.img}" alt="">` : `<span>${p ? p.name : 'M'}</span>`;
+      return `<div class="cart-line">
+        <div class="cart-thumb">${thumb}</div>
+        <div class="cart-line-body">
+          <div class="cart-line-top">
+            <div>
+              <div class="cart-line-name">${name}</div>
+              <div class="cart-line-meta">${volume} · ${item.price.toLocaleString('ru-RU')} ₽</div>
+            </div>
+            <button onclick="removeFromCart('${item.id}')" class="cart-remove" aria-label="Удалить товар">×</button>
+          </div>
+          <div class="cart-line-bottom">
+            <div class="qty">
+              <button onclick="changeQty('${item.id}',-1)" aria-label="Меньше">−</button>
+              <span>${item.qty}</span>
+              <button onclick="changeQty('${item.id}',1)" aria-label="Больше">+</button>
+            </div>
+            <div class="cart-line-sum">${(item.price * item.qty).toLocaleString('ru-RU')} ₽</div>
           </div>
         </div>
-        <button onclick="removeFromCart('${item.id}')" class="self-start w-7 h-7 rounded-full bg-white grid place-items-center text-black/40 hover:text-red-500">✕</button>
       </div>`;
     }).join('');
   }
-  // checkout summary
+
   const sumEl = document.getElementById('checkout-summary');
   if(sumEl){
-    if(cart.length===0) sumEl.innerHTML = 'Корзина пуста';
+    if(cart.length === 0) sumEl.innerHTML = '<div class="summary-row"><span>Корзина пуста</span></div>';
     else {
-      const total = cart.reduce((s,c)=>s+c.price*c.qty,0);
-      sumEl.innerHTML = cart.map(c=> `<div class="flex justify-between py-1"><span>${c.name} × ${c.qty}</span><span class="font-bold">${(c.price*c.qty).toLocaleString('ru-RU')} ₽</span></div>`).join('') + `<div class="border-t border-black/10 mt-2 pt-2 flex justify-between font-extrabold"><span>Итого</span><span>${total.toLocaleString('ru-RU')} ₽</span></div>`;
+      const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+      sumEl.innerHTML = cart.map(c => `<div class="summary-row"><span>${c.name} × ${c.qty}</span><b>${(c.price * c.qty).toLocaleString('ru-RU')} ₽</b></div>`).join('')
+        + `<div class="summary-total"><span>Итого</span><b>${total.toLocaleString('ru-RU')} ₽</b></div>`;
     }
   }
 }
+
 function changeQty(id, delta){
-  const item = cart.find(c=>c.id===id);
+  const item = cart.find(c => c.id === id);
   if(!item) return;
   item.qty += delta;
-  if(item.qty<=0) cart = cart.filter(c=>c.id!==id);
+  if(item.qty <= 0) cart = cart.filter(c => c.id !== id);
   localStorage.setItem('mirea_cart', JSON.stringify(cart));
   updateCartUI();
 }
+
 function removeFromCart(id){
-  cart = cart.filter(c=>c.id!==id);
+  cart = cart.filter(c => c.id !== id);
   localStorage.setItem('mirea_cart', JSON.stringify(cart));
   updateCartUI();
 }
+
 function toggleCart(show){
   const drawer = document.getElementById('cart-drawer');
   const overlay = document.getElementById('cart-overlay');
+  drawer.classList.toggle('is-open', show);
+  overlay.classList.toggle('is-open', show);
+  drawer.setAttribute('aria-hidden', show ? 'false' : 'true');
   if(show){
-    overlay.classList.remove('hidden'); setTimeout(()=> overlay.classList.remove('opacity-0'),10);
-    drawer.classList.remove('translate-x-full');
     updateCartUI();
-  } else {
-    overlay.classList.add('opacity-0'); drawer.classList.add('translate-x-full');
-    setTimeout(()=> overlay.classList.add('hidden'),300);
+    hideToast();
   }
+  lockBody();
 }
+
+function hideToast(){
+  const t = document.getElementById('toast');
+  if(t) t.classList.remove('show');
+  clearTimeout(toastTimer);
+}
+
 function showToast(msg){
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.classList.remove('hidden');
-  setTimeout(()=> t.classList.add('hidden'), 2500);
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
 // MODALS
-function openWholesale(){ document.getElementById('wholesale-modal').classList.remove('hidden'); }
-function closeWholesale(){ document.getElementById('wholesale-modal').classList.add('hidden'); }
+function openWholesale(){
+  hideToast();
+  document.getElementById('wholesale-modal').classList.remove('hidden');
+  lockBody();
+}
+function closeWholesale(){
+  document.getElementById('wholesale-modal').classList.add('hidden');
+  lockBody();
+}
 function openCheckout(){
-  if(cart.length===0){ showToast('Корзина пуста'); return; }
+  if(cart.length === 0){ showToast('Корзина пуста'); return; }
+  hideToast();
   toggleCart(false);
   updateCartUI();
   document.getElementById('checkout-modal').classList.remove('hidden');
+  lockBody();
 }
-function closeCheckout(){ document.getElementById('checkout-modal').classList.add('hidden'); }
+function closeCheckout(){
+  document.getElementById('checkout-modal').classList.add('hidden');
+  lockBody();
+}
 
 async function submitWholesale(e){
   e.preventDefault();
@@ -715,20 +1145,15 @@ async function submitWholesale(e){
   const data = Object.fromEntries(fd.entries());
   data.cart = [];
   data.date = new Date().toISOString();
-  // save for admin
-  const leads = JSON.parse(localStorage.getItem('mirea_leads')||'[]');
+  const leads = JSON.parse(localStorage.getItem('mirea_leads') || '[]');
   leads.push(data);
   localStorage.setItem('mirea_leads', JSON.stringify(leads));
-  // try php
   try{
     await fetch('api/send_cooperation.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
   } catch(err){}
-  // mailto fallback
-  const body = `Запрос опта MIREA%0AИмя: ${data.name}%0AТелефон: ${data.phone}%0AEmail: ${data.email}%0AКомпания: ${data.company}%0AСообщение: ${data.message}`;
-  // window.open(`mailto:cooperation@mireacare.ru?subject=Опт MIREA&body=${body}`);
   e.target.reset();
   closeWholesale();
-  showToast('Запрос отправлен на cooperation@mireacare.ru ✓');
+  showToast('Запрос отправлен на cooperation@mireacare.ru');
 }
 
 async function submitOrder(e){
@@ -736,60 +1161,134 @@ async function submitOrder(e){
   const fd = new FormData(e.target);
   const data = Object.fromEntries(fd.entries());
   data.cart = [...cart];
-  data.total = cart.reduce((s,c)=>s+c.price*c.qty,0);
+  data.total = cart.reduce((s, c) => s + c.price * c.qty, 0);
   data.date = new Date().toISOString();
-  data.id = 'ORD-'+Date.now().toString(36).toUpperCase();
-  // save sale for admin
-  const sales = JSON.parse(localStorage.getItem('mirea_sales')||'[]');
-  sales.push({id:data.id, date:data.date, customer:data.name, phone:data.phone, email:data.email, address:data.address, items: data.cart.map(c=> ({...c})), total:data.total, payment:'при получении', status:'новый'});
+  data.id = 'ORD-' + Date.now().toString(36).toUpperCase();
+  const sales = JSON.parse(localStorage.getItem('mirea_sales') || '[]');
+  sales.push({id:data.id, date:data.date, customer:data.name, phone:data.phone, email:data.email, address:data.address, items: data.cart.map(c => ({...c})), total:data.total, payment:'при получении', status:'новый'});
   localStorage.setItem('mirea_sales', JSON.stringify(sales));
-  // also save clients
-  const clients = JSON.parse(localStorage.getItem('mirea_clients')||'[]');
-  if(!clients.find(c=>c.phone===data.phone)){
-    clients.push({id:'CLI-'+Date.now().toString(36), fio:data.name, phone:data.phone, email:data.email, address:data.address, type:'физлицо', date:data.date});
+  const clients = JSON.parse(localStorage.getItem('mirea_clients') || '[]');
+  if(!clients.find(c => c.phone === data.phone)){
+    clients.push({id:'CLI-' + Date.now().toString(36), fio:data.name, phone:data.phone, email:data.email, address:data.address, type:'физлицо', date:data.date});
     localStorage.setItem('mirea_clients', JSON.stringify(clients));
   }
   try{
     await fetch('api/send_order.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
   } catch(err){}
-  cart=[]; localStorage.setItem('mirea_cart', JSON.stringify(cart)); updateCartUI();
+  cart = [];
+  localStorage.setItem('mirea_cart', JSON.stringify(cart));
+  updateCartUI();
   e.target.reset();
   closeCheckout();
-  showToast('Заказ '+data.id+' отправлен на order@mireacare.ru ✓');
+  showToast('Заказ ' + data.id + ' отправлен на order@mireacare.ru');
 }
 
-// NAV scroll effect
-window.addEventListener('scroll', ()=>{
-  const nav = document.getElementById('navbar');
-  if(window.scrollY>10) nav.classList.add('shadow-sm');
-  else nav.classList.remove('shadow-sm');
-});
-document.getElementById('burger').addEventListener('click', ()=>{
-  document.getElementById('mobile-menu').classList.toggle('hidden');
-});
-function closeMobile(){ document.getElementById('mobile-menu').classList.add('hidden'); }
+// NAV
+const navbar = document.getElementById('navbar');
+const progressBar = document.getElementById('progress');
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobile-menu');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// 3D tilt for hero bottles
+function onScroll(){
+  const y = window.scrollY || window.pageYOffset;
+  navbar.classList.toggle('scrolled', y > 20);
+  if(progressBar){
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = h > 0 ? Math.min(100, (y / h) * 100) + '%' : '0%';
+  }
+}
+window.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+
+burger.addEventListener('click', () => {
+  const open = mobileMenu.classList.toggle('open');
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  lockBody();
+});
+
+function closeMobile(){
+  mobileMenu.classList.remove('open');
+  burger.classList.remove('open');
+  burger.setAttribute('aria-expanded', 'false');
+  lockBody();
+}
+
+document.addEventListener('keydown', (e) => {
+  if(e.key !== 'Escape') return;
+  if(!document.getElementById('checkout-modal').classList.contains('hidden')) return closeCheckout();
+  if(!document.getElementById('wholesale-modal').classList.contains('hidden')) return closeWholesale();
+  if(document.getElementById('cart-drawer').classList.contains('is-open')) return toggleCart(false);
+  if(mobileMenu.classList.contains('open')) return closeMobile();
+});
+
+// reveal on scroll + active nav
+(function(){
+  const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){
+    els.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
+    });
+  }, {threshold:0.14, rootMargin:'0px 0px -8% 0px'});
+  els.forEach(el => io.observe(el));
+
+  const links = [...document.querySelectorAll('[data-spy]')];
+  const sections = links.map(l => document.getElementById(l.dataset.spy)).filter(Boolean);
+  if(sections.length){
+    const visible = new Set();
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) visible.add(entry.target.id);
+        else visible.delete(entry.target.id);
+      });
+      const current = visible.values().next().value || null;
+      links.forEach(l => l.classList.toggle('active', l.dataset.spy === current));
+    }, {rootMargin:'-45% 0px -50% 0px', threshold:0});
+    sections.forEach(s => spy.observe(s));
+  }
+})();
+
+// hero tilt + parallax
 (function(){
   const inner = document.getElementById('hero-3d-inner');
   const zone = document.getElementById('hero-3d');
+  const visual = document.querySelector('.hero-visual');
   if(!inner || !zone) return;
-  zone.addEventListener('mousemove', (e)=>{
-    const r = zone.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    inner.style.transform = `rotateY(${x*14}deg) rotateX(${-y*8}deg)`;
-  });
-  zone.addEventListener('mouseleave', ()=>{ inner.style.transform = 'rotateY(0deg) rotateX(0deg)'; });
+
+  if(!reduceMotion && window.matchMedia('(hover:hover)').matches){
+    zone.addEventListener('mousemove', (e) => {
+      const r = zone.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      inner.style.transform = `rotateY(${x * 12}deg) rotateX(${-y * 7}deg)`;
+    });
+    zone.addEventListener('mouseleave', () => { inner.style.transform = 'rotateY(0deg) rotateX(0deg)'; });
+  }
+
+  if(!reduceMotion && visual){
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = Math.min(window.scrollY, window.innerHeight);
+        visual.style.transform = `translateY(${y * 0.06}px)`;
+        ticking = false;
+      });
+    }, {passive:true});
+  }
 })();
 
-
-
+// BRANDING
 function loadBranding(){
-  const logoH = parseInt(localStorage.getItem('mirea_logo_height')||'48',10);
+  const logoH = parseInt(localStorage.getItem('mirea_logo_height') || '44', 10);
   const def = document.getElementById('site-logo-default');
   const custom = document.getElementById('site-logo-custom');
-  // пробуем загрузить лого с сервера
   const img = new Image();
   img.onload = () => {
     const url = 'logo.png?v=' + Date.now();
@@ -808,44 +1307,40 @@ function loadBranding(){
     }
   };
   img.onerror = () => {
-    if(def && custom){
-      custom.classList.add('hidden');
-      def.classList.remove('hidden');
-    }
+    if(def && custom){ custom.classList.add('hidden'); def.classList.remove('hidden'); }
     const fDef = document.getElementById('footer-logo-default');
     const fCustom = document.getElementById('footer-logo-custom');
-    if(fDef && fCustom){
-      fCustom.classList.add('hidden');
-      fDef.classList.remove('hidden');
-    }
+    if(fDef && fCustom){ fCustom.classList.add('hidden'); fDef.classList.remove('hidden'); }
   };
   img.src = 'logo.png?v=' + Date.now();
-  const socials = JSON.parse(localStorage.getItem('mirea_socials')||'[]');
+
+  const socials = JSON.parse(localStorage.getItem('mirea_socials') || '[]');
   const header = document.getElementById('header-socials');
   const footer = document.getElementById('footer-socials');
   function iconFor(url){
     const u = url.toLowerCase();
     if(u.includes('vk')) return 'VK';
-    if(u.includes('telegram')||u.includes('t.me')) return 'TG';
+    if(u.includes('telegram') || u.includes('t.me')) return 'TG';
     if(u.includes('instagram')) return '<span class="soc-ig" aria-hidden="true"></span>';
-    if(u.includes('whatsapp')||u.includes('wa.me')) return 'WA';
+    if(u.includes('whatsapp') || u.includes('wa.me')) return 'WA';
     if(u.includes('youtube')) return 'YT';
     if(u.includes('ok.ru')) return 'OK';
     return '↗';
   }
   if(socials.length){
-    header.innerHTML = socials.map(s=> `<a href="${s.url}" target="_blank" class="w-8 h-8 rounded-full bg-[#f4f7f5] border border-black/5 grid place-items-center text-[11px] font-bold hover:bg-[#1e3e35] hover:text-white transition" title="${s.name}">${iconFor(s.url)}</a>`).join('');
-    footer.innerHTML = socials.map(s=> `<a href="${s.url}" target="_blank" class="w-8 h-8 rounded-full bg-white/10 grid place-items-center text-[11px] font-bold hover:bg-white hover:text-[#1e3e35] transition">${iconFor(s.url)}</a>`).join('');
+    const mk = (s, cls) => `<a href="${s.url}" target="_blank" rel="noopener" class="${cls}" title="${s.name}" aria-label="${s.name}">${iconFor(s.url)}</a>`;
+    if(header) header.innerHTML = socials.map(s => mk(s, 'social-link')).join('');
+    if(footer) footer.innerHTML = socials.map(s => mk(s, 'social-link')).join('');
   }
 }
 
-// Yandex Maps JS API initialization
+// YANDEX MAP
 (function(){
   const mapContainer = document.getElementById('yandex-map');
   if(!mapContainer || typeof ymaps === 'undefined') return;
 
   ymaps.ready(function(){
-    const coords = [42.044419, 48.28689]; // Дербент, ул. Шоссейная, 26 (точка геокодера Яндекса)
+    const coords = [42.044419, 48.28689];
 
     const map = new ymaps.Map('yandex-map', {
       center: coords,
@@ -857,10 +1352,7 @@ function loadBranding(){
       suppressObsoleteBrowserNotifier: true
     });
 
-    // Скрываем копирайт Яндекса
     map.copyrights.add('');
-
-    // Убираем все стандартные контролы
     map.options.set('mapTypeControl', false);
     map.options.set('zoomControl', false);
     map.options.set('geolocationControl', false);
@@ -869,32 +1361,30 @@ function loadBranding(){
     map.options.set('fullscreenControl', false);
     map.options.set('rulerControl', false);
 
-    // Кастомная метка с логотипом M
     const mireaIconLayout = ymaps.templateLayoutFactory.createClass(`
       <div style="
-        width: 40px; height: 40px;
+        width: 42px; height: 42px;
         border-radius: 50%;
-        background: #1e3e35;
-        border: 3px solid #e8b44f;
+        background: #1E3E35;
+        border: 3px solid #DFA94D;
         display: flex; align-items: center; justify-content: center;
-        color: #fff; font-family: 'Cormorant Garamond', serif;
-        font-weight: 700; font-size: 16px;
-        box-shadow: 0 6px 20px rgba(30,62,53,0.5);
+        color: #FBFAF6; font-family: 'Instrument Serif', Georgia, serif;
+        font-weight: 400; font-size: 17px;
+        box-shadow: 0 6px 20px rgba(18,33,28,0.5);
         cursor: pointer;
       ">M</div>
     `);
 
-    // Фирменный балун (тёмно-зелёный + золото), vanilla JS без jQuery
     const MireaBalloonLayout = ymaps.templateLayoutFactory.createClass(
       '<div class="mirea-balloon">' +
         '<button type="button" class="mirea-balloon-close" aria-label="Закрыть">×</button>' +
         '<div class="mirea-balloon-title">Mirea — производство</div>' +
         '<div class="mirea-balloon-addr">г. Дербент, ул. Шоссейная, д. 26</div>' +
         '<div class="mirea-balloon-hours">Пн–Сб 9:00–18:00</div>' +
-        '<a class="mirea-balloon-route" href="https://yandex.ru/maps/?text=Дербент%20ул.%20Шоссейная%2026" target="_blank">Построить маршрут</a>' +
+        '<a class="mirea-balloon-route" href="https://yandex.ru/maps/?text=Дербент%20ул.%20Шоссейная%2026" target="_blank" rel="noopener">Построить маршрут</a>' +
         '<div class="mirea-balloon-tail"></div>' +
       '</div>', {
-      build: function () {
+      build: function(){
         MireaBalloonLayout.superclass.build.call(this);
         const el = this.getParentElement().querySelector('.mirea-balloon');
         this._el = el;
@@ -902,45 +1392,36 @@ function loadBranding(){
         el.querySelector('.mirea-balloon-close').addEventListener('click', this._onClose);
         this.applyOffset();
       },
-      clear: function () {
+      clear: function(){
         const btn = this._el && this._el.querySelector('.mirea-balloon-close');
-        if (btn) btn.removeEventListener('click', this._onClose);
+        if(btn) btn.removeEventListener('click', this._onClose);
         this._el = null;
         MireaBalloonLayout.superclass.clear.call(this);
       },
-      applyOffset: function () {
-        if (!this._el) return;
+      applyOffset: function(){
+        if(!this._el) return;
         this._el.style.left = -(this._el.offsetWidth / 2) + 'px';
         this._el.style.top = -(this._el.offsetHeight + 16) + 'px';
       },
-      getShape: function () {
-        if (!this._el) return null;
+      getShape: function(){
+        if(!this._el) return null;
         const w = this._el.offsetWidth, h = this._el.offsetHeight;
         return new ymaps.shape.Rectangle(new ymaps.geometry.pixel.Rectangle([[-w / 2, -(h + 16)], [w / 2, 0]]));
       }
     });
 
-    const mireaPlacemark = new ymaps.Placemark(
-      coords,
-      {},
-      {
-        iconLayout: mireaIconLayout,
-        iconShape: { type: 'Circle', coordinates: [0, 0], radius: 20 },
-        iconAnchor: [20, 20],
-        balloonLayout: MireaBalloonLayout,
-        balloonPanelMaxMapArea: 0,
-        balloonOffset: [0, -26],
-        hideIconOnBalloonOpen: false
-      }
-    );
+    const mireaPlacemark = new ymaps.Placemark(coords, {}, {
+      iconLayout: mireaIconLayout,
+      iconShape: { type: 'Circle', coordinates: [0, 0], radius: 21 },
+      iconAnchor: [21, 21],
+      balloonLayout: MireaBalloonLayout,
+      balloonPanelMaxMapArea: 0,
+      balloonOffset: [0, -28],
+      hideIconOnBalloonOpen: false
+    });
 
     map.geoObjects.add(mireaPlacemark);
-
-    // Стандартный тип карты; фирменное тонирование — CSS-фильтром тайлов (см. <style>)
     map.setType('yandex#map');
-
-    // Открываем баллун через 500мс
-    setTimeout(() => mireaPlacemark.balloon.open(), 500);
   });
 })();
 
