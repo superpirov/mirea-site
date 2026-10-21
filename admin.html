@@ -50,6 +50,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .brand-mark{width:38px;height:38px;flex:0 0 38px;border-radius:11px;background:var(--gold);color:var(--green-deep);display:grid;place-items:center;font-family:var(--display);font-size:23px;line-height:1;padding-bottom:2px}
 .brand-name{font-size:12.5px;font-weight:600;letter-spacing:.22em;line-height:1}
 .brand-sub{font-size:8.5px;letter-spacing:.24em;color:rgba(255,255,255,.4);margin-top:4px;text-transform:uppercase}
+.admin-brand{display:block}
+.sidebar .admin-brand{padding:24px 20px 20px}
+.login-aside .admin-brand{padding:0}
+.brand-lockup{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.admin-brand-logo{display:block;height:34px;width:auto;max-width:184px;object-fit:contain;filter:brightness(0) invert(1)}
+.admin-brand-fallback{font-size:12.5px;font-weight:600;letter-spacing:.22em;line-height:1;color:#fff}
+.admin-brand .brand-sub{margin-top:0}
 .nav{flex:1;overflow-y:auto;padding:6px 14px 18px;display:flex;flex-direction:column;gap:2px}
 .nav::-webkit-scrollbar{width:6px}
 .nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border:0}
@@ -371,9 +378,12 @@ body input[type=range]{width:100%;accent-color:var(--green);height:22px}
 <div id="login-screen">
   <div class="login-card">
     <div class="login-aside">
-      <div class="brand">
-        <div class="brand-mark">M</div>
-        <div><div class="brand-name">MIREA</div><div class="brand-sub">Admin panel</div></div>
+      <div class="brand admin-brand">
+        <div class="brand-lockup">
+          <img class="admin-brand-logo" src="logo.png" alt="Mirea">
+          <span class="admin-brand-fallback" style="display:none">MIREA</span>
+          <div class="brand-sub">Admin panel</div>
+        </div>
       </div>
       <div class="login-quote">Ваш каталог,<br>под контролем.</div>
       <p class="login-note">Товары, продажи, поставщики и оптовые заявки — в одном спокойном интерфейсе.</p>
@@ -398,9 +408,12 @@ body input[type=range]{width:100%;accent-color:var(--green);height:22px}
 <!-- APP -->
 <div id="app" class="hidden">
   <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-mark">M</div>
-      <div><div class="brand-name">MIREA</div><div class="brand-sub">Admin panel</div></div>
+    <div class="brand admin-brand">
+      <div class="brand-lockup">
+        <img class="admin-brand-logo" src="logo.png" alt="Mirea">
+        <span class="admin-brand-fallback" style="display:none">MIREA</span>
+        <div class="brand-sub">Admin panel</div>
+      </div>
     </div>
     <nav class="nav">
       <div class="nav-label">Обзор</div>
@@ -1124,6 +1137,16 @@ function showApp(){
   document.getElementById('app').classList.remove('hidden');
   renderAll();
 }
+function refreshAdminBrandLogos(){
+  const v='logo.png?v='+Date.now();
+  document.querySelectorAll('.admin-brand-logo').forEach(img=>{
+    const fb=img.parentElement.querySelector('.admin-brand-fallback');
+    img.onload=()=>{ img.style.display='block'; if(fb) fb.style.display='none'; };
+    img.onerror=()=>{ img.style.display='none'; if(fb) fb.style.display='block'; };
+    img.src=v;
+  });
+}
+refreshAdminBrandLogos();
 if(localStorage.getItem('mirea_admin_auth')==='1') showApp();
 
 function switchTab(tab){
@@ -1591,6 +1614,7 @@ async function handleLogoUpload(e){
       const h=parseInt(localStorage.getItem('mirea_logo_height')||'48',10);
       const el=document.getElementById('logo-preview');
       if(el) el.innerHTML=`<img src="${data.url}" style="height:${h}px;max-width:100%;object-fit:contain" alt="Логотип">`;
+      refreshAdminBrandLogos();
       showToast('Логотип загружен на сервер — виден везде');
     }else{
       showToast('Ошибка: '+data.error);
