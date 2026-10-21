@@ -6,71 +6,464 @@
 <title>MIREA — Админ-панель</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="favicon.svg">
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script>
-tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gold:'#e8b44f',light:'#f4f7f5'}},fontFamily:{sans:['Manrope','sans-serif'],display:['Space Grotesk','sans-serif']}}}}
-</script>
-<style>::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#7a9d8f;border-radius:99px}</style>
+<style>
+:root{
+  --green:#1E3E35; --green-deep:#15241F; --sage:#7A9D8F; --gold:#DFA94D;
+  --ink:#182420; --muted:#656C63; --canvas:#F3F1EA; --paper:#FBFAF6;
+  --line:#E5E1D6; --line-soft:#EFECE3; --danger:#B0412C;
+  --ui:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --display:'Instrument Serif',Georgia,'Times New Roman',serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--ui);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p{margin:0}
+a{text-decoration:none}
+.hidden{display:none!important}
+table{border-collapse:collapse;width:100%}
+svg{display:block}
+::selection{background:rgba(223,169,77,.3)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#D8D3C4;border-radius:99px;border:3px solid var(--canvas)}
+::-webkit-scrollbar-thumb:hover{background:#C7C1AF}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid rgba(122,157,143,.65);outline-offset:2px}
+
+/* ---------- shell ---------- */
+#app.hidden{display:none}
+#app:not(.hidden){display:flex;min-height:100vh}
+.sidebar{width:252px;flex:0 0 252px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;color:#fff;background:
+  radial-gradient(90% 45% at 8% 0%,#27483D 0%,transparent 62%),
+  radial-gradient(70% 40% at 100% 100%,#1B3029 0%,transparent 62%),
+  var(--green-deep)}
+.sidebar::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px);background-size:14px 14px;opacity:.45}
+.sidebar>*{position:relative}
+.brand{display:flex;align-items:center;gap:12px;padding:24px 20px 18px}
+.brand-mark{width:38px;height:38px;flex:0 0 38px;border-radius:11px;background:var(--gold);color:var(--green-deep);display:grid;place-items:center;font-family:var(--display);font-size:23px;line-height:1;padding-bottom:2px}
+.brand-name{font-size:12.5px;font-weight:600;letter-spacing:.22em;line-height:1}
+.brand-sub{font-size:8.5px;letter-spacing:.24em;color:rgba(255,255,255,.4);margin-top:4px;text-transform:uppercase}
+.nav{flex:1;overflow-y:auto;padding:6px 14px 18px;display:flex;flex-direction:column;gap:2px}
+.nav::-webkit-scrollbar{width:6px}
+.nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border:0}
+.nav-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:18px 12px 6px;font-weight:600}
+.tab-btn{position:relative;display:flex;align-items:center;gap:11px;padding:10px 12px;border:0;background:none;color:rgba(255,255,255,.62);border-radius:10px;font-size:13px;font-weight:500;text-align:left;width:100%;transition:background .16s ease,color .16s ease}
+.tab-btn svg{width:17px;height:17px;flex:0 0 17px;opacity:.7;transition:opacity .16s}
+.tab-btn:hover{background:rgba(255,255,255,.055);color:#fff}
+.tab-btn:hover svg{opacity:.95}
+.tab-btn.active{background:rgba(255,255,255,.085);color:#fff;font-weight:600;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+.tab-btn.active svg{opacity:1}
+.tab-btn.active::before{content:'';position:absolute;left:-8px;top:50%;transform:translateY(-50%);width:3px;height:18px;border-radius:99px;background:var(--gold)}
+.side-foot{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
+.user-chip{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px}
+.user-avatar{width:32px;height:32px;flex:0 0 32px;border-radius:9px;background:var(--gold);color:var(--green-deep);display:grid;place-items:center;font-weight:700;font-size:12px}
+.user-name{font-size:12.5px;font-weight:600;line-height:1.2}
+.user-mail{font-size:10.5px;color:rgba(255,255,255,.45);margin-top:2px}
+.logout{width:100%;margin-top:8px;background:none;border:0;color:rgba(255,255,255,.45);font-size:9.5px;letter-spacing:.16em;font-weight:600;padding:8px;border-radius:8px;transition:.16s;text-transform:uppercase}
+.logout:hover{color:#fff;background:rgba(255,255,255,.06)}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{display:none}
+.mobilebar{display:none}
+@media(min-width:1024px){
+  .topbar{display:flex;align-items:center;justify-content:space-between;height:58px;padding:0 40px;border-bottom:1px solid var(--line);background:rgba(243,241,234,.82);backdrop-filter:blur(14px);position:sticky;top:0;z-index:20}
+}
+.crumbs{display:flex;align-items:center;gap:9px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.crumbs b{color:var(--ink)}
+.crumbs i{font-style:normal;opacity:.45}
+.topbar-right{display:flex;align-items:center;gap:16px;font-size:11.5px;color:var(--muted)}
+.top-link{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--green);padding:7px 11px;border:1px solid var(--line);border-radius:8px;background:#fff;transition:.16s}
+.top-link:hover{border-color:#C9D6CF;background:#F7F9F7}
+
+@media(max-width:1023px){
+  .sidebar{display:none}
+  .mobilebar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px;position:sticky;top:0;z-index:30;background:var(--green-deep);color:#fff}
+  .mobilebar .brand{padding:0;gap:9px}
+  .mobilebar .brand-mark{width:32px;height:32px;flex:0 0 32px;font-size:18px;border-radius:9px}
+  .mobilebar .brand-sub{display:none}
+  .mobile-exit{width:36px;height:36px;flex:0 0 36px;border-radius:9px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:rgba(255,255,255,.72);display:grid;place-items:center;transition:.15s}
+  .mobile-exit:hover{background:rgba(255,255,255,.12);color:#fff}
+  .mobilebar select{width:auto;max-width:40vw;min-width:0;height:36px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:#fff;border-radius:9px;font-size:11.5px;font-weight:600;padding:0 9px;background-image:none;appearance:auto}
+}
+
+/* ---------- pages ---------- */
+.page{padding:32px 40px 56px;width:100%;max-width:1280px;margin:0 auto}
+@media(max-width:1023px){.page{padding:20px 16px 44px}}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:24px}
+.eyebrow{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.page-title{font-family:var(--display);font-size:42px;font-weight:400;line-height:1;letter-spacing:-.015em;margin:8px 0 0}
+@media(max-width:640px){.page-title{font-size:34px}}
+.page-sub{font-size:13px;color:var(--muted);margin-top:9px;max-width:58ch}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}.mt-20{margin-top:20px}.mt-24{margin-top:24px}
+.mb-0{margin-bottom:0}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 15px;border-radius:10px;border:1px solid transparent;background:transparent;font-family:inherit;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;transition:background .16s,border-color .16s,color .16s,transform .16s,box-shadow .16s;white-space:nowrap;text-decoration:none}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--green);color:#fff}
+.btn-primary:hover{background:#17302A;box-shadow:0 8px 20px -12px rgba(30,62,53,.7)}
+.btn-gold{background:var(--gold);color:#1B2A24}
+.btn-gold:hover{background:#D69C3B}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:#C8D4CE;background:#FAFCFA}
+.btn-danger{background:#fff;border-color:#EDD6D0;color:var(--danger)}
+.btn-danger:hover{background:#FDF4F2;border-color:#E2C1B8}
+.btn-sm{height:32px;padding:0 11px;font-size:9.5px;border-radius:8px}
+.btn-block{width:100%}
+.icon-x{border:0;background:none;color:#B9B6AA;font-size:11px;padding:5px 7px;border-radius:6px;line-height:1;transition:.15s}
+.icon-x:hover{color:var(--danger);background:#FBF0ED}
+.icon-eye{border:1px solid var(--line);background:var(--paper);border-radius:9px;width:42px;height:42px;display:grid;place-items:center;font-size:14px;line-height:1;flex:0 0 42px}
+.icon-eye:hover{background:#F4F1E8}
+
+/* ---------- cards ---------- */
+.card{background:#fff;border:1px solid var(--line);border-radius:16px}
+.card-pad{padding:20px}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.card-title{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.card-sub{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45}
+.card-tool{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rule{height:1px;background:var(--line-soft);margin:16px 0}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.kpi-grid{grid-template-columns:1fr}}
+.kpi{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 18px 15px;transition:border-color .18s,box-shadow .18s}
+.kpi:hover{border-color:#D8D2C3;box-shadow:0 14px 30px -26px rgba(24,36,32,.65)}
+.kpi-label{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kpi-value{font-family:var(--display);font-size:33px;line-height:1.05;margin-top:9px;font-variant-numeric:tabular-nums}
+.kpi-note{font-size:11.5px;color:var(--muted);margin-top:5px}
+.kpi-dark{background:radial-gradient(120% 120% at 100% 0%,#27483D 0%,#1A2E27 56%,#15241F 100%);border-color:#1A2E27;color:#fff}
+.kpi-dark .kpi-label{color:rgba(255,255,255,.45)}
+.kpi-dark .kpi-note{color:rgba(255,255,255,.52)}
+.kpi-dark .kpi-value{font-family:var(--ui);font-size:17px;font-weight:600;line-height:1.35;margin-top:12px;min-height:46px}
+.kpi-dark::after{content:'';position:absolute;right:-28px;top:-28px;width:106px;height:106px;border-radius:50%;background:radial-gradient(circle,rgba(223,169,77,.3),transparent 68%);pointer-events:none}
+
+.grid-main{display:grid;grid-template-columns:1.85fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:1023px){.grid-main{grid-template-columns:1fr}}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:1023px){.grid-2{grid-template-columns:1fr}}
+.stack{display:flex;flex-direction:column;gap:12px}
+.stack-tight{display:flex;flex-direction:column;gap:8px}
+
+/* recent */
+.recent{display:flex;flex-direction:column}
+.recent-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.recent-item:last-child{border-bottom:0;padding-bottom:0}
+.recent-name{font-size:13px;font-weight:600}
+.recent-meta{font-size:10.5px;color:var(--muted);margin-top:2px}
+.recent-amt{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty{padding:38px 16px;text-align:center;color:var(--muted);font-size:13px}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quick-btn{display:flex;align-items:center;gap:9px;text-align:left;padding:13px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font-family:inherit;font-size:12px;font-weight:600;line-height:1.25;cursor:pointer;transition:border-color .15s,background .15s,transform .15s}
+.quick-btn svg{color:var(--green);flex:0 0 18px;opacity:.75}
+.quick-btn:hover{border-color:#C9D2C9;background:#F7F5EE}
+.quick-btn:active{transform:translateY(1px)}
+@media(max-width:560px){.quick-grid{grid-template-columns:1fr}}
+
+/* ---------- form controls ---------- */
+body input:not([type=color]):not([type=file]):not([type=range]):not([type=checkbox]):not([type=radio]),body select,body textarea{width:100%;font-family:inherit;font-size:13.5px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:10px;height:42px;padding:0 12px;outline:none;transition:border-color .15s,box-shadow .15s;margin:0}
+body textarea{height:auto;padding:10px 12px;line-height:1.55;resize:vertical;min-height:74px}
+body select{appearance:none;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%23656C63' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+body input:focus,body select:focus,body textarea:focus{border-color:#A9BDB2;box-shadow:0 0 0 3px rgba(122,157,143,.16)}
+body input::placeholder,body textarea::placeholder{color:#ADB0A6}
+body input[type=color]{width:44px;height:42px;padding:3px;border:1px solid var(--line);border-radius:10px;background:#fff}
+body input[type=file]{width:100%;font-size:11.5px;color:var(--muted)}
+body input[type=file]::file-selector-button{font-family:inherit;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-right:10px;cursor:pointer;transition:.15s}
+body input[type=file]::file-selector-button:hover{background:#F2EFE6}
+body input[type=range]{width:100%;accent-color:var(--green);height:22px}
+.field{display:block}
+.lbl{display:block;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:6px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:560px){.form-grid,.form-grid-3{grid-template-columns:1fr}}
+.stack-form{display:flex;flex-direction:column;gap:12px}
+.inline-form{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.inline-form input{flex:1 1 170px;max-width:230px}
+.form-error{color:var(--danger);font-size:12.5px;text-align:center}
+.hint{font-size:10.5px;color:var(--muted);text-align:center;letter-spacing:.02em}
+
+/* charts */
+.chart-box{position:relative;height:260px;margin-top:4px}
+.chart-box canvas{width:100%!important;height:100%!important;display:block}
+.chart-box-sm{height:230px}
+.chart-empty{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:var(--muted);font-size:12.5px;letter-spacing:.01em}
+.chart-box.is-empty canvas{display:none}
+.chart-box.is-empty .chart-empty{display:flex}
+
+/* ---------- toolbar / table ---------- */
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:12px;border-bottom:1px solid var(--line);background:#FCFBF7;border-radius:16px 16px 0 0}
+.toolbar input[type=search],.toolbar input[type=text]{height:38px;flex:1 1 200px;max-width:340px;font-size:13px}
+.toolbar select{height:38px;width:auto;min-width:132px;font-size:12.5px}
+.tablewrap{overflow:auto;border-radius:0 0 16px 16px}
+.tablewrap table{width:100%;border-collapse:collapse;font-size:13px}
+.tablewrap thead th{position:sticky;top:0;z-index:1;background:#FCFBF7;text-align:left;padding:10px 14px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);white-space:nowrap}
+.tablewrap tbody td{padding:13px 14px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+.tablewrap tbody tr:last-child td{border-bottom:0}
+.tablewrap tbody tr:hover{background:#FCFBF7}
+.td-r{text-align:right;font-variant-numeric:tabular-nums}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;letter-spacing:.01em}
+.mut{color:var(--muted)}
+.xs{font-size:11px;line-height:1.5}
+.sm{font-size:12.5px;line-height:1.5}
+.b{font-weight:600}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:6px;height:25px;padding:0 9px;border-radius:7px;background:#F2F0E8;color:#4A574F;font-size:10.5px;font-weight:600;letter-spacing:.04em;white-space:nowrap}
+.chip-gold{background:rgba(223,169,77,.16);color:#8A6220}
+.chip-green{background:rgba(30,62,53,.08);color:#2C5146}
+.chip-x{border:0;background:none;display:grid;place-items:center;width:16px;height:16px;border-radius:5px;color:inherit;opacity:.65;font-size:9px;line-height:1}
+.chip-x:hover{opacity:1;background:rgba(0,0,0,.07)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.list{display:flex;flex-direction:column}
+
+/* person rows */
+.row{display:flex;align-items:center;gap:14px;padding:15px 18px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap;transition:background .14s}
+.row:last-child{border-bottom:0}
+.row:hover{background:#FCFBF7}
+.avatar{width:38px;height:38px;flex:0 0 38px;border-radius:11px;display:grid;place-items:center;font-size:13px;font-weight:600;background:var(--green);color:#fff}
+.avatar-sage{background:#E9F0EC;color:#3A5E52}
+.row-main{flex:1;min-width:190px}
+.row-name{font-size:13.5px;font-weight:600}
+.row-meta{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.row-meta a{color:#38604F;text-decoration:none;border-bottom:1px solid rgba(56,96,79,.25)}
+.row-meta a:hover{border-bottom-color:#38604F}
+.row-note{font-size:11.5px;color:#5D675F;background:#F7F5EE;border-radius:8px;padding:8px 10px;margin-top:7px;line-height:1.5}
+.row-side{text-align:right;flex:0 0 auto}
+.row-actions{display:flex;gap:6px;flex:0 0 auto;align-items:center}
+.access{font-size:11.5px;color:var(--muted);margin-top:5px}
+.access b{color:var(--ink);font-weight:600}
+.access button{border:0;background:none;color:#38604F;font-weight:600;text-decoration:underline;font-size:11.5px;padding:0 2px}
+
+/* products */
+.prod-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media(max-width:1100px){.prod-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.prod-grid{grid-template-columns:1fr}}
+.prod{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff;display:flex;flex-direction:column;gap:12px;transition:border-color .18s,box-shadow .18s}
+.prod:hover{border-color:#D8D2C3;box-shadow:0 16px 32px -28px rgba(24,36,32,.7)}
+.prod-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.prod-meta{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:600;line-height:1.55}
+.prod-name{font-size:14px;font-weight:600;margin-top:6px;line-height:1.35}
+.prod-desc{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.prod-price{text-align:right;flex:0 0 auto}
+.prod-price b{font-family:var(--display);font-size:22px;font-weight:400;display:block;line-height:1;white-space:nowrap}
+.prod-old{font-size:11px;color:#B7B4A8;text-decoration:line-through;margin-top:4px}
+.prod-actions{display:flex;gap:6px;margin-top:auto}
+.prod-actions .btn{flex:1}
+
+/* stats */
+.seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg-btn{border:0;background:none;border-radius:7px;padding:8px 13px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--muted);transition:.15s}
+.seg-btn:hover{color:var(--ink);background:#F7F5EE}
+.seg-btn.active{background:var(--green);color:#fff}
+.stats-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px}
+.bar-row{margin-top:12px}
+.bar-top{display:flex;justify-content:space-between;gap:10px;font-size:12px}
+.bar-top b{font-weight:600;font-variant-numeric:tabular-nums}
+.bar-track{height:6px;background:#F2F0E8;border-radius:99px;overflow:hidden;margin-top:6px}
+.bar-fill{height:100%;background:var(--gold);border-radius:99px}
+
+/* calc */
+.calc-grid{display:grid;grid-template-columns:1.55fr .95fr;gap:12px;margin-top:12px}
+@media(max-width:1023px){.calc-grid{grid-template-columns:1fr}}
+.calc-summary{background:radial-gradient(130% 100% at 100% 0%,#27483D,#15241F);color:#fff;border-radius:16px;padding:22px;display:flex;flex-direction:column;border:1px solid #1A2E27;min-height:100%}
+.calc-total{font-family:var(--display);font-size:46px;line-height:1;margin:10px 0 4px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.calc-label{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);font-weight:600}
+.calc-rows{margin-top:12px}
+.calc-row{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:rgba(255,255,255,.62);padding:5px 0}
+.calc-row b{color:#fff;font-weight:600;font-variant-numeric:tabular-nums}
+.calc-row.hl{background:rgba(255,255,255,.07);border-radius:8px;padding:8px 10px;margin:3px -10px}
+.calc-row.hl b{color:var(--gold)}
+.calc-sep{border-top:1px solid rgba(255,255,255,.15);margin-top:6px;padding-top:9px}
+.calc-foot{margin-top:auto;padding-top:14px;font-size:11px;color:rgba(255,255,255,.4);line-height:1.5}
+.calc-section{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:18px 0 9px}
+.calc-section:first-child{margin-top:0}
+
+/* settings */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:1023px){.settings-grid{grid-template-columns:1fr}}
+.span-2{grid-column:span 2}
+@media(max-width:1023px){.span-2{grid-column:auto}}
+.export-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:8px;margin-top:14px}
+.export-card{background:var(--paper);border:1px solid var(--line-soft);border-radius:12px;padding:12px}
+.export-title{font-size:12px;font-weight:600;margin-bottom:8px}
+.export-btns{display:flex;gap:5px}
+.export-btns .btn{flex:1;padding:0 6px}
+.backup-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:14px;border-top:1px solid var(--line-soft)}
+.backup-label{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-right:4px}
+.preview{min-height:88px;border:1px dashed #D7D1C1;border-radius:12px;background:var(--paper);display:flex;align-items:center;justify-content:center;padding:14px;overflow:hidden;margin-top:14px}
+.soc-row{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line-soft);border-radius:10px;padding:9px 11px;font-size:12.5px}
+.soc-row .soc-name{font-weight:600;flex:1}
+.soc-row .soc-url{font-size:11px;color:var(--muted)}
+.soc-x{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:#fff;color:var(--muted);display:grid;place-items:center;font-size:10px;flex:0 0 26px}
+.soc-x:hover{color:var(--danger);border-color:#EDD6D0}
+.barcode-box{margin-top:14px;background:var(--paper);border:1px dashed #D7D1C1;border-radius:12px;padding:22px;display:grid;place-items:center;min-height:120px;overflow:auto}
+.danger-zone{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line-soft)}
+
+/* ---------- modals ---------- */
+.modal{position:fixed;inset:0;z-index:50}
+.modal-stage{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
+.modal-stage>.modal-panel{margin:auto}
+.overlay{position:absolute;inset:0;background:rgba(21,36,31,.55);backdrop-filter:blur(4px);animation:fadeIn .2s ease both}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-panel{background:#fff;border-radius:20px;max-width:600px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 50px 120px -30px rgba(21,36,31,.55);animation:modalIn .24s cubic-bezier(.2,.85,.3,1) both}
+@keyframes modalIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 24px 0;position:sticky;top:0;background:#fff;z-index:2}
+.modal-title{font-family:var(--display);font-size:27px;font-weight:400;line-height:1.1;margin:0}
+.modal-body{padding:18px 24px 24px}
+.modal-x{width:32px;height:32px;flex:0 0 32px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--muted);display:grid;place-items:center;font-size:12px;line-height:1;transition:.15s}
+.modal-x:hover{background:#F7F5EE;color:var(--ink)}
+
+/* sale items */
+.sale-item{display:flex;gap:8px;align-items:center}
+.sale-item select{flex:1;min-width:0}
+.sale-item input{width:76px;flex:0 0 76px;text-align:center;padding:0 6px}
+.sale-remove{width:38px;height:38px;flex:0 0 38px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--muted);display:grid;place-items:center;font-size:11px}
+.sale-remove:hover{color:var(--danger);border-color:#EDD6D0;background:#FDF4F2}
+
+/* toast */
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(10px);z-index:90;background:var(--green-deep);color:#fff;padding:11px 17px 11px 14px;border-radius:11px;font-size:12.5px;font-weight:500;box-shadow:0 24px 50px -18px rgba(21,36,31,.7);display:flex;align-items:center;gap:9px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px)}
+#toast::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);flex:0 0 6px}
+#toast.hidden{display:flex;opacity:0;transform:translateX(-50%) translateY(10px);pointer-events:none}
+#toast:not(.hidden){opacity:1;transform:translateX(-50%);pointer-events:auto}
+
+/* login */
+#login-screen{min-height:100vh;display:grid;place-items:center;padding:20px;background:
+  radial-gradient(58% 48% at 12% 8%,#E5E9E0 0%,transparent 62%),
+  radial-gradient(50% 42% at 92% 92%,#EDE7D8 0%,transparent 58%),var(--canvas)}
+#login-screen.hidden{display:none}
+.login-card{display:grid;grid-template-columns:1.02fr .98fr;width:100%;max-width:880px;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 60px 130px -70px rgba(24,36,32,.65)}
+.login-aside{background:radial-gradient(120% 100% at 0% 0%,#27483D,#15241F);color:#fff;padding:36px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.login-aside::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:14px 14px;opacity:.5;pointer-events:none}
+.login-aside>*{position:relative}
+.login-quote{font-family:var(--display);font-size:35px;line-height:1.1;letter-spacing:-.01em;margin:auto 0 12px}
+.login-note{font-size:12.5px;color:rgba(255,255,255,.55);line-height:1.6;margin:0;max-width:30ch}
+.login-foot{margin-top:22px;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.32);font-weight:600}
+.login-form{padding:38px 34px;display:flex;flex-direction:column;justify-content:center}
+.login-title{font-family:var(--display);font-size:34px;font-weight:400;line-height:1;margin:8px 0 0}
+.back-link{display:block;text-align:center;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted);text-decoration:none;margin-top:18px}
+.back-link:hover{color:var(--ink)}
+@media(max-width:800px){
+  .login-card{grid-template-columns:1fr;max-width:400px}
+  .login-aside{display:none}
+  .login-form{padding:28px 22px}
+}
+
+/* motion */
+.tab-panel:not(.hidden){animation:panelIn .26s ease both}
+@keyframes panelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
 </head>
-<body class="bg-[#f4f7f5] text-[#1e3e35] font-sans antialiased">
+<body>
 
 <!-- LOGIN -->
-<div id="login-screen" class="min-h-screen grid place-items-center bg-[#1e3e35] p-4">
-  <div class="bg-white rounded-[24px] max-w-[420px] w-full p-8 shadow-2xl">
-    <div class="w-12 h-12 rounded-xl bg-[#1e3e35] text-white grid place-items-center font-bold tracking-widest">M</div>
-    <h1 class="font-display text-[22px] font-semibold mt-4">Админ-панель MIREA</h1>
-    <p class="text-sm text-black/50 mt-1">Вход для управления каталогом и продажами</p>
-    <form onsubmit="login(event)" class="mt-6 space-y-4">
-      <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ЛОГИН</span><input id="login-user" value="admin" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-      <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ПАРОЛЬ</span><input id="login-pass" type="password" value="mirea2024" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-      <button class="w-full bg-[#1e3e35] text-white rounded-full py-3.5 text-sm tracking-[0.12em] font-bold">ВОЙТИ →</button>
-      <div class="text-[11px] text-center text-black/30">Демо: admin / mirea2024 • Сменить в настройках</div>
-      <div id="login-error" class="text-sm text-red-600 hidden text-center"></div>
-    </form>
-    <a href="index.html" class="block text-center text-xs font-bold tracking-[0.12em] text-black/30 mt-4 hover:text-black/60">← ВЕРНУТЬСЯ НА САЙТ</a>
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-aside">
+      <div class="brand">
+        <div class="brand-mark">M</div>
+        <div><div class="brand-name">MIREA</div><div class="brand-sub">Admin panel</div></div>
+      </div>
+      <div class="login-quote">Ваш каталог,<br>под контролем.</div>
+      <p class="login-note">Товары, продажи, поставщики и оптовые заявки — в одном спокойном интерфейсе.</p>
+      <div class="login-foot">mireacare.ru</div>
+    </div>
+    <div class="login-form">
+      <div class="eyebrow">Вход</div>
+      <h1 class="login-title">Админ-панель</h1>
+      <p class="page-sub" style="margin-top:8px">Введите логин и пароль администратора</p>
+      <form onsubmit="login(event)" class="stack-form mt-20">
+        <label class="field"><span class="lbl">Логин</span><input id="login-user" value="admin" autocomplete="username"></label>
+        <label class="field"><span class="lbl">Пароль</span><input id="login-pass" type="password" value="mirea2024" autocomplete="current-password"></label>
+        <button class="btn btn-primary btn-block" style="height:44px">Войти</button>
+        <div id="login-error" class="form-error hidden"></div>
+        <div class="hint">Демо-доступ: admin / mirea2024 · меняется в настройках</div>
+      </form>
+      <a href="index.html" class="back-link">← Вернуться на сайт</a>
+    </div>
   </div>
 </div>
 
 <!-- APP -->
-<div id="app" class="hidden min-h-screen flex">
-  <!-- sidebar -->
-  <aside class="hidden lg:flex w-[260px] bg-[#1e3e35] text-white flex-col sticky top-0 h-screen">
-    <div class="p-6 border-b border-white/10">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-white text-[#1e3e35] grid place-items-center font-bold">M</div>
-        <div><div class="font-display font-bold tracking-[0.14em]">MIREA</div><div class="text-[10px] tracking-[0.14em] text-white/50 font-bold">ADMIN PANEL</div></div>
-      </div>
+<div id="app" class="hidden">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">M</div>
+      <div><div class="brand-name">MIREA</div><div class="brand-sub">Admin panel</div></div>
     </div>
-    <nav class="flex-1 p-4 space-y-1 overflow-auto">
-      <button onclick="switchTab('dash')" data-tab="dash" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl bg-white text-[#1e3e35] font-bold text-sm"><span>◈</span> Дашборд</button>
-      <button onclick="switchTab('products')" data-tab="products" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>⬢</span> Товары и линейки</button>
-      <button onclick="switchTab('sales')" data-tab="sales" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>◍</span> Продажи</button>
-      <button onclick="switchTab('clients')" data-tab="clients" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>◎</span> Клиенты</button>
-      <button onclick="switchTab('suppliers')" data-tab="suppliers" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>◉</span> Поставщики</button>
-      <button onclick="switchTab('leads')" data-tab="leads" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>✉</span> Оптовые заявки</button>
-      <button onclick="switchTab('stats')" data-tab="stats" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>▦</span> Статистика</button>
-      <button onclick="switchTab('calc')" data-tab="calc" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>∑</span> Калькулятор себестоимости</button>
-      <button onclick="switchTab('settings')" data-tab="settings" class="tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold"><span>⚙</span> Настройки</button>
+    <nav class="nav">
+      <div class="nav-label">Обзор</div>
+      <button onclick="switchTab('dash')" data-tab="dash" class="tab-btn active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>
+        Дашборд
+      </button>
+      <button onclick="switchTab('stats')" data-tab="stats" class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 19v-6M9.5 19V8M15 19v-9M20.5 19V5"/></svg>
+        Статистика
+      </button>
+
+      <div class="nav-label">Каталог</div>
+      <button onclick="switchTab('products')" data-tab="products" class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 7.5v9L12 21 4 16.5v-9L12 3Z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg>
+        Товары и линейки
+      </button>
+      <button onclick="switchTab('calc')" data-tab="calc" class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 7.5h7M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg>
+        Себестоимость
+      </button>
+
+      <div class="nav-label">Клиенты и продажи</div>
+      <button onclick="switchTab('sales')" data-tab="sales" class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 8h6M9 12h6"/></svg>
+        Продажи
+      </button>
+      <button onclick="switchTab('clients')" data-tab="clients" class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16 5.5a3 3 0 0 1 0 5.6M17.5 15c2 .6 3.5 2.4 3.5 5"/></svg>
+        Клиенты
+      </button>
+      <button onclick="switchTab('suppliers')" data-tab="suppliers" class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h10v9H3z"/><path d="M13 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>
+        Поставщики
+      </button>
+      <button onclick="switchTab('leads')" data-tab="leads" class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg>
+        Оптовые заявки
+      </button>
+
+      <div class="nav-label">Система</div>
+      <button onclick="switchTab('settings')" data-tab="settings" class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="#15241F"/><circle cx="15" cy="12" r="2" fill="#15241F"/><circle cx="8" cy="17" r="2" fill="#15241F"/></svg>
+        Настройки
+      </button>
     </nav>
-    <div class="p-4 border-t border-white/10">
-      <div class="bg-white/10 rounded-xl p-3 flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-[#e8b44f] grid place-items-center text-[#1e3e35] font-bold text-xs">A</div>
-        <div class="flex-1"><div class="text-sm font-bold leading-none">Администратор</div><div class="text-xs text-white/50">admin@mireacare.ru</div></div>
+    <div class="side-foot">
+      <div class="user-chip">
+        <div class="user-avatar">A</div>
+        <div style="flex:1;min-width:0"><div class="user-name">Администратор</div><div class="user-mail">admin@mireacare.ru</div></div>
       </div>
-      <button onclick="logout()" class="w-full mt-3 text-xs tracking-[0.12em] font-bold text-white/50 hover:text-white">ВЫЙТИ</button>
+      <button onclick="logout()" class="logout">Выйти</button>
     </div>
   </aside>
 
-  <!-- main -->
-  <div class="flex-1 min-w-0">
-    <!-- topbar mobile -->
-    <div class="lg:hidden bg-[#1e3e35] text-white p-4 flex items-center justify-between sticky top-0 z-20">
-      <div class="font-bold tracking-[0.14em]">MIREA ADMIN</div>
-      <select onchange="switchTab(this.value)" class="bg-white text-[#1e3e35] rounded-full px-4 py-2 text-sm font-bold">
+  <div class="main">
+    <div class="mobilebar">
+      <div class="brand">
+        <div class="brand-mark">M</div>
+        <div><div class="brand-name">MIREA</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;min-width:0">
+        <select id="mobile-tab" onchange="switchTab(this.value)" aria-label="Раздел">
         <option value="dash">Дашборд</option>
         <option value="products">Товары</option>
         <option value="sales">Продажи</option>
@@ -78,341 +471,487 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
         <option value="suppliers">Поставщики</option>
         <option value="leads">Оптовые заявки</option>
         <option value="stats">Статистика</option>
-        <option value="calc">Калькулятор себестоимости</option>
+        <option value="calc">Себестоимость</option>
         <option value="settings">Настройки</option>
-      </select>
+        </select>
+        <button onclick="logout()" class="mobile-exit" aria-label="Выйти" title="Выйти"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M10 8l-4 4 4 4M6 12h9"/></svg></button>
+      </div>
+    </div>
+
+    <div class="topbar">
+      <div class="crumbs"><span>MIREA</span><i>/</i><b>Админ-панель</b></div>
+      <div class="topbar-right">
+        <span id="topbar-date"></span>
+        <a href="index.html" target="_blank" rel="noopener" class="top-link">На сайт ↗</a>
+      </div>
     </div>
 
     <!-- DASH -->
-    <div id="tab-dash" class="tab-panel p-4 lg:p-8 max-w-[1200px] mx-auto">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <div><h2 class="font-display text-[28px] font-semibold">Дашборд</h2><p class="text-sm text-black/50">Сводка по продажам и активности</p></div>
-        <div class="flex gap-2">
-          <button onclick="exportData()" class="bg-white border border-black/10 rounded-full px-5 py-2.5 text-xs tracking-[0.12em] font-bold">ЭКСПОРТ CSV</button>
-          <button onclick="switchTab('sales')" class="bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs tracking-[0.12em] font-bold">+ ПРОДАЖА</button>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-        <div class="bg-white rounded-2xl p-5 border border-black/5">
-          <div class="text-[11px] tracking-[0.14em] font-bold text-black/40">ВЫРУЧКА</div>
-          <div id="dash-revenue" class="font-display text-[24px] font-semibold mt-1">—</div>
-          <div class="text-xs text-[#7a9d8f] font-semibold mt-1">за выбранный период</div>
-        </div>
-        <div class="bg-white rounded-2xl p-5 border border-black/5">
-          <div class="text-[11px] tracking-[0.14em] font-bold text-black/40">ЗАКАЗОВ</div>
-          <div id="dash-orders" class="font-display text-[24px] font-semibold mt-1">—</div>
-          <div id="dash-orders-sub" class="text-xs text-black/40 mt-1">—</div>
-        </div>
-        <div class="bg-white rounded-2xl p-5 border border-black/5">
-          <div class="text-[11px] tracking-[0.14em] font-bold text-black/40">СРЕДНИЙ ЧЕК</div>
-          <div id="dash-aov" class="font-display text-[24px] font-semibold mt-1">—</div>
-          <div class="text-xs text-black/40 mt-1">на заказ</div>
-        </div>
-        <div class="bg-[#1e3e35] text-white rounded-2xl p-5">
-          <div class="text-[11px] tracking-[0.14em] font-bold text-white/50">ТОП ТОВАР</div>
-          <div id="dash-top" class="font-display text-[16px] font-semibold mt-2 leading-tight">—</div>
-          <div id="dash-top-sub" class="text-xs text-white/60 mt-1">—</div>
-        </div>
-      </div>
-
-      <div class="grid lg:grid-cols-3 gap-4 mt-6">
-        <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-black/5">
-          <div class="flex items-center justify-between">
-            <h3 class="font-bold">Выручка по дням</h3>
-            <select id="dash-period" onchange="renderDash()" class="bg-[#f4f7f5] rounded-full px-3 py-1.5 text-xs font-bold">
-              <option value="7">7 дней</option>
-              <option value="30">30 дней</option>
-              <option value="90">90 дней</option>
-              <option value="365">Год</option>
-            </select>
+    <div id="tab-dash" class="tab-panel">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Обзор</div>
+            <h2 class="page-title">Дашборд</h2>
+            <p class="page-sub">Сводка по продажам и активности магазина</p>
           </div>
-          <canvas id="dash-chart" height="120" class="mt-4"></canvas>
+          <div class="actions">
+            <button onclick="exportData()" class="btn btn-ghost">Экспорт CSV</button>
+            <button onclick="switchTab('sales')" class="btn btn-primary">+ Продажа</button>
+          </div>
         </div>
-        <div class="bg-white rounded-2xl p-6 border border-black/5">
-          <h3 class="font-bold">Последние продажи</h3>
-          <div id="dash-recent" class="mt-4 space-y-3"></div>
-          <button onclick="switchTab('sales')" class="w-full mt-4 bg-[#f4f7f5] rounded-full py-2.5 text-xs tracking-[0.12em] font-bold">ВСЕ ПРОДАЖИ →</button>
+
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">Выручка</div>
+            <div id="dash-revenue" class="kpi-value">—</div>
+            <div class="kpi-note">за выбранный период</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Заказов</div>
+            <div id="dash-orders" class="kpi-value">—</div>
+            <div id="dash-orders-sub" class="kpi-note">—</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Средний чек</div>
+            <div id="dash-aov" class="kpi-value">—</div>
+            <div class="kpi-note">на заказ</div>
+          </div>
+          <div class="kpi kpi-dark">
+            <div class="kpi-label">Топ товар</div>
+            <div id="dash-top" class="kpi-value">—</div>
+            <div id="dash-top-sub" class="kpi-note">—</div>
+          </div>
+        </div>
+
+        <div class="grid-main">
+          <div class="card card-pad">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Выручка по дням</div>
+                <div class="card-sub">Динамика продаж за период</div>
+              </div>
+              <div class="card-tool">
+                <select id="dash-period" onchange="renderDash()" style="width:auto;height:38px;font-size:12.5px">
+                  <option value="7">7 дней</option>
+                  <option value="30">30 дней</option>
+                  <option value="90">90 дней</option>
+                  <option value="365">Год</option>
+                </select>
+              </div>
+            </div>
+            <div class="chart-box"><canvas id="dash-chart"></canvas></div>
+          </div>
+
+          <div class="card card-pad" style="display:flex;flex-direction:column">
+            <div class="card-head"><div class="card-title">Последние продажи</div></div>
+            <div id="dash-recent" class="recent"></div>
+            <button onclick="switchTab('sales')" class="btn btn-ghost btn-block" style="margin-top:16px">Все продажи</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card card-pad">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Заявки с сайта</div>
+                <div class="card-sub">Последние обращения из формы</div>
+              </div>
+              <button onclick="switchTab('leads')" class="btn btn-ghost btn-sm">Все</button>
+            </div>
+            <div id="dash-leads" class="recent"></div>
+          </div>
+
+          <div class="card card-pad">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Быстрые действия</div>
+                <div class="card-sub">Частые операции</div>
+              </div>
+            </div>
+            <div class="quick-grid">
+              <button onclick="switchTab('sales');openSaleModal()" class="quick-btn">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h2l2.4 12.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 7H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M13 9v4M11 11h4"/></svg>
+                <span>Новая продажа</span>
+              </button>
+              <button onclick="switchTab('products');openProductModal()" class="quick-btn">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></svg>
+                <span>Добавить товар</span>
+              </button>
+              <button onclick="switchTab('clients');openClientModal()" class="quick-btn">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M18 8v6M15 11h6"/></svg>
+                <span>Добавить клиента</span>
+              </button>
+              <button onclick="switchTab('suppliers');openSupplierModal()" class="quick-btn">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>
+                <span>Добавить поставщика</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- PRODUCTS -->
-    <div id="tab-products" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
-      <div class="flex flex-wrap justify-between gap-4 items-start">
-        <div><h2 class="font-display text-[28px] font-semibold">Товары и линейки</h2><p class="text-sm text-black/50">Управляйте каталогом: добавляйте линейки, категории и товары</p></div>
-        <button onclick="openProductModal()" class="bg-[#e8b44f] text-[#1e3e35] rounded-full px-6 py-3 text-xs tracking-[0.12em] font-extrabold">+ ДОБАВИТЬ ТОВАР</button>
-      </div>
-
-      <!-- line manager -->
-      <div class="mt-6 bg-white rounded-2xl p-6 border border-black/5">
-        <h3 class="font-bold text-sm tracking-[0.1em]">ЛИНЕЙКИ</h3>
-        <div id="lines-list" class="flex flex-wrap gap-3 mt-3"></div>
-        <div class="flex gap-2 mt-4">
-          <input id="new-line-name" placeholder="Название линейки, напр. Home" class="flex-1 max-w-[220px] rounded-xl border border-black/10 px-4 py-2.5 text-sm">
-          <input id="new-line-id" placeholder="id (home)" class="w-[140px] rounded-xl border border-black/10 px-4 py-2.5 text-sm">
-          <button onclick="addLine()" class="bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs font-bold">+ ЛИНЕЙКА</button>
+    <div id="tab-products" class="tab-panel hidden">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Каталог</div>
+            <h2 class="page-title">Товары и линейки</h2>
+            <p class="page-sub">Линейки, категории и карточки товаров</p>
+          </div>
+          <div class="actions">
+            <button onclick="openProductModal()" class="btn btn-gold">+ Добавить товар</button>
+          </div>
         </div>
-      </div>
 
-      <div id="products-list" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        <div class="card card-pad">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Линейки</div>
+              <div class="card-sub">Группы товаров в каталоге</div>
+            </div>
+          </div>
+          <div id="lines-list" class="chips"></div>
+          <div class="inline-form">
+            <input id="new-line-name" placeholder="Название, напр. Home">
+            <input id="new-line-id" placeholder="id (home)">
+            <button onclick="addLine()" class="btn btn-primary btn-sm" style="height:42px">+ Линейка</button>
+          </div>
+        </div>
+
+        <div id="products-list" class="prod-grid mt-12"></div>
+      </div>
     </div>
 
     <!-- SALES -->
-    <div id="tab-sales" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
-      <div class="flex flex-wrap justify-between gap-4">
-        <div><h2 class="font-display text-[28px] font-semibold">Продажи</h2><p class="text-sm text-black/50">Все заказы с сайта и ручные продажи</p></div>
-        <button onclick="openSaleModal()" class="bg-[#1e3e35] text-white rounded-full px-6 py-3 text-xs tracking-[0.12em] font-bold">+ ДОБАВИТЬ ПРОДАЖУ</button>
-      </div>
-      <div class="mt-6 bg-white rounded-2xl border border-black/5 overflow-hidden">
-        <div class="p-4 flex flex-wrap gap-2 border-b border-black/5">
-          <input id="sales-search" oninput="renderSales()" placeholder="Поиск по клиенту, ID…" class="flex-1 min-w-[220px] rounded-full border border-black/10 px-4 py-2.5 text-sm">
-          <select id="sales-filter-payment" onchange="renderSales()" class="rounded-full border border-black/10 px-4 py-2.5 text-sm font-semibold">
-            <option value="">Все оплаты</option>
-            <option value="при получении">При получении</option>
-            <option value="картой">Картой</option>
-            <option value="по счёту">По счёту</option>
-            <option value="перевод">Перевод</option>
-          </select>
+    <div id="tab-sales" class="tab-panel hidden">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Продажи</div>
+            <h2 class="page-title">Продажи</h2>
+            <p class="page-sub">Все заказы с сайта и ручные продажи</p>
+          </div>
+          <div class="actions">
+            <button onclick="openSaleModal()" class="btn btn-primary">+ Добавить продажу</button>
+          </div>
         </div>
-        <div class="overflow-auto">
-          <table class="w-full text-sm">
-            <thead class="bg-[#f4f7f5] text-[11px] tracking-[0.12em] font-bold text-black/40"><tr><th class="text-left p-3">ID / ДАТА</th><th class="text-left p-3">КЛИЕНТ</th><th class="text-left p-3">ТОВАРЫ</th><th class="text-right p-3">СУММА</th><th class="text-left p-3">ОПЛАТА</th><th class="p-3"></th></tr></thead>
-            <tbody id="sales-tbody"></tbody>
-          </table>
+
+        <div class="card" style="overflow:hidden">
+          <div class="toolbar">
+            <input id="sales-search" oninput="renderSales()" type="search" placeholder="Поиск по клиенту, ID…">
+            <select id="sales-filter-payment" onchange="renderSales()">
+              <option value="">Все оплаты</option>
+              <option value="при получении">При получении</option>
+              <option value="картой">Картой</option>
+              <option value="по счёту">По счёту</option>
+              <option value="перевод">Перевод</option>
+            </select>
+          </div>
+          <div class="tablewrap">
+            <table>
+              <thead><tr><th>ID / дата</th><th>Клиент</th><th>Товары</th><th class="td-r">Сумма</th><th>Оплата</th><th></th></tr></thead>
+              <tbody id="sales-tbody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- CLIENTS -->
-    <div id="tab-clients" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
-      <div class="flex flex-wrap justify-between gap-4">
-        <div><h2 class="font-display text-[28px] font-semibold">Клиенты</h2><p class="text-sm text-black/50">База клиентов с типами и историей</p></div>
-        <button onclick="openClientModal()" class="bg-[#1e3e35] text-white rounded-full px-6 py-3 text-xs tracking-[0.12em] font-bold">+ ДОБАВИТЬ КЛИЕНТА</button>
-      </div>
-      <div class="mt-6 bg-white rounded-2xl border border-black/5 overflow-hidden">
-        <div class="p-4 border-b border-black/5 flex gap-2">
-          <input id="clients-search" oninput="renderClients()" placeholder="Поиск ФИО, телефон…" class="flex-1 rounded-full border border-black/10 px-4 py-2.5 text-sm">
-          <select id="clients-filter-type" onchange="renderClients()" class="rounded-full border border-black/10 px-4 py-2.5 text-sm font-semibold">
-            <option value="">Все типы</option>
-            <option value="физлицо">Физлицо</option>
-            <option value="самозанятый">Самозанятый</option>
-            <option value="ИП">ИП</option>
-            <option value="юрлицо">Юрлицо</option>
-          </select>
+    <div id="tab-clients" class="tab-panel hidden">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">База</div>
+            <h2 class="page-title">Клиенты</h2>
+            <p class="page-sub">База клиентов с типами и историей</p>
+          </div>
+          <div class="actions">
+            <button onclick="openClientModal()" class="btn btn-primary">+ Добавить клиента</button>
+          </div>
         </div>
-        <div id="clients-list" class="divide-y divide-black/5"></div>
+
+        <div class="card" style="overflow:hidden">
+          <div class="toolbar">
+            <input id="clients-search" oninput="renderClients()" type="search" placeholder="Поиск ФИО, телефон…">
+            <select id="clients-filter-type" onchange="renderClients()">
+              <option value="">Все типы</option>
+              <option value="физлицо">Физлицо</option>
+              <option value="самозанятый">Самозанятый</option>
+              <option value="ИП">ИП</option>
+              <option value="юрлицо">Юрлицо</option>
+            </select>
+          </div>
+          <div id="clients-list" class="list"></div>
+        </div>
       </div>
     </div>
 
     <!-- SUPPLIERS -->
-    <div id="tab-suppliers" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
-      <div class="flex flex-wrap justify-between gap-4">
-        <div><h2 class="font-display text-[28px] font-semibold">Поставщики</h2><p class="text-sm text-black/50">Контакты и доступы поставщиков сырья и материалов</p></div>
-        <button onclick="openSupplierModal()" class="bg-[#1e3e35] text-white rounded-full px-6 py-3 text-xs tracking-[0.12em] font-bold">+ ДОБАВИТЬ ПОСТАВЩИКА</button>
-      </div>
-      <div class="mt-6 bg-white rounded-2xl border border-black/5 overflow-hidden">
-        <div class="p-4 border-b border-black/5 flex gap-2">
-          <input id="suppliers-search" oninput="renderSuppliers()" placeholder="Поиск название, телефон, сайт…" class="flex-1 rounded-full border border-black/10 px-4 py-2.5 text-sm">
-          <select id="suppliers-filter-status" onchange="renderSuppliers()" class="rounded-full border border-black/10 px-4 py-2.5 text-sm font-semibold">
-            <option value="">Все статусы</option>
-            <option value="Физ. лицо">Физ. лицо</option>
-            <option value="самозанятый">Самозанятый</option>
-            <option value="ИП">ИП</option>
-            <option value="ООО">ООО</option>
-          </select>
+    <div id="tab-suppliers" class="tab-panel hidden">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Снабжение</div>
+            <h2 class="page-title">Поставщики</h2>
+            <p class="page-sub">Контакты и доступы поставщиков сырья и материалов</p>
+          </div>
+          <div class="actions">
+            <button onclick="openSupplierModal()" class="btn btn-primary">+ Добавить поставщика</button>
+          </div>
         </div>
-        <div id="suppliers-list" class="divide-y divide-black/5"></div>
+
+        <div class="card" style="overflow:hidden">
+          <div class="toolbar">
+            <input id="suppliers-search" oninput="renderSuppliers()" type="search" placeholder="Поиск: название, телефон, сайт…">
+            <select id="suppliers-filter-status" onchange="renderSuppliers()">
+              <option value="">Все статусы</option>
+              <option value="Физ. лицо">Физ. лицо</option>
+              <option value="самозанятый">Самозанятый</option>
+              <option value="ИП">ИП</option>
+              <option value="ООО">ООО</option>
+            </select>
+          </div>
+          <div id="suppliers-list" class="list"></div>
+        </div>
       </div>
     </div>
 
     <!-- LEADS -->
-    <div id="tab-leads" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
-      <h2 class="font-display text-[28px] font-semibold">Оптовые заявки</h2>
-      <p class="text-sm text-black/50">Запросы с формы «Оптовые закупки» → cooperation@mireacare.ru</p>
-      <div id="leads-list" class="mt-6 space-y-3"></div>
+    <div id="tab-leads" class="tab-panel hidden">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Опт</div>
+            <h2 class="page-title">Оптовые заявки</h2>
+            <p class="page-sub">Запросы с формы «Оптовые закупки» → cooperation@mireacare.ru</p>
+          </div>
+        </div>
+        <div id="leads-list" class="stack"></div>
+      </div>
     </div>
 
     <!-- STATS -->
-    <div id="tab-stats" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
-      <h2 class="font-display text-[28px] font-semibold">Статистика</h2>
-      <p class="text-sm text-black/50">Аналитика по периодам и товарам</p>
-
-      <div class="mt-6 flex flex-wrap gap-2">
-        <button onclick="setStatsPeriod('1')" data-p="1" class="stats-period-btn bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs font-bold">1 ДЕНЬ</button>
-        <button onclick="setStatsPeriod('7')" data-p="7" class="stats-period-btn bg-white border border-black/10 rounded-full px-5 py-2.5 text-xs font-bold">НЕДЕЛЯ</button>
-        <button onclick="setStatsPeriod('30')" data-p="30" class="stats-period-btn bg-white border border-black/10 rounded-full px-5 py-2.5 text-xs font-bold">МЕСЯЦ</button>
-        <button onclick="setStatsPeriod('365')" data-p="365" class="stats-period-btn bg-white border border-black/10 rounded-full px-5 py-2.5 text-xs font-bold">ГОД</button>
-        <span id="stats-range" class="ml-2 text-xs text-black/40 self-center"></span>
-      </div>
-
-      <div class="grid lg:grid-cols-3 gap-4 mt-6">
-        <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-black/5">
-          <h3 class="font-bold">Динамика выручки</h3>
-          <canvas id="stats-chart" height="140" class="mt-4"></canvas>
+    <div id="tab-stats" class="tab-panel hidden">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Аналитика</div>
+            <h2 class="page-title">Статистика</h2>
+            <p class="page-sub">Аналитика по периодам, товарам и типам оплаты</p>
+          </div>
         </div>
-        <div class="bg-white rounded-2xl p-6 border border-black/5">
-          <h3 class="font-bold">Топ товаров</h3>
-          <div id="stats-top-products" class="mt-4 space-y-3"></div>
-        </div>
-      </div>
 
-      <div class="mt-4 grid lg:grid-cols-2 gap-4">
-        <div class="bg-white rounded-2xl p-6 border border-black/5">
-          <h3 class="font-bold">Продажи по типам оплаты</h3>
-          <canvas id="stats-pay" height="140" class="mt-4"></canvas>
+        <div class="stats-row">
+          <div class="seg">
+            <button onclick="setStatsPeriod('1')" data-p="1" class="stats-period-btn seg-btn">1 день</button>
+            <button onclick="setStatsPeriod('7')" data-p="7" class="stats-period-btn seg-btn active">Неделя</button>
+            <button onclick="setStatsPeriod('30')" data-p="30" class="stats-period-btn seg-btn">Месяц</button>
+            <button onclick="setStatsPeriod('365')" data-p="365" class="stats-period-btn seg-btn">Год</button>
+          </div>
+          <span id="stats-range" class="hint" style="text-align:left"></span>
         </div>
-        <div class="bg-white rounded-2xl p-6 border border-black/5">
-          <h3 class="font-bold">Продажи по клиентам (тип)</h3>
-          <canvas id="stats-client-type" height="140" class="mt-4"></canvas>
+
+        <div class="grid-main">
+          <div class="card card-pad">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Динамика выручки</div>
+                <div class="card-sub">Сумма продаж по выбранному периоду</div>
+              </div>
+            </div>
+            <div class="chart-box"><canvas id="stats-chart"></canvas></div>
+          </div>
+          <div class="card card-pad">
+            <div class="card-head"><div class="card-title">Топ товаров</div></div>
+            <div id="stats-top-products"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card card-pad">
+            <div class="card-head"><div class="card-title">Продажи по типам оплаты</div></div>
+            <div class="chart-box chart-box-sm"><canvas id="stats-pay"></canvas><div class="chart-empty">Нет данных за период</div></div>
+          </div>
+          <div class="card card-pad">
+            <div class="card-head"><div class="card-title">Клиенты по типу</div></div>
+            <div class="chart-box chart-box-sm"><canvas id="stats-client-type"></canvas><div class="chart-empty">Нет данных за период</div></div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- CALC -->
-    <div id="tab-calc" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
-      <h2 class="font-display text-[28px] font-semibold">Калькулятор себестоимости</h2>
-      <p class="text-sm text-black/50">Внесите расходы на 1 единицу товара — калькулятор покажет итоговую себестоимость с учётом налога 1%.</p>
-
-      <div class="mt-6 grid lg:grid-cols-3 gap-4">
-        <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-black/5">
-          <div class="grid sm:grid-cols-2 gap-4">
-            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">СЫРЬЁ</span><input type="number" min="0" step="0.01" data-calc="raw" placeholder="0" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ДОСТАВКА СЫРЬЯ</span><input type="number" min="0" step="0.01" data-calc="rawDelivery" placeholder="0" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ТАРА</span><input type="number" min="0" step="0.01" data-calc="packaging" placeholder="0" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ДОСТАВКА ТАРЫ</span><input type="number" min="0" step="0.01" data-calc="packagingDelivery" placeholder="0" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ЭЛЕМЕНТЫ ДИЗАЙНА</span><input type="number" min="0" step="0.01" data-calc="design" placeholder="0" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-            <label class="block"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ДОСТАВКА ЭЛЕМЕНТОВ ДИЗАЙНА</span><input type="number" min="0" step="0.01" data-calc="designDelivery" placeholder="0" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-          </div>
-          <label class="block mt-4"><span class="text-xs font-bold tracking-[0.12em] text-black/40">КОЛИЧЕСТВО ШТУК В ПАРТИИ</span><input type="number" min="1" step="1" data-calc="qty" value="1" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-          <label class="block mt-4"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ИНТЕРЕС ПРЕДПРИЯТИЯ (ДОБАВОЧНАЯ СТОИМОСТЬ, %)</span><input type="number" min="0" step="0.1" data-calc="margin" value="0" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-          <label class="block mt-4"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ПРОЧИЕ РАСХОДЫ</span><input type="number" min="0" step="0.01" data-calc="other" value="0" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-[#7a9d8f]"></label>
-          <div class="mt-3 flex flex-wrap gap-2">
-            <button onclick="saveCalc()" class="bg-[#1e3e35] text-white rounded-full px-6 py-2.5 text-xs font-bold">СОХРАНИТЬ РАСЧЁТ</button>
-            <button onclick="clearCalc()" class="bg-white border border-black/10 rounded-full px-6 py-2.5 text-xs font-bold">ОЧИСТИТЬ</button>
-            <button onclick="copyCalc()" class="bg-white border border-black/10 rounded-full px-6 py-2.5 text-xs font-bold">СКОПИРОВАТЬ ИТОГ</button>
+    <div id="tab-calc" class="tab-panel hidden">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Экономика</div>
+            <h2 class="page-title">Себестоимость</h2>
+            <p class="page-sub">Расходы на единицу товара — калькулятор покажет себестоимость и прибыль партии с учётом налога 1%</p>
           </div>
         </div>
 
-        <div class="bg-[#1e3e35] text-white rounded-2xl p-6 flex flex-col">
-          <div class="text-[11px] tracking-[0.14em] font-bold text-white/50">ИТОГОВАЯ СЕБЕСТОИМОСТЬ ЗА 1 ШТУКУ</div>
-          <div id="calc-total" class="font-display text-[44px] font-semibold mt-2 leading-none">0,00 ₽</div>
-          <div class="mt-4 space-y-2 text-sm text-white/70">
-            <div class="flex justify-between"><span>Сырьё + доставка</span><span id="calc-raw-sum" class="font-bold text-white">0,00 ₽</span></div>
-            <div class="flex justify-between"><span>Тара + доставка</span><span id="calc-pack-sum" class="font-bold text-white">0,00 ₽</span></div>
-            <div class="flex justify-between"><span>Дизайн + доставка</span><span id="calc-design-sum" class="font-bold text-white">0,00 ₽</span></div>
-            <div class="flex justify-between"><span>Себестоимость за 1 шт</span><span id="calc-perunit" class="font-bold text-white">0,00 ₽</span></div>
-            <div class="flex justify-between bg-white/10 rounded-lg px-2 py-1.5 -mx-2"><span class="font-bold">Итог с интересом за 1 шт</span><span id="calc-price" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
-            <div class="flex justify-between"><span>Всего на партию</span><span id="calc-subtotal" class="font-bold text-white">0,00 ₽</span></div>
-            <div class="flex justify-between"><span>Налог 1% (от общей суммы)</span><span id="calc-tax" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
-            <div class="flex justify-between"><span>Прочие расходы</span><span id="calc-other" class="font-bold text-white">0,00 ₽</span></div>
-            <div class="flex justify-between border-t border-white/15 pt-2"><span class="font-bold">EBIT (прибыль партии)</span><span id="calc-ebit" class="font-bold text-[#e8b44f]">0,00 ₽</span></div>
-            <div class="flex justify-between"><span>Маржа (EBIT от общей суммы)</span><span id="calc-margin-pct" class="font-bold text-[#e8b44f]">0,0%</span></div>
+        <div class="calc-grid">
+          <div class="card card-pad">
+            <div class="calc-section">Сырьё и материалы</div>
+            <div class="form-grid">
+              <label class="field"><span class="lbl">Сырьё</span><input type="number" min="0" step="0.01" data-calc="raw" placeholder="0"></label>
+              <label class="field"><span class="lbl">Доставка сырья</span><input type="number" min="0" step="0.01" data-calc="rawDelivery" placeholder="0"></label>
+              <label class="field"><span class="lbl">Тара</span><input type="number" min="0" step="0.01" data-calc="packaging" placeholder="0"></label>
+              <label class="field"><span class="lbl">Доставка тары</span><input type="number" min="0" step="0.01" data-calc="packagingDelivery" placeholder="0"></label>
+              <label class="field"><span class="lbl">Элементы дизайна</span><input type="number" min="0" step="0.01" data-calc="design" placeholder="0"></label>
+              <label class="field"><span class="lbl">Доставка элементов</span><input type="number" min="0" step="0.01" data-calc="designDelivery" placeholder="0"></label>
+            </div>
+
+            <div class="calc-section">Партия и наценка</div>
+            <div class="form-grid">
+              <label class="field"><span class="lbl">Количество штук</span><input type="number" min="1" step="1" data-calc="qty" value="1"></label>
+              <label class="field"><span class="lbl">Интерес предприятия, %</span><input type="number" min="0" step="0.1" data-calc="margin" value="0"></label>
+            </div>
+            <label class="field mt-12"><span class="lbl">Прочие расходы</span><input type="number" min="0" step="0.01" data-calc="other" value="0"></label>
+
+            <div class="actions" style="margin-top:18px">
+              <button onclick="saveCalc()" class="btn btn-primary">Сохранить расчёт</button>
+              <button onclick="clearCalc()" class="btn btn-ghost">Очистить</button>
+              <button onclick="copyCalc()" class="btn btn-ghost">Скопировать итог</button>
+            </div>
           </div>
-          <div class="mt-auto pt-4 text-xs text-white/40">Расчёт сохраняется в браузере и доступен при следующем визите.</div>
+
+          <div class="calc-summary">
+            <div class="calc-label">Себестоимость за 1 штуку</div>
+            <div id="calc-total" class="calc-total">0,00 ₽</div>
+            <div class="calc-rows">
+              <div class="calc-row"><span>Сырьё + доставка</span><b id="calc-raw-sum">0,00 ₽</b></div>
+              <div class="calc-row"><span>Тара + доставка</span><b id="calc-pack-sum">0,00 ₽</b></div>
+              <div class="calc-row"><span>Дизайн + доставка</span><b id="calc-design-sum">0,00 ₽</b></div>
+              <div class="calc-row"><span>Себестоимость за 1 шт</span><b id="calc-perunit">0,00 ₽</b></div>
+              <div class="calc-row hl"><span>Цена с интересом за 1 шт</span><b id="calc-price">0,00 ₽</b></div>
+              <div class="calc-row"><span>Всего на партию</span><b id="calc-subtotal">0,00 ₽</b></div>
+              <div class="calc-row"><span>Налог 1%</span><b id="calc-tax">0,00 ₽</b></div>
+              <div class="calc-row"><span>Прочие расходы</span><b id="calc-other">0,00 ₽</b></div>
+              <div class="calc-row calc-sep"><span>EBIT (прибыль партии)</span><b id="calc-ebit">0,00 ₽</b></div>
+              <div class="calc-row"><span>Маржа</span><b id="calc-margin-pct">0,0%</b></div>
+            </div>
+            <div class="calc-foot">Расчёт сохраняется в браузере и доступен при следующем визите.</div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- SETTINGS -->
-    <div id="tab-settings" class="tab-panel hidden p-4 lg:p-8 max-w-[1200px] mx-auto">
-      <h2 class="font-display text-[28px] font-semibold">Настройки</h2>
-      <div class="mt-6 grid lg:grid-cols-2 gap-4">
-        <!-- Mail -->
-        <div class="bg-white rounded-2xl p-6 border border-black/5">
-          <h3 class="font-bold">Почта и контакты</h3>
-          <label class="block mt-4"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ЗАКАЗЫ →</span><input id="set-order-email" value="order@mireacare.ru" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
-          <label class="block mt-3"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ОПТ →</span><input id="set-coop-email" value="cooperation@mireacare.ru" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
-          <label class="block mt-3"><span class="text-xs font-bold tracking-[0.12em] text-black/40">АДРЕС</span><input id="set-address" value="г. Дербент, ул. Шоссейная, д. 26" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
-          <label class="block mt-3"><span class="text-xs font-bold tracking-[0.12em] text-black/40">ТЕЛЕФОН</span><input id="set-phone" value="+79384900111" class="mt-1 w-full rounded-xl border border-black/10 px-4 py-3 text-sm"></label>
-          <button onclick="saveSettings()" class="mt-4 bg-[#1e3e35] text-white rounded-full px-6 py-3 text-xs tracking-[0.12em] font-bold">СОХРАНИТЬ</button>
-        </div>
-        <!-- Logo -->
-        <div class="bg-white rounded-2xl p-6 border border-black/5">
-          <h3 class="font-bold">Логотип сайта (хедер)</h3>
-          <p class="text-xs text-black/50 mt-1">Загрузите картинку — она <b>зальётся на сервер</b> и будет видна на всех устройствах. Рекомендуемый размер: до 2 МБ, PNG/WebP/SVG. Размер в шапке регулируется ползунком.</p>
-          <div id="logo-preview" class="mt-4 min-h-[72px] rounded-xl bg-[#f4f7f5] border border-black/5 flex items-center px-4 py-3 overflow-hidden text-xs text-black/30">превью: загрузите логотип</div>
-          <input type="file" id="logo-upload" accept="image/*" onchange="handleLogoUpload(event)" class="mt-3 w-full text-sm">
-          <label class="block mt-3"><span class="text-xs font-bold text-black/40">ВЫСОТА ЛОГОТИПА: <span id="logo-height-val">48</span> PX</span><input id="logo-height" type="range" min="16" max="80" value="48" oninput="changeLogoHeight(this.value)" class="mt-1 w-full"></label>
-          <div class="flex gap-2 mt-3">
-            <button onclick="removeLogo()" class="bg-white border border-black/10 rounded-full px-4 py-2 text-xs font-bold">УДАЛИТЬ ЛОГО</button>
-            <span class="text-[11px] text-black/40 self-center">загружается на сервер, видно везде сразу</span>
+    <div id="tab-settings" class="tab-panel hidden">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">Система</div>
+            <h2 class="page-title">Настройки</h2>
+            <p class="page-sub">Контакты, брендинг, соцсети и экспорт данных</p>
           </div>
         </div>
-        <!-- Socials -->
-        <div class="bg-white rounded-2xl p-6 border border-black/5 lg:col-span-2">
-          <h3 class="font-bold">Соцсети (хедер + подвал)</h3>
-          <p class="text-xs text-black/50 mt-1">Добавляйте любые ссылки — иконки подберутся автоматически (VK, TG, IG, WA, YT и т.д.).</p>
-          <div id="socials-list" class="mt-4 space-y-2"></div>
-          <div class="flex flex-wrap gap-2 mt-3">
-            <input id="social-name" placeholder="Название, напр. Telegram" class="flex-1 min-w-[140px] rounded-xl border border-black/10 px-3 py-2.5 text-sm">
-            <input id="social-url" placeholder="https://t.me/mirea" class="flex-1 min-w-[220px] rounded-xl border border-black/10 px-3 py-2.5 text-sm">
-            <button onclick="addSocial()" class="bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs font-bold">+ ДОБАВИТЬ</button>
+
+        <div class="settings-grid">
+          <!-- Mail -->
+          <div class="card card-pad">
+            <div class="card-head"><div><div class="card-title">Почта и контакты</div><div class="card-sub">Куда приходят заявки с сайта</div></div></div>
+            <div class="stack-form" style="margin-top:14px">
+              <label class="field"><span class="lbl">Заказы →</span><input id="set-order-email" value="order@mireacare.ru" type="email"></label>
+              <label class="field"><span class="lbl">Опт →</span><input id="set-coop-email" value="cooperation@mireacare.ru" type="email"></label>
+              <label class="field"><span class="lbl">Адрес</span><input id="set-address" value="г. Дербент, ул. Шоссейная, д. 26"></label>
+              <label class="field"><span class="lbl">Телефон</span><input id="set-phone" value="+79384900111"></label>
+              <div><button onclick="saveSettings()" class="btn btn-primary">Сохранить</button></div>
+            </div>
           </div>
-        </div>
-        <!-- Exports -->
-        <div class="bg-white rounded-2xl p-6 border border-black/5 lg:col-span-2">
-          <h3 class="font-bold">Экспорт данных</h3>
-          <p class="text-xs text-black/50 mt-1">Выгрузки по отдельности — CSV и Excel (XLS).</p>
-          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
-            <div class="bg-[#f4f7f5] rounded-xl p-4">
-              <div class="font-bold text-sm">Товары</div>
-              <div class="flex gap-2 mt-3">
-                <button onclick="exportProductsCSV()" class="flex-1 bg-white border border-black/10 rounded-full py-2 text-xs font-bold">CSV</button>
-                <button onclick="exportProductsExcel()" class="flex-1 bg-[#1e3e35] text-white rounded-full py-2 text-xs font-bold">EXCEL</button>
+
+          <!-- Logo -->
+          <div class="card card-pad">
+            <div class="card-head"><div><div class="card-title">Логотип сайта</div><div class="card-sub">Загружается на сервер и виден на всех устройствах</div></div></div>
+            <div id="logo-preview" class="preview">
+              <span style="color:var(--muted);font-size:11.5px">превью: загрузите логотип</span>
+            </div>
+            <input type="file" id="logo-upload" accept="image/*" onchange="handleLogoUpload(event)" style="margin-top:12px">
+            <label class="field" style="margin-top:12px"><span class="lbl">Высота логотипа: <span id="logo-height-val">48</span> px</span><input id="logo-height" type="range" min="16" max="80" value="48" oninput="changeLogoHeight(this.value)"></label>
+            <div class="actions" style="margin-top:12px;align-items:center">
+              <button onclick="removeLogo()" class="btn btn-ghost btn-sm">Удалить лого</button>
+              <span class="hint" style="text-align:left">до 2 МБ · PNG / WebP / SVG</span>
+            </div>
+          </div>
+
+          <!-- Socials -->
+          <div class="card card-pad span-2">
+            <div class="card-head"><div><div class="card-title">Соцсети</div><div class="card-sub">Иконки в хедере и подвале подбираются автоматически (VK, TG, IG, WA, YT)</div></div></div>
+            <div id="socials-list" class="stack-tight"></div>
+            <div class="inline-form">
+              <input id="social-name" placeholder="Название, напр. Telegram">
+              <input id="social-url" placeholder="https://t.me/mirea">
+              <button onclick="addSocial()" class="btn btn-primary btn-sm" style="height:42px">+ Добавить</button>
+            </div>
+          </div>
+
+          <!-- Exports -->
+          <div class="card card-pad span-2">
+            <div class="card-head"><div><div class="card-title">Экспорт данных</div><div class="card-sub">CSV — таблицы, Excel — настоящий .xlsx, JSON — полный бэкап</div></div></div>
+            <div class="export-grid">
+              <div class="export-card">
+                <div class="export-title">Товары</div>
+                <div class="export-btns">
+                  <button onclick="exportProductsCSV()" class="btn btn-ghost btn-sm">CSV</button>
+                  <button onclick="exportProductsExcel()" class="btn btn-primary btn-sm">Excel</button>
+                </div>
+              </div>
+              <div class="export-card">
+                <div class="export-title">Клиенты</div>
+                <div class="export-btns">
+                  <button onclick="exportClientsCSV()" class="btn btn-ghost btn-sm">CSV</button>
+                  <button onclick="exportClientsExcel()" class="btn btn-primary btn-sm">Excel</button>
+                </div>
+              </div>
+              <div class="export-card">
+                <div class="export-title">Поставщики</div>
+                <div class="export-btns">
+                  <button onclick="exportSuppliersCSV()" class="btn btn-ghost btn-sm">CSV</button>
+                  <button onclick="exportSuppliersExcel()" class="btn btn-primary btn-sm">Excel</button>
+                </div>
+              </div>
+              <div class="export-card">
+                <div class="export-title">Продажи</div>
+                <div class="export-btns">
+                  <button onclick="exportData()" class="btn btn-ghost btn-sm">CSV</button>
+                  <button onclick="exportSalesExcel()" class="btn btn-primary btn-sm">Excel</button>
+                </div>
               </div>
             </div>
-            <div class="bg-[#f4f7f5] rounded-xl p-4">
-              <div class="font-bold text-sm">Клиенты</div>
-              <div class="flex gap-2 mt-3">
-                <button onclick="exportClientsCSV()" class="flex-1 bg-white border border-black/10 rounded-full py-2 text-xs font-bold">CSV</button>
-                <button onclick="exportClientsExcel()" class="flex-1 bg-[#1e3e35] text-white rounded-full py-2 text-xs font-bold">EXCEL</button>
-              </div>
-            </div>
-            <div class="bg-[#f4f7f5] rounded-xl p-4">
-              <div class="font-bold text-sm">Поставщики</div>
-              <div class="flex gap-2 mt-3">
-                <button onclick="exportSuppliersCSV()" class="flex-1 bg-white border border-black/10 rounded-full py-2 text-xs font-bold">CSV</button>
-                <button onclick="exportSuppliersExcel()" class="flex-1 bg-[#1e3e35] text-white rounded-full py-2 text-xs font-bold">EXCEL</button>
-              </div>
-            </div>
-            <div class="bg-[#f4f7f5] rounded-xl p-4">
-              <div class="font-bold text-sm">Продажи</div>
-              <div class="flex gap-2 mt-3">
-                <button onclick="exportData()" class="flex-1 bg-white border border-black/10 rounded-full py-2 text-xs font-bold">CSV</button>
-                <button onclick="exportSalesExcel()" class="flex-1 bg-[#1e3e35] text-white rounded-full py-2 text-xs font-bold">EXCEL</button>
-              </div>
-            </div>
-            <div class="bg-[#f4f7f5] rounded-xl p-4">
-              <div class="font-bold text-sm">Всё сразу</div>
-              <div class="flex gap-2 mt-3">
-                <button onclick="exportJSON()" class="flex-1 bg-[#e8b44f] text-[#1e3e35] rounded-full py-2 text-xs font-bold">JSON ↓</button>
-                <button onclick="document.getElementById('import-json-file').click()" class="flex-1 bg-white border border-black/10 rounded-full py-2 text-xs font-bold">JSON ↑</button>
-                <button onclick="exportAllExcel()" class="flex-1 bg-[#1e3e35] text-white rounded-full py-2 text-xs font-bold">EXCEL</button>
-              </div>
+            <div class="backup-row">
+              <span class="backup-label">Резервная копия</span>
+              <button onclick="exportJSON()" class="btn btn-gold btn-sm">Скачать JSON</button>
+              <button onclick="document.getElementById('import-json-file').click()" class="btn btn-ghost btn-sm">Загрузить JSON</button>
+              <button onclick="exportAllExcel()" class="btn btn-primary btn-sm">Excel: всё сразу</button>
               <input type="file" id="import-json-file" accept="application/json,.json" class="hidden" onchange="importJSON(event)">
             </div>
+            <div class="danger-zone">
+              <button onclick="seedDemo()" class="btn btn-gold btn-sm">Заполнить демо-данными</button>
+              <button onclick="clearAll()" class="btn btn-danger btn-sm">Очистить всё</button>
+            </div>
           </div>
-          <div class="mt-4 flex flex-wrap gap-2">
-            <button onclick="seedDemo()" class="bg-[#e8b44f] text-[#1e3e35] rounded-full px-5 py-2.5 text-xs font-bold">ЗАПОЛНИТЬ ДЕМО-ДАННЫМИ</button>
-            <button onclick="clearAll()" class="bg-white border border-red-200 text-red-600 rounded-full px-5 py-2.5 text-xs font-bold">ОЧИСТИТЬ ВСЁ</button>
-          </div>
-        </div>
-        <!-- Barcode -->
-        <div class="bg-white rounded-2xl p-6 border border-black/5 lg:col-span-2">
-          <h3 class="font-bold">Генератор штрихкода</h3>
-          <p class="text-xs text-black/50 mt-1">Введите код, выберите цвет фона — скачайте PNG. Формат CODE128.</p>
-          <div class="grid sm:grid-cols-3 gap-3 mt-4">
-            <label class="block"><span class="text-xs font-bold text-black/40">КОД</span><input id="barcode-value" value="4601234567890" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-            <label class="block"><span class="text-xs font-bold text-black/40">ЦВЕТ ФОНА (hex)</span><div class="flex gap-2 mt-1"><input id="barcode-bg" value="#ffffff" class="flex-1 rounded-xl border border-black/10 px-3 py-2.5 text-sm"><input type="color" id="barcode-bg-picker" value="#ffffff" oninput="document.getElementById('barcode-bg').value=this.value" class="w-12 h-10 rounded-xl border border-black/10 p-1"></div></label>
-            <label class="block"><span class="text-xs font-bold text-black/40">ЦВЕТ ЛИНИЙ</span><div class="flex gap-2 mt-1"><input id="barcode-line" value="#1e3e35" class="flex-1 rounded-xl border border-black/10 px-3 py-2.5 text-sm"><input type="color" id="barcode-line-picker" value="#1e3e35" oninput="document.getElementById('barcode-line').value=this.value" class="w-12 h-10 rounded-xl border border-black/10 p-1"></div></label>
-          </div>
-          <div class="flex gap-2 mt-3">
-            <button onclick="generateBarcode()" class="bg-[#1e3e35] text-white rounded-full px-6 py-2.5 text-xs font-bold">СГЕНЕРИРОВАТЬ</button>
-            <button onclick="downloadBarcode()" class="bg-white border border-black/10 rounded-full px-6 py-2.5 text-xs font-bold">СКАЧАТЬ PNG</button>
-          </div>
-          <div id="barcode-wrap" class="mt-4 bg-[#f4f7f5] rounded-xl p-6 grid place-items-center min-h-[120px]">
-            <svg id="barcode-svg"></svg>
+
+          <!-- Barcode -->
+          <div class="card card-pad span-2">
+            <div class="card-head"><div><div class="card-title">Генератор штрихкода</div><div class="card-sub">Формат CODE128, экспорт в PNG</div></div></div>
+            <div class="form-grid-3">
+              <label class="field"><span class="lbl">Код</span><input id="barcode-value" value="4601234567890"></label>
+              <label class="field"><span class="lbl">Цвет фона (hex)</span><span style="display:flex;gap:8px"><input id="barcode-bg" value="#ffffff" style="flex:1;min-width:0"><input type="color" id="barcode-bg-picker" value="#ffffff" oninput="document.getElementById('barcode-bg').value=this.value"></span></label>
+              <label class="field"><span class="lbl">Цвет линий</span><span style="display:flex;gap:8px"><input id="barcode-line" value="#1e3e35" style="flex:1;min-width:0"><input type="color" id="barcode-line-picker" value="#1e3e35" oninput="document.getElementById('barcode-line').value=this.value"></span></label>
+            </div>
+            <div class="actions" style="margin-top:14px">
+              <button onclick="generateBarcode()" class="btn btn-primary">Сгенерировать</button>
+              <button onclick="downloadBarcode()" class="btn btn-ghost">Скачать PNG</button>
+            </div>
+            <div id="barcode-wrap" class="barcode-box">
+              <svg id="barcode-svg"></svg>
+            </div>
           </div>
         </div>
       </div>
@@ -422,84 +961,119 @@ tailwind.config={theme:{extend:{colors:{mirea:{dark:'#1e3e35',sage:'#7a9d8f',gol
 </div>
 
 <!-- MODALS -->
-<div id="product-modal" class="fixed inset-0 z-50 hidden"><div onclick="closeProductModal()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div><div class="absolute inset-0 grid place-items-center p-4"><div class="bg-white rounded-[24px] max-w-[560px] w-full max-h-[90vh] overflow-auto p-6">
-  <div class="flex justify-between items-center"><h3 class="font-display text-xl font-semibold">Товар</h3><button onclick="closeProductModal()" class="w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button></div>
-  <form id="product-form" onsubmit="saveProduct(event)" class="mt-4 space-y-3">
-    <input type="hidden" name="id">
-    <div class="grid grid-cols-2 gap-3">
-      <label class="block"><span class="text-xs font-bold text-black/40">ЛИНЕЙКА (body/auto)</span><input name="line" required placeholder="body" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-      <label class="block"><span class="text-xs font-bold text-black/40">КАТЕГОРИЯ</span><input name="category" required placeholder="sensa/aura/modul" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+<div id="product-modal" class="modal hidden">
+  <div onclick="closeProductModal()" class="overlay"></div>
+  <div class="modal-stage">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h3 class="modal-title">Товар</h3>
+        <button onclick="closeProductModal()" class="modal-x" aria-label="Закрыть">✕</button>
+      </div>
+      <form id="product-form" onsubmit="saveProduct(event)" class="modal-body stack-form">
+        <input type="hidden" name="id">
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Линейка (body/auto)</span><input name="line" required placeholder="body"></label>
+          <label class="field"><span class="lbl">Категория</span><input name="category" required placeholder="sensa / aura / modul"></label>
+        </div>
+        <label class="field"><span class="lbl">Название</span><input name="name" required placeholder="Sensa"></label>
+        <label class="field"><span class="lbl">Подзаголовок (аромат)</span><input name="subtitle" required placeholder="Жасмин + Персик"></label>
+        <label class="field"><span class="lbl">Артикул</span><input name="sku" placeholder="SNS-JSM-500"></label>
+        <label class="field"><span class="lbl">Описание</span><textarea name="desc" rows="2"></textarea></label>
+        <div class="form-grid-3">
+          <label class="field"><span class="lbl">Объём</span><input name="volume" required placeholder="500 мл"></label>
+          <label class="field"><span class="lbl">Цена</span><input name="price" type="number" required placeholder="590"></label>
+          <label class="field"><span class="lbl">Старая цена</span><input name="oldPrice" type="number" placeholder="750"></label>
+        </div>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Бейдж</span><input name="badge" placeholder="ХИТ"></label>
+          <label class="field"><span class="lbl">Аромат (состав)</span><input name="scent" placeholder="Жасмин, персик"></label>
+        </div>
+        <button class="btn btn-primary btn-block" style="height:44px;margin-top:4px">Сохранить</button>
+      </form>
     </div>
-    <label class="block"><span class="text-xs font-bold text-black/40">НАЗВАНИЕ</span><input name="name" required placeholder="Sensa" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    <label class="block"><span class="text-xs font-bold text-black/40">ПОДЗАГОЛОВОК (аромат)</span><input name="subtitle" required placeholder="Жасмин + Персик" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    <label class="block"><span class="text-xs font-bold text-black/40">АРТИКУЛ</span><input name="sku" placeholder="SNS-JSM-500" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    <label class="block"><span class="text-xs font-bold text-black/40">ОПИСАНИЕ</span><textarea name="desc" rows="2" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></textarea></label>
-    <div class="grid grid-cols-3 gap-3">
-      <label class="block"><span class="text-xs font-bold text-black/40">ОБЪЁМ</span><input name="volume" required placeholder="500 мл" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-      <label class="block"><span class="text-xs font-bold text-black/40">ЦЕНА</span><input name="price" type="number" required placeholder="590" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-      <label class="block"><span class="text-xs font-bold text-black/40">СТАРАЯ ЦЕНА</span><input name="oldPrice" type="number" placeholder="750" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    </div>
-    <div class="grid grid-cols-2 gap-3">
-      <label class="block"><span class="text-xs font-bold text-black/40">БЕЙДЖ</span><input name="badge" placeholder="ХИТ" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-      <label class="block"><span class="text-xs font-bold text-black/40">АРОМАТ (состав)</span><input name="scent" placeholder="Жасмин, персик" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    </div>
-    <button class="w-full bg-[#1e3e35] text-white rounded-full py-3 text-sm font-bold mt-2">СОХРАНИТЬ</button>
-  </form>
-</div></div></div>
+  </div>
+</div>
 
-<div id="client-modal" class="fixed inset-0 z-50 hidden"><div onclick="closeClientModal()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div><div class="absolute inset-0 grid place-items-center p-4"><div class="bg-white rounded-[24px] max-w-[560px] w-full max-h-[90vh] overflow-auto p-6">
-  <div class="flex justify-between items-center"><h3 class="font-display text-xl font-semibold">Клиент</h3><button onclick="closeClientModal()" class="w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button></div>
-  <form id="client-form" onsubmit="saveClient(event)" class="mt-4 space-y-3">
-    <input type="hidden" name="id">
-    <label class="block"><span class="text-xs font-bold text-black/40">ФИО *</span><input name="fio" required placeholder="Иванов Иван Иванович" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    <div class="grid grid-cols-2 gap-3">
-      <label class="block"><span class="text-xs font-bold text-black/40">ТЕЛЕФОН *</span><input name="phone" required placeholder="+7 938 000-00-00" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-      <label class="block"><span class="text-xs font-bold text-black/40">EMAIL</span><input name="email" type="email" placeholder="mail@example.com" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+<div id="client-modal" class="modal hidden">
+  <div onclick="closeClientModal()" class="overlay"></div>
+  <div class="modal-stage">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h3 class="modal-title">Клиент</h3>
+        <button onclick="closeClientModal()" class="modal-x" aria-label="Закрыть">✕</button>
+      </div>
+      <form id="client-form" onsubmit="saveClient(event)" class="modal-body stack-form">
+        <input type="hidden" name="id">
+        <label class="field"><span class="lbl">ФИО *</span><input name="fio" required placeholder="Иванов Иван Иванович"></label>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Телефон *</span><input name="phone" required placeholder="+7 938 000-00-00"></label>
+          <label class="field"><span class="lbl">Email</span><input name="email" type="email" placeholder="mail@example.com"></label>
+        </div>
+        <label class="field"><span class="lbl">Тип клиента</span><select name="type"><option value="физлицо">Физлицо</option><option value="самозанятый">Самозанятый</option><option value="ИП">ИП</option><option value="юрлицо">Юрлицо</option></select></label>
+        <label class="field"><span class="lbl">Адрес</span><input name="address" placeholder="Город, улица"></label>
+        <label class="field"><span class="lbl">Компания / ИНН</span><input name="company" placeholder="ООО Ромашка, ИНН"></label>
+        <label class="field"><span class="lbl">Комментарий</span><textarea name="comment" rows="2"></textarea></label>
+        <button class="btn btn-primary btn-block" style="height:44px;margin-top:4px">Сохранить</button>
+      </form>
     </div>
-    <label class="block"><span class="text-xs font-bold text-black/40">ТИП КЛИЕНТА</span><select name="type" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"><option value="физлицо">Физлицо</option><option value="самозанятый">Самозанятый</option><option value="ИП">ИП</option><option value="юрлицо">Юрлицо</option></select></label>
-    <label class="block"><span class="text-xs font-bold text-black/40">АДРЕС</span><input name="address" placeholder="Город, улица" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    <label class="block"><span class="text-xs font-bold text-black/40">КОМПАНИЯ / ИНН</span><input name="company" placeholder="ООО Ромашка, ИНН" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    <label class="block"><span class="text-xs font-bold text-black/40">КОММЕНТАРИЙ</span><textarea name="comment" rows="2" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></textarea></label>
-    <button class="w-full bg-[#1e3e35] text-white rounded-full py-3 text-sm font-bold">СОХРАНИТЬ</button>
-  </form>
-</div></div></div>
+  </div>
+</div>
 
-<div id="supplier-modal" class="fixed inset-0 z-50 hidden"><div onclick="closeSupplierModal()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div><div class="absolute inset-0 grid place-items-center p-4"><div class="bg-white rounded-[24px] max-w-[560px] w-full max-h-[90vh] overflow-auto p-6">
-  <div class="flex justify-between items-center"><h3 class="font-display text-xl font-semibold">Поставщик</h3><button onclick="closeSupplierModal()" class="w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button></div>
-  <form id="supplier-form" onsubmit="saveSupplier(event)" class="mt-4 space-y-3">
-    <input type="hidden" name="id">
-    <label class="block"><span class="text-xs font-bold text-black/40">ИМЯ / НАЗВАНИЕ *</span><input name="name" required placeholder="ООО ХимПром / Иванов Иван" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    <div class="grid grid-cols-2 gap-3">
-      <label class="block"><span class="text-xs font-bold text-black/40">СТАТУС</span><select name="status" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"><option value="Физ. лицо">Физ. лицо</option><option value="самозанятый">Самозанятый</option><option value="ИП">ИП</option><option value="ООО">ООО</option></select></label>
-      <label class="block"><span class="text-xs font-bold text-black/40">КОНТАКТНЫЙ ТЕЛЕФОН</span><input name="phone" placeholder="+7 938 000-00-00" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
+<div id="supplier-modal" class="modal hidden">
+  <div onclick="closeSupplierModal()" class="overlay"></div>
+  <div class="modal-stage">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h3 class="modal-title">Поставщик</h3>
+        <button onclick="closeSupplierModal()" class="modal-x" aria-label="Закрыть">✕</button>
+      </div>
+      <form id="supplier-form" onsubmit="saveSupplier(event)" class="modal-body stack-form">
+        <input type="hidden" name="id">
+        <label class="field"><span class="lbl">Имя / название *</span><input name="name" required placeholder="ООО ХимПром / Иванов Иван"></label>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Статус</span><select name="status"><option value="Физ. лицо">Физ. лицо</option><option value="самозанятый">Самозанятый</option><option value="ИП">ИП</option><option value="ООО">ООО</option></select></label>
+          <label class="field"><span class="lbl">Телефон</span><input name="phone" placeholder="+7 938 000-00-00"></label>
+        </div>
+        <label class="field"><span class="lbl">Сайт</span><input name="site" placeholder="https://example.ru"></label>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Логин на сайте</span><input name="siteLogin" autocomplete="off" placeholder="Логин"></label>
+          <label class="field"><span class="lbl">Пароль на сайте</span><span style="display:flex;gap:8px"><input name="sitePass" type="password" autocomplete="new-password" placeholder="Пароль" style="flex:1;min-width:0"><button type="button" class="icon-eye" onclick="const i=this.previousElementSibling; i.type=i.type==='password'?'text':'password'; this.textContent=i.type==='password'?'👁':'🙈';">👁</button></span></label>
+        </div>
+        <label class="field"><span class="lbl">Примечание</span><textarea name="note" rows="2" placeholder="Что поставляет, условия…"></textarea></label>
+        <button class="btn btn-primary btn-block" style="height:44px;margin-top:4px">Сохранить</button>
+      </form>
     </div>
-    <label class="block"><span class="text-xs font-bold text-black/40">САЙТ</span><input name="site" placeholder="https://example.ru" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    <div class="grid grid-cols-2 gap-3">
-      <label class="block"><span class="text-xs font-bold text-black/40">ЛОГИН НА САЙТЕ</span><input name="siteLogin" autocomplete="off" placeholder="Логин" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-      <label class="block"><span class="text-xs font-bold text-black/40">ПАРОЛЬ НА САЙТЕ</span><span class="mt-1 flex gap-2"><input name="sitePass" type="password" autocomplete="new-password" placeholder="Пароль" class="flex-1 min-w-0 rounded-xl border border-black/10 px-3 py-2.5 text-sm"><button type="button" onclick="const i=this.previousElementSibling; i.type=i.type==='password'?'text':'password'; this.textContent=i.type==='password'?'👁':'🙈';" class="w-11 shrink-0 rounded-xl bg-[#f4f7f5] border border-black/5">👁</button></span></label>
-    </div>
-    <label class="block"><span class="text-xs font-bold text-black/40">ПРИМЕЧАНИЕ</span><textarea name="note" rows="2" placeholder="Что поставляет, условия…" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></textarea></label>
-    <button class="w-full bg-[#1e3e35] text-white rounded-full py-3 text-sm font-bold">СОХРАНИТЬ</button>
-  </form>
-</div></div></div>
+  </div>
+</div>
 
-<div id="sale-modal" class="fixed inset-0 z-50 hidden"><div onclick="closeSaleModal()" class="absolute inset-0 bg-[#1e3e35]/50 backdrop-blur-sm"></div><div class="absolute inset-0 grid place-items-center p-4"><div class="bg-white rounded-[24px] max-w-[560px] w-full max-h-[90vh] overflow-auto p-6">
-  <div class="flex justify-between items-center"><h3 class="font-display text-xl font-semibold">Продажа</h3><button onclick="closeSaleModal()" class="w-8 h-8 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button></div>
-  <form id="sale-form" onsubmit="saveSale(event)" class="mt-4 space-y-3">
-    <label class="block"><span class="text-xs font-bold text-black/40">КЛИЕНТ (выберите или введите)</span><input list="clients-datalist" name="customer" required placeholder="ФИО" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"><datalist id="clients-datalist"></datalist></label>
-    <label class="block"><span class="text-xs font-bold text-black/40">ТЕЛЕФОН</span><input name="phone" placeholder="+7..." class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    <div id="sale-items" class="space-y-2"></div>
-    <button type="button" onclick="addSaleItem()" class="w-full bg-[#f4f7f5] rounded-full py-2.5 text-xs font-bold border border-black/5">+ ТОВАР</button>
-    <div class="grid grid-cols-2 gap-3">
-      <label class="block"><span class="text-xs font-bold text-black/40">СУММА (автомат или вручную)</span><input name="total" type="number" placeholder="0" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-      <label class="block"><span class="text-xs font-bold text-black/40">ОПЛАТА</span><select name="payment" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"><option value="при получении">При получении</option><option value="картой">Картой</option><option value="по счёту">По счёту</option><option value="перевод">Перевод</option><option value="наличные">Наличные</option></select></label>
+<div id="sale-modal" class="modal hidden">
+  <div onclick="closeSaleModal()" class="overlay"></div>
+  <div class="modal-stage">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h3 class="modal-title">Продажа</h3>
+        <button onclick="closeSaleModal()" class="modal-x" aria-label="Закрыть">✕</button>
+      </div>
+      <form id="sale-form" onsubmit="saveSale(event)" class="modal-body stack-form">
+        <label class="field"><span class="lbl">Клиент (выберите или введите)</span><input list="clients-datalist" name="customer" required placeholder="ФИО"><datalist id="clients-datalist"></datalist></label>
+        <label class="field"><span class="lbl">Телефон</span><input name="phone" placeholder="+7…"></label>
+        <div>
+          <span class="lbl">Товары</span>
+          <div id="sale-items" class="stack-tight"></div>
+          <button type="button" onclick="addSaleItem()" class="btn btn-ghost btn-sm btn-block" style="margin-top:8px">+ Товар</button>
+        </div>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Сумма (автомат)</span><input name="total" type="number" placeholder="0"></label>
+          <label class="field"><span class="lbl">Оплата</span><select name="payment"><option value="при получении">При получении</option><option value="картой">Картой</option><option value="по счёту">По счёту</option><option value="перевод">Перевод</option><option value="наличные">Наличные</option></select></label>
+        </div>
+        <label class="field"><span class="lbl">Дата</span><input name="date" type="date"></label>
+        <button class="btn btn-gold btn-block" style="height:44px;margin-top:4px">Сохранить продажу</button>
+      </form>
     </div>
-    <label class="block"><span class="text-xs font-bold text-black/40">ДАТА</span><input name="date" type="date" class="mt-1 w-full rounded-xl border border-black/10 px-3 py-2.5 text-sm"></label>
-    <button class="w-full bg-[#e8b44f] text-[#1e3e35] rounded-full py-3 text-sm font-extrabold">СОХРАНИТЬ ПРОДАЖУ</button>
-  </form>
-</div></div></div>
+  </div>
+</div>
 
-<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#1e3e35] text-white px-6 py-3 rounded-full text-sm font-semibold shadow-xl z-[80] hidden"></div>
+<div id="toast" class="hidden"></div>
 
 <script>
 let products = JSON.parse(localStorage.getItem('mirea_products')||'null') || [
@@ -516,6 +1090,12 @@ let leads = JSON.parse(localStorage.getItem('mirea_leads')||'[]');
 let lines = JSON.parse(localStorage.getItem('mirea_lines')||'null') || [{id:'body', name:'Body'}, {id:'auto', name:'Auto'}];
 let statsPeriod = 7;
 let dashChart, statsChart, payChart, clientTypeChart;
+
+if(window.Chart){
+  Chart.defaults.font.family = "'Instrument Sans', sans-serif";
+  Chart.defaults.font.size = 11;
+  Chart.defaults.color = '#656C63';
+}
 
 function saveAll(){
   localStorage.setItem('mirea_products', JSON.stringify(products));
@@ -550,9 +1130,9 @@ function switchTab(tab){
   document.querySelectorAll('.tab-panel').forEach(el=> el.classList.add('hidden'));
   document.getElementById('tab-'+tab).classList.remove('hidden');
   document.querySelectorAll('.tab-btn').forEach(b=>{
-    if(b.dataset.tab===tab) b.className='tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl bg-white text-[#1e3e35] font-bold text-sm';
-    else b.className='tab-btn w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 text-sm font-semibold';
+    b.classList.toggle('active', b.dataset.tab===tab);
   });
+  const mob=document.getElementById('mobile-tab'); if(mob) mob.value=tab;
   if(tab==='dash') setTimeout(renderDash,50);
   if(tab==='stats') setTimeout(renderStats,50);
   if(tab==='products') renderProductsAdmin();
@@ -595,16 +1175,31 @@ function renderDash(){
   }
   const ctx=document.getElementById('dash-chart');
   if(dashChart) dashChart.destroy();
-  dashChart=new Chart(ctx,{type:'line',data:{labels, datasets:[{label:'Выручка', data, borderColor:'#1e3e35', backgroundColor:'rgba(30,62,53,0.08)', fill:true, tension:0.4, pointRadius:0}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true, ticks:{callback:v=>v+' ₽'}},x:{grid:{display:false}}}}});
+  dashChart=new Chart(ctx,{type:'line',data:{labels, datasets:[{label:'Выручка', data, borderColor:'#1E3E35', backgroundColor:'rgba(30,62,53,0.07)', borderWidth:1.8, fill:true, tension:0.38, pointRadius:0, pointHoverRadius:4, pointHoverBackgroundColor:'#DFA94D', pointHoverBorderColor:'#DFA94D'}]},options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, grid:{color:'#EFECE3'}, border:{display:false}, ticks:{callback:v=>v+' ₽',maxTicksLimit:5}},x:{grid:{display:false}, border:{display:false}, ticks:{maxTicksLimit:8}}}}});
 
   // recent
   const recent = [...sales].sort((a,b)=> new Date(b.date)-new Date(a.date)).slice(0,5);
-  document.getElementById('dash-recent').innerHTML = recent.length? recent.map(s=> `<div class="flex justify-between items-center bg-[#f4f7f5] rounded-xl p-3"><div><div class="font-bold text-sm">${s.customer||'—'}</div><div class="text-xs text-black/40">${new Date(s.date).toLocaleDateString('ru-RU')} • ${s.id}</div></div><div class="font-bold">${(s.total||0).toLocaleString('ru-RU')} ₽</div></div>`).join('') : `<div class="text-sm text-black/40 text-center py-6">Нет продаж</div>`;
+  document.getElementById('dash-recent').innerHTML = recent.length? recent.map(s=> `<div class="recent-item"><div><div class="recent-name">${s.customer||'—'}</div><div class="recent-meta">${new Date(s.date).toLocaleDateString('ru-RU')} · ${s.id}</div></div><div class="recent-amt">${(s.total||0).toLocaleString('ru-RU')} ₽</div></div>`).join('') : `<div class="empty">Нет продаж за период</div>`;
+
+  renderDashLeads();
+}
+
+function renderDashLeads(){
+  const box=document.getElementById('dash-leads'); if(!box) return;
+  const latest=[...leads].sort((a,b)=> new Date(b.date)-new Date(a.date)).slice(0,3);
+  box.innerHTML = latest.length? latest.map(l=> `
+    <div class="recent-item">
+      <div style="min-width:0">
+        <div class="recent-name">${l.name||'Без имени'}${l.company? ` <span class="mut" style="font-weight:400">· ${l.company}</span>`:''}</div>
+        <div class="recent-meta">${l.phone||l.email||'—'} · ${new Date(l.date).toLocaleDateString('ru-RU')}</div>
+      </div>
+      <a href="mailto:${l.email||''}" class="chip chip-gold" style="text-decoration:none">Заявка</a>
+    </div>`).join('') : `<div class="empty" style="padding:22px 0">Заявок пока нет</div>`;
 }
 
 // PRODUCTS ADMIN
 function renderLines(){
-  document.getElementById('lines-list').innerHTML = lines.map(l=> `<span class="bg-[#f4f7f5] border border-black/10 rounded-full px-4 py-2 text-sm font-semibold flex items-center gap-2">${l.name} <span class="text-black/40 text-xs">${l.id}</span> <button onclick="removeLine('${l.id}')" class="ml-1 w-5 h-5 rounded-full bg-white grid place-items-center text-xs">✕</button></span>`).join('');
+  document.getElementById('lines-list').innerHTML = lines.map(l=> `<span class="chip chip-green">${l.name} <span style="opacity:.55">${l.id}</span><button onclick="removeLine('${l.id}')" class="chip-x" aria-label="Удалить линейку">✕</button></span>`).join('');
 }
 function addLine(){
   const name=document.getElementById('new-line-name').value.trim();
@@ -621,17 +1216,21 @@ function removeLine(id){
 function renderProductsAdmin(){
   renderLines();
   document.getElementById('products-list').innerHTML = products.map(p=> `
-    <div class="bg-white rounded-2xl p-5 border border-black/5">
-      <div class="flex justify-between items-start gap-3">
-        <div><div class="text-[11px] tracking-[0.12em] font-bold text-black/40">${p.line.toUpperCase()} • ${p.category.toUpperCase()} • ${p.volume} • арт. ${(p.sku||p.id).toUpperCase()}</div><div class="font-bold mt-1">${p.name} — ${p.subtitle}</div><div class="text-sm text-black/50 mt-1 line-clamp-2">${p.desc}</div></div>
-        <div class="text-right shrink-0"><div class="font-extrabold">${p.price.toLocaleString('ru-RU')} ₽</div><div class="text-xs text-black/30 line-through">${p.oldPrice||''}</div></div>
+    <article class="prod">
+      <div class="prod-top">
+        <div>
+          <div class="prod-meta">${p.line.toUpperCase()} · ${p.category.toUpperCase()} · ${p.volume}<br>арт. ${(p.sku||p.id).toUpperCase()}</div>
+          <div class="prod-name">${p.name} — ${p.subtitle}</div>
+          <div class="prod-desc">${p.desc||''}</div>
+        </div>
+        <div class="prod-price"><b>${p.price.toLocaleString('ru-RU')} ₽</b>${p.oldPrice? `<div class="prod-old">${p.oldPrice.toLocaleString('ru-RU')} ₽</div>`:''}</div>
       </div>
-      <div class="flex gap-2 mt-4">
-        <button onclick="editProduct('${p.id}')" class="flex-1 bg-[#f4f7f5] rounded-full py-2 text-xs font-bold">ИЗМЕНИТЬ</button>
-        <button onclick="deleteProduct('${p.id}')" class="px-4 bg-white border border-red-200 text-red-600 rounded-full py-2 text-xs font-bold">УДАЛИТЬ</button>
+      <div class="prod-actions">
+        <button onclick="editProduct('${p.id}')" class="btn btn-ghost btn-sm">Изменить</button>
+        <button onclick="deleteProduct('${p.id}')" class="btn btn-danger btn-sm">Удалить</button>
       </div>
-    </div>
-  `).join('') || `<div class="col-span-full text-center py-10 text-black/40">Нет товаров</div>`;
+    </article>
+  `).join('') || `<div class="empty" style="grid-column:1/-1">Нет товаров</div>`;
 }
 function openProductModal(id=null){
   document.getElementById('product-modal').classList.remove('hidden');
@@ -666,15 +1265,15 @@ function renderSales(){
   if(q) list=list.filter(s=> (s.id+s.customer+s.phone).toLowerCase().includes(q));
   if(pay) list=list.filter(s=> s.payment===pay);
   document.getElementById('sales-tbody').innerHTML = list.map(s=> `
-    <tr class="border-b border-black/5 hover:bg-[#f4f7f5]/50">
-      <td class="p-3"><div class="font-bold text-xs">${s.id}</div><div class="text-xs text-black/40">${new Date(s.date).toLocaleString('ru-RU')}</div></td>
-      <td class="p-3"><div class="font-semibold">${s.customer||'—'}</div><div class="text-xs text-black/40">${s.phone||''}</div></td>
-      <td class="p-3 text-xs">${(s.items||[]).map(it=> `${it.name||it.id} ×${it.qty}`).join('<br>')}</td>
-      <td class="p-3 text-right font-bold">${(s.total||0).toLocaleString('ru-RU')} ₽</td>
-      <td class="p-3"><span class="bg-[#f4f7f5] rounded-full px-2.5 py-1 text-xs font-bold">${s.payment||'—'}</span></td>
-      <td class="p-3"><button onclick="deleteSale('${s.id}')" class="text-red-500 text-xs font-bold">✕</button></td>
+    <tr>
+      <td><div class="mono b">${s.id}</div><div class="xs mut">${new Date(s.date).toLocaleString('ru-RU')}</div></td>
+      <td><div class="b">${s.customer||'—'}</div><div class="xs mut">${s.phone||''}</div></td>
+      <td class="xs">${(s.items||[]).map(it=> `${it.name||it.id} ×${it.qty}`).join('<br>')}</td>
+      <td class="td-r b">${(s.total||0).toLocaleString('ru-RU')} ₽</td>
+      <td><span class="chip">${s.payment||'—'}</span></td>
+      <td class="td-r"><button onclick="deleteSale('${s.id}')" class="icon-x" aria-label="Удалить продажу">✕</button></td>
     </tr>
-  `).join('') || `<tr><td colspan="6" class="p-10 text-center text-black/40">Нет продаж</td></tr>`;
+  `).join('') || `<tr><td colspan="6"><div class="empty">Нет продаж</div></td></tr>`;
 }
 function deleteSale(id){ if(!confirm('Удалить продажу?'))return; sales=sales.filter(s=>s.id!==id); localStorage.setItem('mirea_sales',JSON.stringify(sales)); renderSales(); renderDash(); }
 function openSaleModal(){
@@ -688,8 +1287,8 @@ function openSaleModal(){
 function closeSaleModal(){ document.getElementById('sale-modal').classList.add('hidden'); }
 function addSaleItem(){
   const div=document.createElement('div');
-  div.className='flex gap-2';
-  div.innerHTML=`<select class="flex-1 rounded-xl border border-black/10 px-3 py-2.5 text-sm">${products.map(p=> `<option value="${p.id}">${p.name} — ${p.subtitle} (${p.price} ₽)</option>`).join('')}</select><input type="number" value="1" min="1" class="w-20 rounded-xl border border-black/10 px-3 py-2.5 text-sm" placeholder="шт"><button type="button" onclick="this.parentElement.remove();calcSaleTotal()" class="w-10 h-10 rounded-full bg-[#f4f7f5] grid place-items-center">✕</button>`;
+  div.className='sale-item';
+  div.innerHTML=`<select>${products.map(p=> `<option value="${p.id}">${p.name} — ${p.subtitle} (${p.price} ₽)</option>`).join('')}</select><input type="number" value="1" min="1" placeholder="шт"><button type="button" class="sale-remove" onclick="this.parentElement.remove();calcSaleTotal()" aria-label="Удалить">✕</button>`;
   div.querySelectorAll('select,input').forEach(el=> el.addEventListener('input',calcSaleTotal));
   document.getElementById('sale-items').appendChild(div);
   calcSaleTotal();
@@ -728,13 +1327,17 @@ function renderClients(){
   if(q) list=list.filter(c=> (c.fio+c.phone+c.email).toLowerCase().includes(q));
   if(type) list=list.filter(c=> c.type===type);
   document.getElementById('clients-list').innerHTML = list.map(c=> `
-    <div class="p-5 flex flex-wrap gap-4 items-center">
-      <div class="w-10 h-10 rounded-full bg-[#1e3e35] text-white grid place-items-center font-bold">${c.fio?.[0]||'?'}</div>
-      <div class="flex-1 min-w-[200px]"><div class="font-bold">${c.fio}</div><div class="text-xs text-black/50">${c.phone} • ${c.email||'—'} • ${c.type}</div><div class="text-xs text-black/30">${c.address||''} ${c.company? '• '+c.company:''}</div></div>
-      <div class="text-right"><div class="text-xs tracking-[0.12em] font-bold text-black/40">${c.type.toUpperCase()}</div><div class="text-xs text-black/30">${c.date? new Date(c.date).toLocaleDateString('ru-RU'):''}</div></div>
-      <div class="flex gap-2"><button onclick="editClient('${c.id}')" class="bg-[#f4f7f5] rounded-full px-4 py-2 text-xs font-bold">ИЗМЕНИТЬ</button><button onclick="deleteClient('${c.id}')" class="text-red-500 text-xs font-bold px-2">✕</button></div>
+    <div class="row">
+      <div class="avatar">${c.fio?.[0]||'?'}</div>
+      <div class="row-main">
+        <div class="row-name">${c.fio}</div>
+        <div class="row-meta">${c.phone} • ${c.email||'—'}</div>
+        <div class="row-meta">${c.address||''} ${c.company? '• '+c.company:''}</div>
+      </div>
+      <div class="row-side"><span class="chip">${(c.type||'').toUpperCase()}</span><div class="xs mut" style="margin-top:5px">${c.date? new Date(c.date).toLocaleDateString('ru-RU'):''}</div></div>
+      <div class="row-actions"><button onclick="editClient('${c.id}')" class="btn btn-ghost btn-sm">Изменить</button><button onclick="deleteClient('${c.id}')" class="icon-x" aria-label="Удалить">✕</button></div>
     </div>
-  `).join('') || `<div class="p-10 text-center text-black/40">Нет клиентов</div>`;
+  `).join('') || `<div class="empty">Нет клиентов</div>`;
 }
 function openClientModal(id=null){
   document.getElementById('client-modal').classList.remove('hidden');
@@ -762,18 +1365,18 @@ function renderSuppliers(){
   if(q) list=list.filter(s=> ((s.name||'')+(s.phone||'')+(s.site||'')+(s.note||'')).toLowerCase().includes(q));
   if(status) list=list.filter(s=> s.status===status);
   document.getElementById('suppliers-list').innerHTML = list.map(s=> `
-    <div class="p-5 flex flex-wrap gap-4 items-center">
-      <div class="w-10 h-10 rounded-full bg-[#7a9d8f] text-white grid place-items-center font-bold shrink-0">${(s.name||'?')[0]}</div>
-      <div class="flex-1 min-w-[220px]">
-        <div class="font-bold">${s.name||'—'}</div>
-        <div class="text-xs text-black/50 mt-0.5">${s.phone? `<a href="tel:${s.phone.replace(/[^+\d]/g,'')}" class="underline">${s.phone}</a> • `:''}${s.site? `<a href="${s.site.startsWith('http')? s.site : 'https://'+s.site}" target="_blank" class="underline text-[#1e3e35]">${s.site}</a>`:''}</div>
-        ${s.siteLogin||s.sitePass? `<div class="text-xs text-black/50 mt-0.5">доступ: <b>${s.siteLogin||'—'}</b> • <span id="sup-pass-${s.id}">••••••</span> <button onclick="toggleSupPass('${s.id}')" class="underline text-[#1e3e35] font-bold">показать</button></div>`:''}
-        ${s.note? `<div class="text-xs text-black/40 mt-1 bg-[#f4f7f5] rounded-lg px-3 py-2">${s.note}</div>`:''}
+    <div class="row">
+      <div class="avatar avatar-sage">${(s.name||'?')[0]}</div>
+      <div class="row-main">
+        <div class="row-name">${s.name||'—'}</div>
+        <div class="row-meta">${s.phone? `<a href="tel:${s.phone.replace(/[^+\d]/g,'')}">${s.phone}</a> • `:''}${s.site? `<a href="${s.site.startsWith('http')? s.site : 'https://'+s.site}" target="_blank" rel="noopener">${s.site}</a>`:''}</div>
+        ${s.siteLogin||s.sitePass? `<div class="access">доступ: <b>${s.siteLogin||'—'}</b> • <span id="sup-pass-${s.id}">••••••</span> <button onclick="toggleSupPass('${s.id}')">показать</button></div>`:''}
+        ${s.note? `<div class="row-note">${s.note}</div>`:''}
       </div>
-      <div class="text-right shrink-0"><div class="text-xs tracking-[0.12em] font-bold text-black/40">${(s.status||'').toUpperCase()}</div><div class="text-xs text-black/30">${s.date? new Date(s.date).toLocaleDateString('ru-RU'):''}</div></div>
-      <div class="flex gap-2 shrink-0"><button onclick="editSupplier('${s.id}')" class="bg-[#f4f7f5] rounded-full px-4 py-2 text-xs font-bold">ИЗМЕНИТЬ</button><button onclick="deleteSupplier('${s.id}')" class="text-red-500 text-xs font-bold px-2">✕</button></div>
+      <div class="row-side"><span class="chip">${(s.status||'').toUpperCase()}</span><div class="xs mut" style="margin-top:5px">${s.date? new Date(s.date).toLocaleDateString('ru-RU'):''}</div></div>
+      <div class="row-actions"><button onclick="editSupplier('${s.id}')" class="btn btn-ghost btn-sm">Изменить</button><button onclick="deleteSupplier('${s.id}')" class="icon-x" aria-label="Удалить">✕</button></div>
     </div>
-  `).join('') || `<div class="p-10 text-center text-black/40">Нет поставщиков</div>`;
+  `).join('') || `<div class="empty">Нет поставщиков</div>`;
 }
 function openSupplierModal(id=null){
   document.getElementById('supplier-modal').classList.remove('hidden');
@@ -807,19 +1410,28 @@ function toggleSupPass(id){
 function renderLeads(){
   leads=JSON.parse(localStorage.getItem('mirea_leads')||'[]');
   document.getElementById('leads-list').innerHTML = [...leads].reverse().map(l=> `
-    <div class="bg-white rounded-2xl p-5 border border-black/5">
-      <div class="flex justify-between gap-4"><div><div class="font-bold">${l.name} <span class="text-black/40 font-normal">• ${l.phone}</span></div><div class="text-xs text-black/40">${l.email} • ${l.company||''} • ${new Date(l.date).toLocaleString('ru-RU')}</div></div><a href="mailto:${l.email}" class="text-xs font-bold text-[#1e3e35] underline">ОТВЕТИТЬ</a></div>
-      <div class="text-sm mt-3 bg-[#f4f7f5] rounded-xl p-3">${l.message||'—'}</div>
+    <div class="card card-pad">
+      <div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start">
+        <div>
+          <div class="b">${l.name} <span class="mut" style="font-weight:400">• ${l.phone}</span></div>
+          <div class="xs mut" style="margin-top:4px">${l.email} ${l.company? '• '+l.company:''} • ${new Date(l.date).toLocaleString('ru-RU')}</div>
+        </div>
+        <a href="mailto:${l.email}" class="btn btn-ghost btn-sm">Ответить</a>
+      </div>
+      <div class="row-note" style="margin-top:12px">${l.message||'—'}</div>
     </div>
-  `).join('') || `<div class="bg-white rounded-2xl p-10 text-center text-black/40">Нет заявок</div>`;
+  `).join('') || `<div class="card"><div class="empty">Нет заявок</div></div>`;
 }
 
 // STATS
+function toggleChartEmpty(ctx, isEmpty){
+  const box = ctx && ctx.closest ? ctx.closest('.chart-box') : null;
+  if(box) box.classList.toggle('is-empty', !!isEmpty);
+}
 function setStatsPeriod(p){
   statsPeriod=parseInt(p);
   document.querySelectorAll('.stats-period-btn').forEach(b=>{
-    if(b.dataset.p===p) b.className='stats-period-btn bg-[#1e3e35] text-white rounded-full px-5 py-2.5 text-xs font-bold';
-    else b.className='stats-period-btn bg-white border border-black/10 rounded-full px-5 py-2.5 text-xs font-bold';
+    b.classList.toggle('active', b.dataset.p===p);
   });
   renderStats();
 }
@@ -829,7 +1441,6 @@ function renderStats(){
   document.getElementById('stats-range').textContent = `Выбрано: ${filtered.length} заказов на ${filtered.reduce((s,x)=>s+x.total,0).toLocaleString('ru-RU')} ₽`;
 
   // line chart by day
-  const days = statsPeriod===1? 24 : statsPeriod;
   let labels=[], data=[];
   if(statsPeriod===1){
     // hourly
@@ -839,7 +1450,7 @@ function renderStats(){
   }
   const ctx=document.getElementById('stats-chart');
   if(statsChart) statsChart.destroy();
-  statsChart=new Chart(ctx,{type:'bar',data:{labels, datasets:[{label:'Выручка', data, backgroundColor:'#1e3e35', borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true},x:{grid:{display:false}}}}});
+  statsChart=new Chart(ctx,{type:'bar',data:{labels, datasets:[{label:'Выручка', data, backgroundColor:'#1E3E35', hoverBackgroundColor:'#DFA94D', borderRadius:5, maxBarThickness:26}]},options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, grid:{color:'#EFECE3'}, border:{display:false}},x:{grid:{display:false}, border:{display:false}, ticks:{maxTicksLimit:10}}}}});
 
   // top products
   const counts={};
@@ -849,15 +1460,16 @@ function renderStats(){
     const prod=products.find(p=>p.id===id);
     const max=sorted[0][1];
     const w=Math.round(qty/max*100);
-    return `<div><div class="flex justify-between text-sm"><span class="font-semibold">${prod? prod.name+' — '+prod.subtitle : id}</span><span class="font-bold">${qty} шт</span></div><div class="h-2 bg-[#f4f7f5] rounded-full mt-1 overflow-hidden"><div class="h-full bg-[#e8b44f]" style="width:${w}%"></div></div></div>`;
-  }).join('') : `<div class="text-sm text-black/40">Нет данных</div>`;
+    return `<div class="bar-row"><div class="bar-top"><span>${prod? prod.name+' — '+prod.subtitle : id}</span><b>${qty} шт</b></div><div class="bar-track"><div class="bar-fill" style="width:${w}%"></div></div></div>`;
+  }).join('') : `<div class="empty">Нет данных</div>`;
 
   // payment pie
   const payCounts={};
   filtered.forEach(s=> payCounts[s.payment]=(payCounts[s.payment]||0)+1);
   const payCtx=document.getElementById('stats-pay');
+  toggleChartEmpty(payCtx, Object.keys(payCounts).length===0);
   if(payChart) payChart.destroy();
-  payChart=new Chart(payCtx,{type:'doughnut',data:{labels:Object.keys(payCounts), datasets:[{data:Object.values(payCounts), backgroundColor:['#1e3e35','#7a9d8f','#e8b44f','#d1d5db','#9ca3af']}]},options:{plugins:{legend:{position:'bottom'}}}});
+  payChart=new Chart(payCtx,{type:'doughnut',data:{labels:Object.keys(payCounts), datasets:[{data:Object.values(payCounts), backgroundColor:['#1E3E35','#7A9D8F','#DFA94D','#D8D2C3','#A9BDB2'], borderWidth:0}]},options:{responsive:true, maintainAspectRatio:false, cutout:'62%', plugins:{legend:{position:'bottom', labels:{boxWidth:8,boxHeight:8,usePointStyle:true,pointStyle:'circle',padding:14}}}}});
 
   // client type
   const typeCounts={};
@@ -867,8 +1479,9 @@ function renderStats(){
     typeCounts[t]=(typeCounts[t]||0)+1;
   });
   const ctCtx=document.getElementById('stats-client-type');
+  toggleChartEmpty(ctCtx, Object.keys(typeCounts).length===0);
   if(clientTypeChart) clientTypeChart.destroy();
-  clientTypeChart=new Chart(ctCtx,{type:'doughnut',data:{labels:Object.keys(typeCounts), datasets:[{data:Object.values(typeCounts), backgroundColor:['#1e3e35','#7a9d8f','#e8b44f','#a7f3d0']}]},options:{plugins:{legend:{position:'bottom'}}}});
+  clientTypeChart=new Chart(ctCtx,{type:'doughnut',data:{labels:Object.keys(typeCounts), datasets:[{data:Object.values(typeCounts), backgroundColor:['#1E3E35','#7A9D8F','#DFA94D','#D8D2C3'], borderWidth:0}]},options:{responsive:true, maintainAspectRatio:false, cutout:'62%', plugins:{legend:{position:'bottom', labels:{boxWidth:8,boxHeight:8,usePointStyle:true,pointStyle:'circle',padding:14}}}}});
 }
 
 function showToast(msg){
@@ -977,7 +1590,7 @@ async function handleLogoUpload(e){
     if(data.ok){
       const h=parseInt(localStorage.getItem('mirea_logo_height')||'48',10);
       const el=document.getElementById('logo-preview');
-      if(el) el.innerHTML=`<img src="${data.url}" style="height:${h}px;max-width:100%;" class="object-contain">`;
+      if(el) el.innerHTML=`<img src="${data.url}" style="height:${h}px;max-width:100%;object-fit:contain" alt="Логотип">`;
       showToast('Логотип загружен на сервер — виден везде');
     }else{
       showToast('Ошибка: '+data.error);
@@ -994,7 +1607,7 @@ function renderLogoPreview(){
   if(val) val.textContent=h;
   if(range) range.value=h;
   if(!el) return;
-  el.innerHTML=`<img src="logo.png?v=${Date.now()}" style="height:${parseInt(localStorage.getItem('mirea_logo_height')||'48',10)}px;max-width:100%;" class="object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span style="display:none;color:#999;font-size:11px;">лого не найден на сервере</span>`;
+  el.innerHTML=`<img src="logo.png?v=${Date.now()}" style="height:${h}px;max-width:100%;object-fit:contain" alt="Логотип" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span style="display:none;color:#A9ABA2;font-size:11px">лого не найден на сервере</span>`;
 }
 function changeLogoHeight(v){
   localStorage.setItem('mirea_logo_height', String(v));
@@ -1014,7 +1627,7 @@ function renderSocials(){
   const list=getSocials();
   const el=document.getElementById('socials-list');
   if(!el) return;
-  el.innerHTML = list.length ? list.map((s,i)=> `<div class="flex items-center gap-2 bg-[#f4f7f5] rounded-xl px-3 py-2 text-sm"><span class="font-bold flex-1">${s.name} — <span class="text-black/50 text-xs">${s.url}</span></span><button onclick="removeSocial(${i})" class="w-7 h-7 rounded-full bg-white grid place-items-center text-xs">✕</button></div>`).join('') : `<div class="text-xs text-black/40">Нет соцсетей</div>`;
+  el.innerHTML = list.length ? list.map((s,i)=> `<div class="soc-row"><span class="soc-name">${s.name} <span class="soc-url">${s.url}</span></span><button onclick="removeSocial(${i})" class="soc-x" aria-label="Удалить">✕</button></div>`).join('') : `<div class="hint" style="text-align:left">Нет соцсетей</div>`;
 }
 function addSocial(){
   const name=document.getElementById('social-name').value.trim();
@@ -1170,6 +1783,9 @@ function seedDemo(){
   localStorage.setItem('mirea_sales',JSON.stringify(sales)); localStorage.setItem('mirea_clients',JSON.stringify(clients));
   renderAll(); showToast('Демо данные добавлены');
 }
+
+const topDate=document.getElementById('topbar-date');
+if(topDate) topDate.textContent=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
 </script>
 </body>
 </html>
