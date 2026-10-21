@@ -74,7 +74,9 @@ section{scroll-margin-top:88px}
 .brand:hover .brand-mark{transform:rotate(-6deg)}
 .brand-name{font-family:var(--serif);font-size:21px;line-height:1;letter-spacing:.13em}
 .brand-sub{font-size:8.5px;letter-spacing:.22em;font-weight:600;opacity:.55;margin-top:3px}
-#site-logo-custom{height:44px;max-width:220px;object-fit:contain;display:none}
+#site-logo-custom{height:44px;max-width:220px;object-fit:contain;display:none;filter:brightness(0) invert(1)}
+#site-logo-custom:not(.hidden){display:block}
+.nav.scrolled #site-logo-custom{filter:none}
 .nav-links{display:flex;align-items:center;gap:clamp(14px,2.2vw,30px);margin-left:auto}
 .nav-link{font-size:11.5px;letter-spacing:.13em;font-weight:600;text-transform:uppercase;position:relative;padding:6px 0;opacity:.72;transition:opacity .25s}
 .nav-link::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
@@ -90,7 +92,7 @@ section{scroll-margin-top:88px}
 .social-link:hover{background:var(--gold);color:var(--green-deep);transform:translateY(-2px)}
 .nav.scrolled .social-link{background:rgba(30,62,53,.08)}
 .nav.scrolled .social-link:hover{background:var(--green);color:var(--paper)}
-.social-link .soc-ig{width:17px;height:17px}
+.social-link .soc-ig{width:17px;height:17px;display:block}
 .cart-btn{position:relative;width:44px;height:44px;border-radius:50%;background:var(--paper);color:var(--green);display:grid;place-items:center;transition:background .25s,color .25s,transform .25s}
 .cart-btn:hover{background:var(--gold);color:var(--green-deep);transform:translateY(-1px)}
 #cart-badge{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--gold);color:var(--green-deep);font-size:10.5px;font-weight:700;display:grid;place-items:center;line-height:1}
@@ -442,6 +444,7 @@ section{scroll-margin-top:88px}
 }
 @media(max-width:700px){
   .brand-sub{display:none}
+  #site-logo-custom{height:38px;max-width:170px}
   .nav-right{gap:8px}
   .nav-phone span{display:none}
   .nav-phone{width:40px;height:40px;justify-content:center;border-radius:50%;background:rgba(255,255,255,.12)}
@@ -471,6 +474,9 @@ section{scroll-margin-top:88px}
   .footer-mark{font-size:clamp(64px,20vw,110px)}
   .footer-cols{grid-template-columns:1fr 1fr;gap:20px}
   .footer-bottom{flex-direction:column;gap:6px}
+}
+@media(max-width:340px){
+  #site-logo-custom{height:30px;max-width:135px}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -1321,7 +1327,7 @@ function loadBranding(){
     const u = url.toLowerCase();
     if(u.includes('vk')) return 'VK';
     if(u.includes('telegram') || u.includes('t.me')) return 'TG';
-    if(u.includes('instagram')) return '<span class="soc-ig" aria-hidden="true"></span>';
+    if(u.includes('instagram')) return '<svg class="soc-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/></svg>';
     if(u.includes('whatsapp') || u.includes('wa.me')) return 'WA';
     if(u.includes('youtube')) return 'YT';
     if(u.includes('ok.ru')) return 'OK';
