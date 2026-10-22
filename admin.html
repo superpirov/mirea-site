@@ -615,6 +615,8 @@ body input[type=range]{width:100%;accent-color:var(--green);height:22px}
             <p class="page-sub">Линейки, категории и карточки товаров</p>
           </div>
           <div class="actions">
+            <span id="products-sync-status" class="page-sub" style="margin-right:10px"></span>
+            <button id="publish-products-btn" onclick="publishProducts()" class="btn btn-ghost">Опубликовать на сервере</button>
             <button onclick="openProductModal()" class="btn btn-gold">+ Добавить товар</button>
           </div>
         </div>
@@ -1089,12 +1091,13 @@ body input[type=range]{width:100%;accent-color:var(--green);height:22px}
 <div id="toast" class="hidden"></div>
 
 <script>
+const PRODUCTS_API_KEY = 'mirea_catalog_9f4c2a7e1b6d';
 let products = JSON.parse(localStorage.getItem('mirea_products')||'null') || [
-  { id:'sensa-jasmin', sku:'SNS-JSM-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', scent:'Жасмин, персик, белый мускус', img:'bottle-clean.png' },
-  { id:'sensa-grape', sku:'SNS-GRP-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец + Чистая кожа', desc:'Бодрящий цитрус с пикантной нотой перца.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', scent:'Грейпфрут, розовый перец, кедр', img:'bottle-clean.png' },
-  { id:'aura-almond', sku:'AUR-AMD-500', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', scent:'Миндаль, вишня, ваниль', img:'bottle-clean.png' },
-  { id:'aura-honey', sku:'AUR-HON-500', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом.', volume:'500 мл', price:490, oldPrice:650, badge:'', scent:'Мёд, молоко', img:'bottle-clean.png' },
-  { id:'modul-20', sku:'MDL-20L', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь 1:50', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', scent:'—' },
+  { id:'sensa-jasmin', sku:'SNS-JSM-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Жасмин + Персик', desc:'Гель для душа с французской отдушкой. Мягкое очищение, аромат держится весь день.', volume:'500 мл', price:590, oldPrice:750, badge:'ХИТ', color:'#1e3e35', accent:'#dfa94d', scent:'Жасмин, персик, белый мускус', img:'bottle-clean.png' },
+  { id:'sensa-grape', sku:'SNS-GRP-500', line:'body', category:'sensa', name:'Sensa', subtitle:'Грейпфрут и розовый перец', desc:'Бодрящий цитрус с пикантной нотой перца. Для утреннего заряда и чистой кожи.', volume:'500 мл', price:590, oldPrice:750, badge:'NEW', color:'#7a9d8f', accent:'#1e3e35', scent:'Грейпфрут, розовый перец, кедр', img:'bottle-clean.png' },
+  { id:'aura-almond', sku:'AUR-AMD-500', line:'body', category:'aura', name:'Aura', subtitle:'Миндаль + Вишня', desc:'Жидкое мыло с кремовой пеной. Не сушит кожу, аромат вишнёвого десерта.', volume:'500 мл', price:490, oldPrice:650, badge:'TOP', color:'#fdf8ed', accent:'#1e3e35', scent:'Миндаль, вишня, ваниль', img:'bottle-clean.png' },
+  { id:'aura-honey', sku:'AUR-HON-500', line:'body', category:'aura', name:'Aura', subtitle:'Мёд с молоком', desc:'Питательное мыло с мёдом и молочными протеинами. Для сухой кожи.', volume:'500 мл', price:490, oldPrice:650, badge:'', color:'#fff7e6', accent:'#dfa94d', scent:'Мёд, молоко, овсяное молочко', img:'bottle-clean.png' },
+  { id:'modul-20', sku:'MDL-20L', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь для бесконтактной мойки. 1:50, густая пена, без разводов.', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', color:'#1e3e35', accent:'#dfa94d', scent:'—', extra:'20 литров · концентрат' }
 ];
 let sales = JSON.parse(localStorage.getItem('mirea_sales')||'[]');
 let clients = JSON.parse(localStorage.getItem('mirea_clients')||'[]');
@@ -1118,6 +1121,65 @@ function saveAll(){
   localStorage.setItem('mirea_lines', JSON.stringify(lines));
 }
 
+function setProductsSyncStatus(text, error=false){
+  const el=document.getElementById('products-sync-status');
+  if(!el) return;
+  el.textContent=text;
+  el.style.color=error ? '#a33a2b' : '';
+}
+
+async function saveProductsToServer(list){
+  try{
+    const res=await fetch('api/products.php', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Mirea-Products-Key':PRODUCTS_API_KEY},
+      body:JSON.stringify({products:list})
+    });
+    const data=await res.json();
+    if(!res.ok || !data || data.ok !== true || !Array.isArray(data.products)) return null;
+    return data.products;
+  }catch(e){
+    return null;
+  }
+}
+
+async function loadProductsFromServer(){
+  try{
+    const res=await fetch('api/products.php?t='+Date.now(), {cache:'no-store'});
+    if(!res.ok) return;
+    const data=await res.json();
+    if(!data || data.ok !== true || !Array.isArray(data.products)) return;
+    if(data.exists){
+      products=data.products;
+      localStorage.setItem('mirea_products', JSON.stringify(products));
+      renderProductsAdmin();
+      setProductsSyncStatus('На сервере: '+products.length+' тов.');
+    }else{
+      setProductsSyncStatus('Каталог ещё не опубликован');
+    }
+  }catch(e){
+    setProductsSyncStatus('Сервер недоступен', true);
+  }
+}
+
+async function publishProducts(showSuccess=true){
+  const btn=document.getElementById('publish-products-btn');
+  if(btn){ btn.disabled=true; btn.textContent='Публикую...'; }
+  const saved=await saveProductsToServer(products);
+  if(btn){ btn.disabled=false; btn.textContent='Опубликовать на сервере'; }
+  if(saved){
+    products=saved;
+    localStorage.setItem('mirea_products', JSON.stringify(products));
+    renderProductsAdmin();
+    setProductsSyncStatus('Опубликовано: '+products.length+' тов.');
+    if(showSuccess) showToast('Каталог опубликован — обновите сайт на телефоне');
+    return true;
+  }
+  setProductsSyncStatus('Не удалось опубликовать каталог', true);
+  if(showSuccess) showToast('Не удалось опубликовать каталог');
+  return false;
+}
+
 function login(e){
   e.preventDefault();
   const u = document.getElementById('login-user').value;
@@ -1136,6 +1198,7 @@ function showApp(){
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   renderAll();
+  loadProductsFromServer();
 }
 function refreshAdminBrandLogos(){
   const v='logo.png?v='+Date.now();
@@ -1268,7 +1331,7 @@ function closeProductModal(){ document.getElementById('product-modal').classList
 function editProduct(id){ openProductModal(id); }
 function deleteProduct(id){
   if(!confirm('Удалить товар?')) return;
-  products=products.filter(p=>p.id!==id); saveAll(); renderProductsAdmin(); showToast('Удалено');
+  products=products.filter(p=>p.id!==id); saveAll(); renderProductsAdmin(); showToast('Удалено'); publishProducts(false);
 }
 function saveProduct(e){
   e.preventDefault();
@@ -1277,7 +1340,7 @@ function saveProduct(e){
   d.price=parseInt(d.price); d.oldPrice= d.oldPrice? parseInt(d.oldPrice):0;
   if(!d.id){ d.id = d.name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now().toString(36); products.push(d); }
   else { const idx=products.findIndex(p=>p.id===d.id); if(idx>=0) products[idx]=d; else products.push(d); }
-  saveAll(); closeProductModal(); renderProductsAdmin(); showToast('Сохранено');
+  saveAll(); closeProductModal(); renderProductsAdmin(); showToast('Сохранено'); publishProducts(false);
 }
 
 // SALES
@@ -1825,7 +1888,7 @@ function importJSON(e){
       const l=put('mirea_leads',d.leads); if(l) leads=l;
       if(Array.isArray(d.lines)){ lines=d.lines; localStorage.setItem('mirea_lines',JSON.stringify(lines)); }
       if(Array.isArray(d.socials)){ localStorage.setItem('mirea_socials',JSON.stringify(d.socials)); saveSocialsToServer(d.socials); }
-      renderAll(); showToast('Данные восстановлены из JSON');
+      renderAll(); showToast('Данные восстановлены из JSON'); publishProducts(false);
     }catch(err){ showToast('Ошибка: неверный JSON-файл'); }
   };
   r.readAsText(f);

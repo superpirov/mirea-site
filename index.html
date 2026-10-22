@@ -891,16 +891,10 @@ const defaultProducts = [
   { id:'modul-20', sku:'MDL-20L', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь для бесконтактной мойки. 1:50, густая пена, без разводов.', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', color:'#1e3e35', accent:'#dfa94d', scent:'—', extra:'20 литров · концентрат' }
 ];
 
-const PRODUCTS_VERSION = '2026-10-22-1';
 let products = defaultProducts;
 try {
   const savedProducts = JSON.parse(localStorage.getItem('mirea_products') || 'null');
-  if(localStorage.getItem('mirea_products_version') === PRODUCTS_VERSION && Array.isArray(savedProducts) && savedProducts.length){
-    products = savedProducts;
-  } else {
-    localStorage.setItem('mirea_products', JSON.stringify(defaultProducts));
-    localStorage.setItem('mirea_products_version', PRODUCTS_VERSION);
-  }
+  if(Array.isArray(savedProducts) && savedProducts.length) products = savedProducts;
 } catch(e) {
   products = defaultProducts;
 }
@@ -1013,6 +1007,27 @@ function renderProducts(){
       </div>
     </article>`;
   }).join('') + aside;
+}
+
+async function loadProductsFromServer(){
+  try{
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 4000);
+    let res;
+    try{
+      res = await fetch('api/products.php?t=' + Date.now(), {cache:'no-store', signal:controller.signal});
+    } finally {
+      clearTimeout(timer);
+    }
+    if(!res.ok) return false;
+    const data = await res.json();
+    if(!data || data.ok !== true || !data.exists || !Array.isArray(data.products)) return false;
+    products = data.products;
+    try { localStorage.setItem('mirea_products', JSON.stringify(products)); } catch(e) {}
+    return true;
+  }catch(e){
+    return false;
+  }
 }
 
 // CART
@@ -1468,9 +1483,10 @@ function loadBranding(){
 
 // init
 loadBranding();
-selectLine('body');
-renderProducts();
-updateCartUI();
+loadProductsFromServer().then(() => {
+  selectLine('body');
+  updateCartUI();
+});
 </script>
 </body>
 </html>
