@@ -54,7 +54,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .sidebar .admin-brand{padding:24px 20px 20px}
 .login-aside .admin-brand{padding:0}
 .brand-lockup{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
-.admin-brand-logo{display:block;height:34px;width:auto;max-width:184px;object-fit:contain;filter:brightness(0) invert(1)}
+.admin-brand-logo{display:block;height:34px;width:auto;max-width:184px;margin-left:-27px;object-fit:contain;filter:brightness(0) invert(1)}
 .admin-brand-fallback{font-size:12.5px;font-weight:600;letter-spacing:.22em;line-height:1;color:#fff}
 .admin-brand .brand-sub{margin-top:0}
 .nav{flex:1;overflow-y:auto;padding:6px 14px 18px;display:flex;flex-direction:column;gap:2px}
@@ -895,7 +895,7 @@ body input[type=range]{width:100%;accent-color:var(--green);height:22px}
 
           <!-- Socials -->
           <div class="card card-pad span-2">
-            <div class="card-head"><div><div class="card-title">Соцсети</div><div class="card-sub">Иконки в хедере и подвале подбираются автоматически (VK, TG, IG, WA, YT)</div></div></div>
+            <div class="card-head"><div><div class="card-title">Соцсети</div><div class="card-sub">Иконки подбираются автоматически. Ссылки сохраняются на сервере и видны всем посетителям</div></div></div>
             <div id="socials-list" class="stack-tight"></div>
             <div class="inline-form">
               <input id="social-name" placeholder="Название, напр. Telegram">
@@ -1646,26 +1646,62 @@ async function removeLogo(){
   showToast('Логотип удалён с сервера — вернулся текстовый MIREA');
 }
 // SOCIALS
-function getSocials(){ return JSON.parse(localStorage.getItem('mirea_socials')||'[]'); }
+function escHtml(v){ return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function getSocials(){
+  try{ const list=JSON.parse(localStorage.getItem('mirea_socials')||'[]'); return Array.isArray(list)?list:[]; }
+  catch(e){ return []; }
+}
 function renderSocials(){
   const list=getSocials();
   const el=document.getElementById('socials-list');
   if(!el) return;
-  el.innerHTML = list.length ? list.map((s,i)=> `<div class="soc-row"><span class="soc-name">${s.name} <span class="soc-url">${s.url}</span></span><button onclick="removeSocial(${i})" class="soc-x" aria-label="Удалить">✕</button></div>`).join('') : `<div class="hint" style="text-align:left">Нет соцсетей</div>`;
+  el.innerHTML = list.length ? list.map((s,i)=> `<div class="soc-row"><span class="soc-name">${escHtml(s.name)} <span class="soc-url">${escHtml(s.url)}</span></span><button onclick="removeSocial(${i})" class="soc-x" aria-label="Удалить">✕</button></div>`).join('') : `<div class="hint" style="text-align:left">Нет соцсетей</div>`;
 }
-function addSocial(){
+async function saveSocialsToServer(list){
+  try{
+    const res=await fetch('api/socials.php', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({socials:list})});
+    const data=await res.json();
+    if(!res.ok || !data.ok) throw new Error(data.error||'Ошибка сервера');
+    if(Array.isArray(data.socials)) localStorage.setItem('mirea_socials', JSON.stringify(data.socials));
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+async function loadSocialsFromServer(){
+  try{
+    const res=await fetch('api/socials.php?t='+Date.now(), {cache:'no-store'});
+    if(!res.ok) return;
+    const data=await res.json();
+    if(!data || data.ok !== true || !Array.isArray(data.socials)) return;
+    if(data.socials.length || data.exists){
+      localStorage.setItem('mirea_socials', JSON.stringify(data.socials));
+      renderSocials();
+    }else{
+      const local=getSocials();
+      if(local.length && await saveSocialsToServer(local)) renderSocials();
+    }
+  }catch(e){}
+}
+async function addSocial(){
   const name=document.getElementById('social-name').value.trim();
   const url=document.getElementById('social-url').value.trim();
   if(!url) return showToast('Введите ссылку');
+  if(!/^https?:\/\//i.test(url)) return showToast('Ссылка должна начинаться с http:// или https://');
   const list=getSocials();
   list.push({name: name||url, url});
   localStorage.setItem('mirea_socials', JSON.stringify(list));
   document.getElementById('social-name').value=''; document.getElementById('social-url').value='';
-  renderSocials(); showToast('Соцсеть добавлена');
+  const ok=await saveSocialsToServer(list);
+  renderSocials();
+  showToast(ok ? 'Соцсеть добавлена — видна на сайте' : 'Соцсеть добавлена локально (сервер недоступен)');
 }
-function removeSocial(i){
+async function removeSocial(i){
   const list=getSocials(); list.splice(i,1);
-  localStorage.setItem('mirea_socials', JSON.stringify(list)); renderSocials();
+  localStorage.setItem('mirea_socials', JSON.stringify(list));
+  const ok=await saveSocialsToServer(list);
+  renderSocials();
+  showToast(ok ? 'Соцсеть удалена с сайта' : 'Соцсеть удалена локально (сервер недоступен)');
 }
 // BARCODE
 function generateBarcode(){
@@ -1788,7 +1824,7 @@ function importJSON(e){
       const sup=put('mirea_suppliers',d.suppliers); if(sup) suppliers=sup;
       const l=put('mirea_leads',d.leads); if(l) leads=l;
       if(Array.isArray(d.lines)){ lines=d.lines; localStorage.setItem('mirea_lines',JSON.stringify(lines)); }
-      if(Array.isArray(d.socials)) localStorage.setItem('mirea_socials',JSON.stringify(d.socials));
+      if(Array.isArray(d.socials)){ localStorage.setItem('mirea_socials',JSON.stringify(d.socials)); saveSocialsToServer(d.socials); }
       renderAll(); showToast('Данные восстановлены из JSON');
     }catch(err){ showToast('Ошибка: неверный JSON-файл'); }
   };
@@ -1810,6 +1846,7 @@ function seedDemo(){
 
 const topDate=document.getElementById('topbar-date');
 if(topDate) topDate.textContent=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
+loadSocialsFromServer();
 </script>
 </body>
 </html>

@@ -1320,11 +1320,17 @@ function loadBranding(){
   };
   img.src = 'logo.png?v=' + Date.now();
 
-  const socials = JSON.parse(localStorage.getItem('mirea_socials') || '[]');
+  let localSocials = [];
+  try {
+    const parsed = JSON.parse(localStorage.getItem('mirea_socials') || '[]');
+    if(Array.isArray(parsed)) localSocials = parsed;
+  } catch(e) {}
   const header = document.getElementById('header-socials');
   const footer = document.getElementById('footer-socials');
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const safeUrl = v => /^https?:\/\//i.test(String(v || '')) ? String(v) : '#';
   function iconFor(url){
-    const u = url.toLowerCase();
+    const u = String(url || '').toLowerCase();
     if(u.includes('vk')) return 'VK';
     if(u.includes('telegram') || u.includes('t.me')) return 'TG';
     if(u.includes('instagram')) return '<svg class="soc-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/></svg>';
@@ -1333,11 +1339,33 @@ function loadBranding(){
     if(u.includes('ok.ru')) return 'OK';
     return '↗';
   }
-  if(socials.length){
-    const mk = (s, cls) => `<a href="${s.url}" target="_blank" rel="noopener" class="${cls}" title="${s.name}" aria-label="${s.name}">${iconFor(s.url)}</a>`;
-    if(header) header.innerHTML = socials.map(s => mk(s, 'social-link')).join('');
-    if(footer) footer.innerHTML = socials.map(s => mk(s, 'social-link')).join('');
+  function renderSocialIcons(items){
+    const list = Array.isArray(items) ? items : [];
+    const mk = (s, cls) => `<a href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer" class="${cls}" title="${esc(s.name)}" aria-label="${esc(s.name)}">${iconFor(s.url)}</a>`;
+    const html = list.map(s => mk(s, 'social-link')).join('');
+    if(header) header.innerHTML = html;
+    if(footer) footer.innerHTML = html;
   }
+  renderSocialIcons(localSocials);
+  fetch('api/socials.php?t=' + Date.now(), {cache:'no-store'})
+    .then(res => res.ok ? res.json() : null)
+    .then(data => {
+      if(!data || data.ok !== true || !Array.isArray(data.socials)) return;
+      if(data.socials.length || data.exists){
+        try { localStorage.setItem('mirea_socials', JSON.stringify(data.socials)); } catch(e) {}
+        renderSocialIcons(data.socials);
+      } else if(localSocials.length){
+        fetch('api/socials.php', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({socials:localSocials})})
+          .then(res => res.ok ? res.json() : null)
+          .then(saved => {
+            if(!saved || saved.ok !== true || !Array.isArray(saved.socials)) return;
+            try { localStorage.setItem('mirea_socials', JSON.stringify(saved.socials)); } catch(e) {}
+            renderSocialIcons(saved.socials);
+          })
+          .catch(() => {});
+      }
+    })
+    .catch(() => {});
 }
 
 // YANDEX MAP
