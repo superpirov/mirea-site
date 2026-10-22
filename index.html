@@ -1307,30 +1307,25 @@ function loadBranding(){
   const logoH = parseInt(localStorage.getItem('mirea_logo_height') || '44', 10);
   const def = document.getElementById('site-logo-default');
   const custom = document.getElementById('site-logo-custom');
-  const img = new Image();
-  img.onload = () => {
-    const url = 'logo.png?v=' + Date.now();
-    if(def && custom){
-      custom.src = url;
-      custom.style.height = logoH + 'px';
-      custom.classList.remove('hidden');
-      def.classList.add('hidden');
-    }
-    const fDef = document.getElementById('footer-logo-default');
-    const fCustom = document.getElementById('footer-logo-custom');
-    if(fDef && fCustom){
-      fCustom.src = url;
-      fCustom.classList.remove('hidden');
-      fDef.classList.add('hidden');
-    }
-  };
-  img.onerror = () => {
-    if(def && custom){ custom.classList.add('hidden'); def.classList.remove('hidden'); }
-    const fDef = document.getElementById('footer-logo-default');
-    const fCustom = document.getElementById('footer-logo-custom');
-    if(fDef && fCustom){ fCustom.classList.add('hidden'); fDef.classList.remove('hidden'); }
-  };
-  img.src = 'logo.png?v=' + Date.now();
+  const fDef = document.getElementById('footer-logo-default');
+  const fCustom = document.getElementById('footer-logo-custom');
+  const logoUrl = 'logo.png?v=' + Date.now();
+  function bindLogo(el, fallback, height){
+    if(!el || !fallback) return;
+    el.onload = () => {
+      if(height) el.style.height = height + 'px';
+      el.classList.remove('hidden');
+      fallback.classList.add('hidden');
+    };
+    el.onerror = () => {
+      el.classList.add('hidden');
+      fallback.classList.remove('hidden');
+      el.removeAttribute('src');
+    };
+    el.src = logoUrl;
+  }
+  bindLogo(custom, def, logoH);
+  bindLogo(fCustom, fDef);
 
   let localSocials = [];
   try {
