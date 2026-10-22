@@ -1321,12 +1321,33 @@ function loadBranding(){
   const fDef = document.getElementById('footer-logo-default');
   const fCustom = document.getElementById('footer-logo-custom');
   const logoUrl = 'logo.png?v=' + Date.now();
-  function bindLogo(el, fallback, height){
+  function alignVisibleLeft(el){
+    try{
+      const w = el.naturalWidth, h = el.naturalHeight;
+      if(!w || !h) return;
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(el, 0, 0);
+      const data = ctx.getImageData(0, 0, w, h).data;
+      let minX = w;
+      for(let y = 0; y < h && minX > 0; y++){
+        for(let x = 0; x < minX; x++){
+          if(data[(y * w + x) * 4 + 3] > 8){ minX = x; break; }
+        }
+      }
+      if(minX <= 0 || minX >= w) return;
+      el.style.marginLeft = (-minX * el.getBoundingClientRect().width / w) + 'px';
+    }catch(e){}
+  }
+  function bindLogo(el, fallback, height, alignLeft){
     if(!el || !fallback) return;
     el.onload = () => {
       if(height) el.style.height = height + 'px';
       el.classList.remove('hidden');
       fallback.classList.add('hidden');
+      if(alignLeft) requestAnimationFrame(() => alignVisibleLeft(el));
     };
     el.onerror = () => {
       el.classList.add('hidden');
@@ -1336,7 +1357,7 @@ function loadBranding(){
     el.src = logoUrl;
   }
   bindLogo(custom, def, logoH);
-  bindLogo(fCustom, fDef);
+  bindLogo(fCustom, fDef, null, true);
 
   let localSocials = [];
   try {
