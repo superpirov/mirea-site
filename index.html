@@ -891,7 +891,19 @@ const defaultProducts = [
   { id:'modul-20', sku:'MDL-20L', line:'auto', category:'modul', name:'Modul', subtitle:'Автошампунь концентрат', desc:'Профессиональный шампунь для бесконтактной мойки. 1:50, густая пена, без разводов.', volume:'20 л', price:3500, oldPrice:4200, badge:'PRO', color:'#1e3e35', accent:'#dfa94d', scent:'—', extra:'20 литров · концентрат' }
 ];
 
-let products = JSON.parse(localStorage.getItem('mirea_products') || 'null') || defaultProducts;
+const PRODUCTS_VERSION = '2026-10-22-1';
+let products = defaultProducts;
+try {
+  const savedProducts = JSON.parse(localStorage.getItem('mirea_products') || 'null');
+  if(localStorage.getItem('mirea_products_version') === PRODUCTS_VERSION && Array.isArray(savedProducts) && savedProducts.length){
+    products = savedProducts;
+  } else {
+    localStorage.setItem('mirea_products', JSON.stringify(defaultProducts));
+    localStorage.setItem('mirea_products_version', PRODUCTS_VERSION);
+  }
+} catch(e) {
+  products = defaultProducts;
+}
 let cart = JSON.parse(localStorage.getItem('mirea_cart') || '[]');
 let currentLine = 'body';
 let currentCategory = 'sensa';
