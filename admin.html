@@ -146,7 +146,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .kpi{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 18px 15px;transition:border-color .18s,box-shadow .18s}
 .kpi:hover{border-color:#D8D2C3;box-shadow:0 14px 30px -26px rgba(24,36,32,.65)}
 .kpi-label{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.kpi-value{font-family:var(--display);font-size:33px;line-height:1.05;margin-top:9px;font-variant-numeric:tabular-nums}
+.kpi-value{font-family:var(--ui);font-weight:600;font-size:33px;line-height:1.05;margin-top:9px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .kpi-note{font-size:11.5px;color:var(--muted);margin-top:5px}
 .kpi-dark{background:radial-gradient(120% 120% at 100% 0%,#27483D 0%,#1A2E27 56%,#15241F 100%);border-color:#1A2E27;color:#fff}
 .kpi-dark .kpi-label{color:rgba(255,255,255,.45)}
@@ -261,7 +261,7 @@ body input[type=range]{width:100%;accent-color:var(--green);height:22px}
 .prod-name{font-size:14px;font-weight:600;margin-top:6px;line-height:1.35}
 .prod-desc{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .prod-price{text-align:right;flex:0 0 auto}
-.prod-price b{font-family:var(--display);font-size:22px;font-weight:400;display:block;line-height:1;white-space:nowrap}
+.prod-price b{font-family:var(--ui);font-size:22px;font-weight:600;display:block;line-height:1;white-space:nowrap;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .prod-old{font-size:11px;color:#B7B4A8;text-decoration:line-through;margin-top:4px}
 .prod-actions{display:flex;gap:6px;margin-top:auto}
 .prod-actions .btn{flex:1}
@@ -282,7 +282,7 @@ body input[type=range]{width:100%;accent-color:var(--green);height:22px}
 .calc-grid{display:grid;grid-template-columns:1.55fr .95fr;gap:12px;margin-top:12px}
 @media(max-width:1023px){.calc-grid{grid-template-columns:1fr}}
 .calc-summary{background:radial-gradient(130% 100% at 100% 0%,#27483D,#15241F);color:#fff;border-radius:16px;padding:22px;display:flex;flex-direction:column;border:1px solid #1A2E27;min-height:100%}
-.calc-total{font-family:var(--display);font-size:46px;line-height:1;margin:10px 0 4px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.calc-total{font-family:var(--ui);font-weight:600;font-size:46px;line-height:1;margin:10px 0 4px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .calc-label{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);font-weight:600}
 .calc-rows{margin-top:12px}
 .calc-row{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:rgba(255,255,255,.62);padding:5px 0}
