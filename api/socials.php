@@ -47,6 +47,9 @@ foreach ($data['socials'] as $item) {
     }
     $name = trim(strip_tags((string)($item['name'] ?? '')));
     $url = trim((string)($item['url'] ?? ''));
+    if ($url !== '' && !preg_match('~^[a-z][a-z0-9+.-]*://~i', $url)) {
+        $url = 'https://' . ltrim($url, '/');
+    }
     if ($url === '' || strlen($url) > 500 || !preg_match('~^https?://~i', $url) || !filter_var($url, FILTER_VALIDATE_URL)) {
         respond(['ok' => false, 'error' => 'Некорректная ссылка соцсети'], 400);
     }
